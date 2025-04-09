@@ -1,3 +1,16 @@
+<?php
+// Inicializa la sesión
+session_start();
+
+// Obtén la sección actual (por ejemplo, desde la URL)
+$section = $_GET['section'] ?? 'dashboard';
+
+// Asegúrate de que el archivo existe para cargarlo
+$templateFile = "templates/{$section}.php";
+if (!file_exists($templateFile)) {
+    $templateFile = "templates/404.php"; // Página de error si no existe
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -183,7 +196,7 @@
 				<ul>
 					<li class="menu-heading"><span>Manage</span></li>
 					<li>
-						<a href="#" class="active">
+						<a href="?section=dashboard" class="active">
 							<svg>
 								<use xlink:href="#icon-dashboard"></use>
 							</svg>
@@ -207,7 +220,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="#">
+						<a href="?section=users">
 							<svg>
 								<use xlink:href="#icon-users"></use>
 							</svg>
@@ -271,7 +284,10 @@
 
 		<div id="main-content">
 			<div id="main-content__container">
-				<p>This is the page content</p>
+				 <?php
+                        // Carga la sección dinámica
+                        include $templateFile;
+                 ?>
 			</div>
 		</div> <!-- main-content -->
 	</section> <!-- main -->
