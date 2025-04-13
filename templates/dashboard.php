@@ -1,11 +1,11 @@
-<link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
+<!--<link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">-->
 <!-- Custom Stylesheet -->
 
 <link href="../assets/css/style.css" rel="stylesheet">
 <link href="../assets/css/flotante.css" rel="stylesheet">
 <link href="../assets/icons/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <!-- Dropify -->
-<link rel="stylesheet" href="../../assets/plugins/dropify/dist/css/dropify.min.css">
+<!--<link rel="stylesheet" href="../../assets/plugins/dropify/dist/css/dropify.min.css">-->
 
     <div class="container-fluid">
         <div class="row justify-content-between mb-3">
@@ -26,7 +26,7 @@
 
 
             <?php
-            include_once "../conexion/base_de_datos.php";
+            include_once "../pdo/conexion.php";
 
             global $base_de_datos;
             $sentencia = $base_de_datos->query("select disponible as tiene_cliente,id as nro_mesa from mesa");
@@ -255,7 +255,7 @@
                                 <!-- Modal  INSERT-->
 
                                 <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="../php/salonController.php" method="POST" id="main-contact-form">
+                                    <form enctype="multipart/form-data" class="form-valide" action="../controllers/salonController.php" method="POST" id="main-contact-form">
                                         <div class="modal fade" id="exampleModalCenter">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
@@ -291,7 +291,7 @@
                                 <!-- Modal  Insertar Pedidos-->
 
                                 <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="../php/salonController.php" method="POST" id="main-contact-form">
+                                    <form enctype="multipart/form-data" class="form-valide" action="../controllers/salonController.php" method="POST" id="main-contact-form">
 
                                         <div class="modal fade" id="pedidoModalCenter">
                                             <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%;">
