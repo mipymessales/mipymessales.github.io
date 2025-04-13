@@ -7,7 +7,7 @@
 <!-- Dropify -->
 <link rel="stylesheet" href="../../assets/plugins/dropify/dist/css/dropify.min.css">
 
-<div class="content-body">
+
 
     <div class="row page-titles mx-0">
         <div class="col-sm-6 p-md-0">
@@ -29,7 +29,6 @@
         <div class="row justify-content-between mb-3">
             <div class="col-12 ">
                 <h2 class="page-heading">Hola <?php if(isset($_SESSION["user"]))  echo $_SESSION["user"];     ?> ,Bienvenido!</h2>
-                <p class="mb-0">Your restaurent admin template</p>
             </div>
         </div>
 

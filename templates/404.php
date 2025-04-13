@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>404 Not Found</title>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -97,8 +92,7 @@
             }
         }
     </style>
-</head>
-<body>
+
 <div class="bg-bubble"></div>
 <div class="bg-bubble"></div>
 
@@ -108,6 +102,5 @@
     <p>Tal parece que la página que buscas no ha sido encontrada o fue movida.</p>
     <a href="dashboard.php" class="button">Regresar a inicio</a>
 </div>
-</body>
-</html>
+
 
