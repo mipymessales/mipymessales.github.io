@@ -21,7 +21,7 @@ global $base_de_datos;
         $nroMesa=$nroMesa+ $ad;
     }*/
     $sentencia = $base_de_datos->prepare("INSERT INTO mesa (capacidad, disponible) VALUES (:nroMesa, :tiene_clientes)");
-    $nroMesa=4;
+    $nroMesa=$_POST["cantidad"];
     $sentencia->bindParam(':nroMesa',$nroMesa);
     $d=0;
     $sentencia->bindParam(':tiene_clientes',$d,PDO::PARAM_BOOL);

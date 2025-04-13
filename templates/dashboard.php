@@ -285,6 +285,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <input type="hidden" name="agregarmesa">
+                                                        <input type="hidden" name="cantidad" id="cantidad">
                                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                                                         <button  type="submit" class="btn btn-success">Agregar</button>
                                                     </div>
@@ -427,6 +428,7 @@
                                     mesa.innerHTML = '';
 
                                     const cantidad = parseInt(this.value);
+                                    document.getElementById("cantidad").value=cantidad;
 
                                     for (let i = 0; i < cantidad; i++) {
                                         const angle = (360 / cantidad) * i;
@@ -448,7 +450,7 @@
 
                                 function  agregarPedidos(nro_mesa){
 
-                                    document.getElementById("nromesa_pedido").value=nro_mesa;
+                                    //document.getElementById("nromesa_pedido").value=nro_mesa;
                                     $("#pedidoModalCenter").modal('show');
 
 
