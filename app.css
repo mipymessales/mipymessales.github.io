@@ -271,7 +271,6 @@ body.sidebar-open #sidebar {
 	border: var(--gray-tint-50) 1px dashed;
 	border-radius: 8px;
 	height: calc(100vh + 10rem);
-	display: flex;
 	place-content: center;
 }
 

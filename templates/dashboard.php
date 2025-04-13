@@ -261,18 +261,6 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">Agregando nueva mesa ...</h5>
-                                                        <h2>Selecciona cantidad de sillas</h2>
-                                                        <select id="selectorSillas">
-                                                            <option value="0">0</option>
-                                                            <!-- Opciones de 1 a 8 -->
-                                                            <script>
-                                                                for (let i = 1; i <= 8; i++) {
-                                                                    document.write(`<option value="${i}">${i}</option>`);
-                                                                }
-                                                            </script>
-                                                        </select>
-
-                                                        <div class="mesa" id="mesa"></div>
                                                         <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                                         </button>
                                                     </div>
@@ -280,6 +268,18 @@
                                                         <div class="card">
                                                             <div class="card-header pb-0">
                                                                 <h4 class="card-title">Desea agregar otra mesa?</h4>
+                                                                <h2>Selecciona cantidad de sillas</h2>
+                                                                <select id="selectorSillas">
+                                                                    <option value="0">0</option>
+                                                                    <!-- Opciones de 1 a 8 -->
+                                                                    <script>
+                                                                        for (let i = 1; i <= 8; i++) {
+                                                                            document.write(`<option value="${i}">${i}</option>`);
+                                                                        }
+                                                                    </script>
+                                                                </select>
+
+                                                                <div class="mesa" id="mesa"></div>
                                                             </div>
                                                         </div>
                                                     </div>
