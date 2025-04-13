@@ -1,7 +1,7 @@
 <?php
 // Inicializa la sesión
 session_start();
-
+include_once "pdo/conexion.php";
 // Obtén la sección actual (por ejemplo, desde la URL)
 $section = $_GET['section'] ?? 'dashboard';
 
@@ -17,7 +17,7 @@ if (!file_exists($templateFile)) {
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>A Simple Admin Dashboard</title>
+	<title>Sales Manager</title>
 
 	<script>
 		// Check local storage
@@ -150,7 +150,7 @@ if (!file_exists($templateFile)) {
 						<svg>
 							<use xlink:href="#icon-house"></use>
 						</svg>
-						<span>local-wp</span>
+						<span>Sitio web</span>
 					</a>
 				</li>
 				<li>
