@@ -36,7 +36,7 @@ global $base_de_datos;
         # Redireccionar a la lista
 
         echo "<script type='text/javascript'>
-window.location=('../templates/dashboard.php');
+window.location=('../index.php');
 
 </script>";
 }

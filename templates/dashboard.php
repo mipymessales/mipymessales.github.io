@@ -261,6 +261,18 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">Agregando nueva mesa ...</h5>
+                                                        <h2>Selecciona cantidad de sillas</h2>
+                                                        <select id="selectorSillas">
+                                                            <option value="0">0</option>
+                                                            <!-- Opciones de 1 a 8 -->
+                                                            <script>
+                                                                for (let i = 1; i <= 8; i++) {
+                                                                    document.write(`<option value="${i}">${i}</option>`);
+                                                                }
+                                                            </script>
+                                                        </select>
+
+                                                        <div class="mesa" id="mesa"></div>
                                                         <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                                         </button>
                                                     </div>
@@ -407,7 +419,32 @@
                             <script src="../assets/js/styleSwitcher.js"></script>
                             <script type="application/javascript">
 
+                                const mesa = document.getElementById('mesa');
+                                const selector = document.getElementById('selectorSillas');
 
+                                selector.addEventListener('change', function () {
+                                    // Limpiar sillas anteriores
+                                    mesa.innerHTML = '';
+
+                                    const cantidad = parseInt(this.value);
+
+                                    for (let i = 0; i < cantidad; i++) {
+                                        const angle = (360 / cantidad) * i;
+                                        const rad = angle * (Math.PI / 180);
+                                        const x = 60 * Math.cos(rad);
+                                        const y = 60 * Math.sin(rad);
+
+                                        const silla = document.createElement('div');
+                                        silla.classList.add('silla');
+                                        silla.style.left = `calc(50% + ${x}px - 20px)`;
+                                        silla.style.top = `calc(50% + ${y}px - 20px)`;
+
+                                        mesa.appendChild(silla);
+
+                                        // Forzar animación
+                                        setTimeout(() => silla.classList.add('visible'), 10);
+                                    }
+                                });
 
                                 function  agregarPedidos(nro_mesa){
 
@@ -425,3 +462,39 @@
 
                             </script>
 
+                                <style>
+                                    body {
+                                        font-family: Arial, sans-serif;
+                                        text-align: center;
+                                    }
+
+                                    .mesa {
+                                        width: 150px;
+                                        height: 150px;
+                                        background-color: #8B4513;
+                                        border-radius: 50%;
+                                        margin: 100px auto;
+                                        position: relative;
+                                    }
+
+                                    .silla {
+                                        width: 40px;
+                                        height: 40px;
+                                        background-color: #ccc;
+                                        border-radius: 10px;
+                                        position: absolute;
+                                        opacity: 0;
+                                        transform: scale(0);
+                                        transition: all 0.5s ease;
+                                    }
+
+                                    .silla.visible {
+                                        opacity: 1;
+                                        transform: scale(1);
+                                    }
+
+                                    select {
+                                        padding: 10px;
+                                        font-size: 16px;
+                                    }
+                                </style>
