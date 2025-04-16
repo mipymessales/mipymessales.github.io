@@ -194,21 +194,21 @@ if (!file_exists($templateFile)) {
 
 			<nav id="sidebar__nav">
 				<ul>
-					<li class="menu-heading"><span>Manage</span></li>
+					<li class="menu-heading"><span>Nombre Restaurant</span></li>
 					<li>
 						<a href="?section=dashboard" class="active">
 							<svg>
 								<use xlink:href="#icon-dashboard"></use>
 							</svg>
-							<span>Dashboard</span>
+							<span>Sal&oacute;n</span>
 						</a>
 					</li>
 					<li>
 						<a href="#">
 							<svg>
-								<use xlink:href="#icon-appearance"></use>
+                                <use xlink:href="#icon-posts"></use>
 							</svg>
-							<span>Appearance</span>
+							<span>Ofertas</span>
 						</a>
 					</li>
 					<li>
@@ -216,58 +216,44 @@ if (!file_exists($templateFile)) {
 							<svg>
 								<use xlink:href="#icon-plugins"></use>
 							</svg>
-							<span>Plugins</span>
+							<span>Pedidos</span>
 						</a>
 					</li>
-					<li>
-						<a href="?section=users">
-							<svg>
-								<use xlink:href="#icon-users"></use>
-							</svg>
-							<span>Users</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<svg>
-								<use xlink:href="#icon-settings"></use>
-							</svg>
-							<span>Settings</span>
-						</a>
-					</li>
-					<li class="menu-heading"><span>Content</span></li>
-					<li>
+
+					<li class="menu-heading"><span>Configuraci&oacute;n</span></li>
+				<!--	<li>
 						<a href="#">
 							<svg>
 								<use xlink:href="#icon-posts"></use>
 							</svg>
 							<span>Posts</span>
 						</a>
-					</li>
-					<li>
-						<a href="#">
-							<svg>
-								<use xlink:href="#icon-media"></use>
-							</svg>
-							<span>Media</span>
-						</a>
-					</li>
+					</li>-->
+                    <li>
+                        <a href="#">
+                            <svg>
+                                <use xlink:href="#icon-comments"></use>
+                            </svg>
+                            <span>Reservaciones</span>
+                        </a>
+                    </li>
 					<li>
 						<a href="#">
 							<svg>
 								<use xlink:href="#icon-pages"></use>
 							</svg>
-							<span>Pages</span>
+							<span>Cierres</span>
 						</a>
 					</li>
-					<li>
-						<a href="#">
-							<svg>
-								<use xlink:href="#icon-comments"></use>
-							</svg>
-							<span>Comments</span>
-						</a>
-					</li>
+                    <li>
+                        <a href="?section=users">
+                            <svg>
+                                <use xlink:href="#icon-users"></use>
+                            </svg>
+                            <span>Trabajadores</span>
+                        </a>
+                    </li>
+
 				</ul>
 			</nav>
 

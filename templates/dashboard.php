@@ -267,19 +267,25 @@
                                                     <div class="modal-body">
                                                         <div class="card">
                                                             <div class="card-header pb-0">
-                                                                <h4 class="card-title">Desea agregar otra mesa?</h4>
-                                                                <h2>Selecciona cantidad de sillas</h2>
-                                                                <select id="selectorSillas">
-                                                                    <option value="0">0</option>
-                                                                    <!-- Opciones de 1 a 8 -->
-                                                                    <script>
-                                                                        for (let i = 1; i <= 8; i++) {
-                                                                            document.write(`<option value="${i}">${i}</option>`);
-                                                                        }
-                                                                    </script>
-                                                                </select>
 
-                                                                <div class="mesa" id="mesa"></div>
+                                                                <div class="row">
+                                                                    <div class="col-xl-3 col-lg-6 col-sm-6">
+                                                                        <h4 class="card-title">Desea agregar otra mesa?</h4>
+                                                                        <h6>Selecciona cantidad de sillas</h6>
+                                                                        <select id="selectorSillas">
+                                                                            <option value="0">0</option>
+                                                                            <!-- Opciones de 1 a 8 -->
+                                                                            <script>
+                                                                                for (let i = 1; i <= 12; i++) {
+                                                                                    document.write(`<option value="${i}">${i}</option>`);
+                                                                                }
+                                                                            </script>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-xl-3 col-lg-6 col-sm-6">
+                                                                        <div class="mesa" id="mesa"></div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -471,10 +477,10 @@
                                     }
 
                                     .mesa {
-                                        width: 150px;
-                                        height: 150px;
-                                        background-color: #8B4513;
-                                        border-radius: 50%;
+                                        width: 120px;
+                                        height: 120px;
+                                        background-color: #13268BB0;
+                                        border-radius: 30%;
                                         margin: 100px auto;
                                         position: relative;
                                     }
