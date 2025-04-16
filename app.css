@@ -272,7 +272,7 @@ body.sidebar-open #sidebar {
 	border-radius: 8px;
 	height: calc(100vh + 10rem);
 	place-content: center;
-	display: flex !important;
+	display: grid;
 }
 
 

@@ -25,7 +25,7 @@
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
+    <div class="label-info">Selecciona una categoría para ver los productos.</div>
 <div class="tabs">
     <div class="tab" onclick="cargarCategoria('entrantes')">Entrantes</div>
     <div class="tab" onclick="cargarCategoria('platos')">Platos</div>
@@ -38,7 +38,7 @@
 <script>
     function cargarCategoria(categoria) {
         $.ajax({
-            url: 'obtener_menu.php',
+            url: '../controllers/obtener_menu.php',
             method: 'POST',
             data: { categoria: categoria },
             success: function(data) {

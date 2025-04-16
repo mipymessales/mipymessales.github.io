@@ -469,6 +469,7 @@
                             <script src="../assets/js/settings.js"></script>
                             <script src="../assets/js/quixnav.js"></script>
                             <script src="../assets/js/styleSwitcher.js"></script>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                             <script type="application/javascript">
 
                                 const mesa = document.getElementById('mesa');

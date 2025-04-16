@@ -139,7 +139,7 @@ if (!file_exists($templateFile)) {
 
 			<ul>
 				<li id="main-header__logo">
-					<a href="index.html">
+					<a href="index.php">
 						<svg>
 							<use xlink:href="#logo"></use>
 						</svg>
