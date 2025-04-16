@@ -510,7 +510,7 @@
 
                                 }
                                 function agregarCliente(nro_mesa){
-                                    $.ajax({
+                                 /*   $.ajax({
                                         url: '../controllers/salonController.php',
                                         method: 'POST',
                                         data: {
@@ -518,9 +518,8 @@
                                         },
                                         success: function(data) {
                                            $('#respuesta').html(data); // Muestra la respuesta del servidor
-                                            // $('#miFormulario')[0].reset(); // Limpia el formulario si quieres
                                         }
-                                    });
+                                    });*/
 
 
                                 }
