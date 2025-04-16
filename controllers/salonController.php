@@ -58,6 +58,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["mesa"]) ) {
     }
 
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["delete_mesa"]) ) {
+    $id_mesa = $_POST['delete_mesa'];
+    $sentencia = $base_de_datos->prepare("DELETE FROM mesa WHERE id=:id_mesa");
+    $sentencia->bindParam(':id_mesa',$id_mesa);
+    $sentencia->execute();
+    if (!$sentencia) {
+        echo "¡La mesa no esta disponible en estos momentos !";
+    }else{
+        echo "¡Se eliminó la mesa  !";
+    }
+
+}
+
 
 
 
