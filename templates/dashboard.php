@@ -46,6 +46,51 @@
                 $nro_mesa= $mesa->nro_mesa;
                 if(!$b){
                 ?>
+                <div class="form-validation">
+
+                    <div class="modal fade" id="exampleModalDELETE<?php echo $nro_mesa;?>">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Eliminando mesa ...</h5>
+                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                    </button>
+                                </div>
+
+
+                                <div class="form-validation">
+                                    <form enctype="multipart/form-data" class="form-valide" action="../controllers/salonController.php" method="POST">
+                                        <input type="hidden" name="delete_mesa" value="<?php echo $nro_mesa;?>">
+                                        <div class="modal-body">
+
+                                            <div class="card">
+                                                <div class="card-header pb-0">
+                                                    <h4 class="card-title">¿ Seguro que desea eliminar la mesa ? </h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <?php if ($b){  ?>
+                                                        <div class="alert-warning">La mesa tiene clientes, si se elimina perder&aacute; los datos ! </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-dark text-white" data-dismiss="modal" >Cancelar</button>
+                                            <button  type="submit" class="btn btn-danger text-white">Eliminar</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
                 <div class="card bg-light">
 
                     <?php
@@ -106,11 +151,11 @@
 
                                     <?php } ?>
                                     <div class="card-body mb-0">
-                                       <!-- <button data-toggle="modal" data-target="#exampleModalDELETE<?php /*echo $nro_mesa;*/?>" class="btn btn-danger text-white" style="margin: 4px">Eliminar</button>-->
+                                        <button data-toggle="modal" data-target="#exampleModalDELETE<?php echo $nro_mesa;?>" class="btn btn-danger text-white" style="margin: 4px">Eliminar</button>
                                         <!-- <span class="ribbon ribbon__one vertical-card__menu--status">Available <em class="ribbon-curve"></em></span>-->
                                         <?php
 
-                                        if(!$b){
+                                        if($b){
                                             ?>
                                             <h5 class="card-title text-dark">
                                                 Mesa <?php echo $nro_mesa; ?></h5>
@@ -304,51 +349,7 @@
                                 </div>
 
                                 <!--end modal insert-->
-                                <div class="form-validation">
 
-                                    <div class="modal fade" id="exampleModalDELETE<?php echo $nro_mesa;?>">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Eliminando mesa ...</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                                    </button>
-                                                </div>
-
-
-                                                <div class="form-validation">
-                                                    <form enctype="multipart/form-data" class="form-valide" action="../controllers/salonController.php" method="POST">
-                                                        <input type="hidden" name="delete_mesa" value="<?php echo $nro_mesa;?>">
-                                                        <div class="modal-body">
-
-                                                            <div class="card">
-                                                                <div class="card-header pb-0">
-                                                                    <h4 class="card-title">¿ Seguro que desea eliminar la mesa ? </h4>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                    <?php if ($b){  ?>
-                                                                        <div class="alert-warning">La mesa tiene clientes, si se elimina perder&aacute; los datos ! </div>
-                                                                    <?php } ?>
-                                                                </div>
-                                                            </div>
-
-
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-dark text-white" data-dismiss="modal" >Cancelar</button>
-                                                            <button  type="submit" class="btn btn-danger text-white">Eliminar</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
 
 
                                 <?php $array=["entrantes","platos","postres","bebidas"]; ?>
