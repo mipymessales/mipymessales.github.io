@@ -106,7 +106,7 @@
 
                                     <?php } ?>
                                     <div class="card-body mb-0">
-                                        <button data-toggle="modal" data-target="#exampleModalDELETE<?php echo $nro_mesa;?>" class="btn btn-danger text-white" style="margin: 4px">Eliminar</button>
+                                       <!-- <button data-toggle="modal" data-target="#exampleModalDELETE<?php /*echo $nro_mesa;*/?>" class="btn btn-danger text-white" style="margin: 4px">Eliminar</button>-->
                                         <!-- <span class="ribbon ribbon__one vertical-card__menu--status">Available <em class="ribbon-curve"></em></span>-->
                                         <?php
 
@@ -328,10 +328,7 @@
                                                                 <div class="card-body">
                                                                     <?php if ($b){  ?>
                                                                         <div class="alert-warning">La mesa tiene clientes, si se elimina perder&aacute; los datos ! </div>
-                                                                    <?php
-
-                                                                    }
-                                                                    ?>
+                                                                    <?php } ?>
                                                                 </div>
                                                             </div>
 
