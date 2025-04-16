@@ -44,7 +44,7 @@
                 <?php
                 $b= $mesa->tiene_cliente;
                 $nro_mesa= $mesa->nro_mesa;
-                if(!$b){
+                if($b){
                 ?>
                 <div class="card bg-light">
 
@@ -269,7 +269,7 @@
                                                             <div class="card-header pb-0">
 
                                                                 <div class="row">
-                                                                    <div class="col-xl-3 col-lg-6 col-sm-6">
+                                                                    <div class="col-sm-6" style="align-content: center;">
                                                                         <h4 class="card-title">Desea agregar otra mesa?</h4>
                                                                         <h6>Selecciona cantidad de sillas</h6>
                                                                         <select id="selectorSillas">
@@ -282,7 +282,7 @@
                                                                             </script>
                                                                         </select>
                                                                     </div>
-                                                                    <div class="col-xl-3 col-lg-6 col-sm-6">
+                                                                    <div class="col-sm-6">
                                                                         <div class="mesa" id="mesa"></div>
                                                                     </div>
                                                                 </div>
@@ -463,7 +463,17 @@
 
                                 }
                                 function agregarCliente(nro_mesa){
-
+                                    $.ajax({
+                                        url: '../controllers/salonController.php',
+                                        method: 'POST',
+                                        data: {
+                                            mesa: nro_mesa
+                                        },
+                                        success: function(data) {
+                                           $('#respuesta').html(data); // Muestra la respuesta del servidor
+                                            // $('#miFormulario')[0].reset(); // Limpia el formulario si quieres
+                                        }
+                                    });
 
 
                                 }

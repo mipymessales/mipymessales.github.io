@@ -189,7 +189,7 @@ if (!file_exists($templateFile)) {
 				<svg>
 					<use xlink:href="#icon-collapse"></use>
 				</svg>
-				<span>Collapse menu</span>
+				<span>Esconder men&uacute;</span>
 			</button>
 
 			<nav id="sidebar__nav">

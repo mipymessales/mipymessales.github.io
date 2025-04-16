@@ -23,7 +23,7 @@ global $base_de_datos;
     $sentencia = $base_de_datos->prepare("INSERT INTO mesa (capacidad, disponible) VALUES (:nroMesa, :tiene_clientes)");
     $nroMesa=$_POST["cantidad"];
     $sentencia->bindParam(':nroMesa',$nroMesa);
-    $d=0;
+    $d=1;
     $sentencia->bindParam(':tiene_clientes',$d,PDO::PARAM_BOOL);
     $sentencia->execute();
     if (!$sentencia) {
@@ -44,6 +44,19 @@ window.location=('../index.php');
 
 
    // header("Location: ../template/bebidasc.php");
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["mesa"]) ) {
+    $id_mesa = $_POST['mesa'];
+    $sentencia = $base_de_datos->prepare("UPDATE mesa
+	SET  disponible=0 WHERE id=:id_c");
+    $sentencia->bindParam(':id_c',$id_mesa);
+    $sentencia->execute();
+    if (!$sentencia) {
+        echo "¡La mesa no esta disponible en estos momentos !";
+    }else{
+        echo "¡Se agregaron clientes a la mesa  !";
+    }
+
 }
 
 
