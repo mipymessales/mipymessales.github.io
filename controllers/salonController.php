@@ -45,7 +45,7 @@ window.location=('../index.php');
 
    // header("Location: ../template/bebidasc.php");
 }
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["mesa"]) ) {
+if (isset($_POST["mesa"]) ) {
     $id_mesa = $_POST['mesa'];
     $sentencia = $base_de_datos->prepare("UPDATE mesa
 	SET  disponible=0 WHERE id=:id_c");
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["mesa"]) ) {
     }
 
 }
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["delete_mesa"]) ) {
+if (isset($_POST["delete_mesa"]) ) {
     $id_mesa = $_POST['delete_mesa'];
     $sentencia = $base_de_datos->prepare("DELETE FROM mesa WHERE id=:id_mesa");
     $sentencia->bindParam(':id_mesa',$id_mesa);
