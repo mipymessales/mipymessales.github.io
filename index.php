@@ -3,7 +3,7 @@
 session_start();
 include_once "pdo/conexion.php";
 // Obtén la sección actual (por ejemplo, desde la URL)
-$section = $_GET['section'] ?? 'dashboard';
+$section = $_GET['section'] ?? 'salon';
 
 // Asegúrate de que el archivo existe para cargarlo
 $templateFile = "templates/{$section}.php";
@@ -40,6 +40,9 @@ if (!file_exists($templateFile)) {
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/flotante.css" rel="stylesheet">
+    <link href="assets/icons/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
 	<!-- Main stylesheet -->
 	<link rel="stylesheet" href="app.css">
@@ -196,7 +199,7 @@ if (!file_exists($templateFile)) {
 				<ul>
 					<li class="menu-heading"><span>Nombre Restaurant</span></li>
 					<li>
-						<a href="?section=dashboard" class="active">
+						<a href="?section=salon" class="active">
 							<svg>
 								<use xlink:href="#icon-dashboard"></use>
 							</svg>
