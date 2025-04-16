@@ -31,11 +31,9 @@
             global $base_de_datos;
             $sentencia = $base_de_datos->query("select disponible as tiene_cliente,id as nro_mesa from mesa");
             $mesas = $sentencia->fetchAll(PDO::FETCH_OBJ);
-            if (!$mesas) {
-                #No existe
-                echo "¡No existe mesas en el salon !";
-                //  exit();
-            }else{
+            if (!$mesas) { ?>
+                <h2 class="page-heading">¡No existe mesas en el salon !</h2>
+            <?php  }else{
             ?>
 
             <?php foreach($mesas as $mesa){ ?>

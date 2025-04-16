@@ -204,7 +204,7 @@ if (!file_exists($templateFile)) {
 						</a>
 					</li>
 					<li>
-						<a href="#">
+						<a href="?section=ofertas">
 							<svg>
                                 <use xlink:href="#icon-posts"></use>
 							</svg>

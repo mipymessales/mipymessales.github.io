@@ -1,7 +1,4 @@
-<?php ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
+
     <meta charset="UTF-8">
     <title>Menú con Tabs</title>
     <style>
@@ -27,8 +24,7 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
+
 
 <div class="tabs">
     <div class="tab" onclick="cargarCategoria('entrantes')">Entrantes</div>
@@ -52,5 +48,3 @@
     }
 </script>
 
-</body>
-</html>
