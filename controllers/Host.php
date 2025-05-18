@@ -2,7 +2,7 @@
 
 class Host
 {
-private static $HOST_NAME="http://localhost/mipymessales/";
+private static $HOST_NAME="http://salesmanager.infinityfreeapp.com/";
 
     /**
      * @return string
