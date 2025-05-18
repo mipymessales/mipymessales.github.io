@@ -158,6 +158,6 @@ if (!empty($resultado) && isset($resultado)) {
 $a.= "  </div>";
 echo $a;
 
-$stmt->close();
-$base_de_datos->close();
+//$stmt->close();
+//$base_de_datos->close();
 
