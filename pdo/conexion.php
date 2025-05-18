@@ -1,15 +1,15 @@
 <?php
-/*$usuario = "if0_38726532";
+$usuario = "if0_38726532";
 $contraseña = "ZauvXbCUiigd";
 $nombreBaseDeDatos = "if0_38726532_restaurant_uno";
 $rutaServidor = "sql310.infinityfree.com";
-$puerto = "3306";*/
+$puerto = "3306";
 
-$usuario = "root";
+/*$usuario = "root";
 $contraseña = "123ok";
 $nombreBaseDeDatos = "if0_38726532_restaurant_uno";
 $rutaServidor = "localhost";
-$puerto = "3306";
+$puerto = "3306";*/
 try {
     global $base_de_datos;
     $base_de_datos = new PDO("mysql:host=$rutaServidor;port=$puerto;dbname=$nombreBaseDeDatos", $usuario, $contraseña);
