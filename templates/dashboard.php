@@ -26,7 +26,8 @@
 
 
             <?php
-            include_once "../pdo/conexion.php";
+            defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
+            include_once ROOT_DIR."pdo/conexion.php";
 
             global $base_de_datos;
             $sentencia = $base_de_datos->query("select disponible as tiene_cliente,id as nro_mesa from mesa");

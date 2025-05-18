@@ -1,10 +1,11 @@
 <?php
 // Inicializa la sesión
 session_start();
-include_once "pdo/conexion.php";
+defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,1).'/');
+include ROOT_DIR.'controllers/auth_check.php';
+include_once ROOT_DIR."pdo/conexion.php";
 // Obtén la sección actual (por ejemplo, desde la URL)
 $section = $_GET['section'] ?? 'salon';
-
 // Asegúrate de que el archivo existe para cargarlo
 $templateFile = "templates/{$section}.php";
 if (!file_exists($templateFile)) {
@@ -20,6 +21,7 @@ if (!file_exists($templateFile)) {
 	<title>Sales Manager</title>
 
 	<script>
+
 		// Check local storage
 		let localS = localStorage.getItem('theme'),
 			themeToSet = localS
@@ -37,15 +39,68 @@ if (!file_exists($templateFile)) {
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize@1.1.0/modern-normalize.min.css">
 
 	<!-- Google fonts -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+	<!--<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--	<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">-->
+    <link href="assets/fullcalendar/css/jquery-ui.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/flotante.css" rel="stylesheet">
+   <!-- <link href="assets/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="assets/icons/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-
+    <link href="assets/fullcalendar/css/fullcalendar.min.css" rel="stylesheet">
+    <link href="assets/css/dropify.min.css" rel="stylesheet">
 	<!-- Main stylesheet -->
 	<link rel="stylesheet" href="app.css">
+    <link href="assets/css/tabulator.min.css" rel="stylesheet">
+    <style>
+
+        .nav-menu {
+            text-decoration: none;
+            padding: 10px;
+            color: gray;
+            transition: 0.3s;
+        }
+
+        .nav-menu.active {
+            background:var(--main-header-bg);
+            color: #fff;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .mesa {
+            width: 120px;
+            height: 120px;
+            background-color: #13268BB0;
+            border-radius: 30%;
+            margin: 100px auto;
+            position: relative;
+        }
+
+        .silla {
+            width: 40px;
+            height: 40px;
+            background-color: #ccc;
+            border-radius: 10px;
+            position: absolute;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.5s ease;
+        }
+
+        .silla.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -127,6 +182,9 @@ if (!file_exists($templateFile)) {
 		<symbol id="icon-expand" viewBox="0 0 20 20">
 			<path d="M5.83338 10.8333L15.4917 10.8333L13.575 12.7417C13.4973 12.8194 13.4357 12.9116 13.3937 13.0131C13.3516 13.1146 13.33 13.2234 13.33 13.3333C13.33 13.4432 13.3516 13.552 13.3937 13.6535C13.4357 13.755 13.4973 13.8473 13.575 13.925C13.6527 14.0027 13.745 14.0643 13.8465 14.1064C13.948 14.1484 14.0568 14.1701 14.1667 14.1701C14.2766 14.1701 14.3854 14.1484 14.4869 14.1064C14.5884 14.0643 14.6807 14.0027 14.7584 13.925L18.0917 10.5917C18.1676 10.5124 18.227 10.4189 18.2667 10.3167C18.3501 10.1138 18.3501 9.88621 18.2667 9.68332C18.227 9.58103 18.1676 9.48758 18.0917 9.40832L14.7584 6.07499C14.6809 5.99688 14.5887 5.93489 14.4872 5.89258C14.3856 5.85027 14.2767 5.82849 14.1667 5.82849C14.0567 5.82849 13.9478 5.85027 13.8462 5.89258C13.7447 5.93489 13.6525 5.99688 13.575 6.07499C13.4969 6.15246 13.4349 6.24463 13.3926 6.34618C13.3503 6.44773 13.3285 6.55665 13.3285 6.66666C13.3285 6.77667 13.3503 6.88559 13.3926 6.98714C13.4349 7.08869 13.4969 7.18085 13.575 7.25832L15.4917 9.16666L5.83338 9.16666C5.61237 9.16666 5.4004 9.25446 5.24412 9.41074C5.08784 9.56702 5.00005 9.77898 5.00005 9.99999C5.00005 10.221 5.08784 10.433 5.24412 10.5892C5.4004 10.7455 5.61237 10.8333 5.83338 10.8333ZM2.50005 16.6667C2.72106 16.6667 2.93302 16.5789 3.0893 16.4226C3.24558 16.2663 3.33338 16.0543 3.33338 15.8333L3.33338 4.16666C3.33338 3.94564 3.24558 3.73368 3.0893 3.5774C2.93302 3.42112 2.72106 3.33332 2.50004 3.33332C2.27903 3.33332 2.06707 3.42112 1.91079 3.5774C1.75451 3.73368 1.66671 3.94564 1.66671 4.16666L1.66671 15.8333C1.66671 16.0543 1.75451 16.2663 1.91079 16.4226C2.06707 16.5789 2.27903 16.6667 2.50005 16.6667V16.6667Z"/>
 		</symbol>
+        <symbol id="icon-settings" viewBox="0 0 20 20">
+            <path d="M16.5833 10.55C16.4497 10.3979 16.3761 10.2024 16.3761 10C16.3761 9.79758 16.4497 9.60208 16.5833 9.45L17.65 8.25C17.7675 8.11889 17.8405 7.95392 17.8585 7.77876C17.8765 7.60359 17.8385 7.42724 17.75 7.275L16.0833 4.39167C15.9957 4.2396 15.8624 4.11907 15.7023 4.04724C15.5422 3.97541 15.3635 3.95597 15.1917 3.99167L13.625 4.30834C13.4256 4.34953 13.2181 4.31633 13.0416 4.215C12.865 4.11368 12.7317 3.95124 12.6667 3.75834L12.1583 2.23334C12.1024 2.06782 11.9959 1.92406 11.8539 1.82237C11.7118 1.72068 11.5414 1.66622 11.3667 1.66667H8.03333C7.85161 1.65718 7.67177 1.70744 7.5213 1.80976C7.37082 1.91209 7.25798 2.06085 7.19999 2.23334L6.73333 3.75834C6.66833 3.95124 6.53497 4.11368 6.35842 4.215C6.18187 4.31633 5.97434 4.34953 5.77499 4.30834L4.16666 3.99167C4.00379 3.96865 3.83774 3.99435 3.68945 4.06553C3.54116 4.13672 3.41725 4.25019 3.33333 4.39167L1.66666 7.275C1.57596 7.42554 1.53518 7.60091 1.55015 7.77602C1.56511 7.95114 1.63506 8.11704 1.74999 8.25L2.80833 9.45C2.94193 9.60208 3.01561 9.79758 3.01561 10C3.01561 10.2024 2.94193 10.3979 2.80833 10.55L1.74999 11.75C1.63506 11.883 1.56511 12.0489 1.55015 12.224C1.53518 12.3991 1.57596 12.5745 1.66666 12.725L3.33333 15.6083C3.42091 15.7604 3.55426 15.8809 3.71437 15.9528C3.87448 16.0246 4.05318 16.044 4.225 16.0083L5.79166 15.6917C5.99101 15.6505 6.19854 15.6837 6.37509 15.785C6.55164 15.8863 6.685 16.0488 6.74999 16.2417L7.25833 17.7667C7.31631 17.9392 7.42916 18.0879 7.57963 18.1902C7.73011 18.2926 7.90994 18.3428 8.09166 18.3333H11.425C11.5997 18.3338 11.7701 18.2793 11.9122 18.1776C12.0542 18.0759 12.1608 17.9322 12.2167 17.7667L12.725 16.2417C12.79 16.0488 12.9234 15.8863 13.0999 15.785C13.2764 15.6837 13.484 15.6505 13.6833 15.6917L15.25 16.0083C15.4218 16.044 15.6005 16.0246 15.7606 15.9528C15.9207 15.8809 16.0541 15.7604 16.1417 15.6083L17.8083 12.725C17.8968 12.5728 17.9348 12.3964 17.9168 12.2212C17.8989 12.0461 17.8259 11.8811 17.7083 11.75L16.5833 10.55ZM15.3417 11.6667L16.0083 12.4167L14.9417 14.2667L13.9583 14.0667C13.3581 13.944 12.7338 14.0459 12.2038 14.3532C11.6738 14.6604 11.2751 15.1515 11.0833 15.7333L10.7667 16.6667H8.63333L8.33333 15.7167C8.14154 15.1349 7.74281 14.6437 7.21283 14.3365C6.68285 14.0293 6.05851 13.9273 5.45833 14.05L4.47499 14.25L3.39166 12.4083L4.05833 11.6583C4.46829 11.2 4.69494 10.6066 4.69494 9.99167C4.69494 9.37672 4.46829 8.78335 4.05833 8.325L3.39166 7.575L4.45833 5.74167L5.44166 5.94167C6.04185 6.06435 6.66618 5.9624 7.19617 5.65517C7.72615 5.34793 8.12487 4.8568 8.31666 4.275L8.63333 3.33334H10.7667L11.0833 4.28333C11.2751 4.86513 11.6738 5.35627 12.2038 5.6635C12.7338 5.97074 13.3581 6.07269 13.9583 5.95L14.9417 5.75L16.0083 7.6L15.3417 8.35C14.9363 8.8073 14.7125 9.39724 14.7125 10.0083C14.7125 10.6194 14.9363 11.2094 15.3417 11.6667V11.6667ZM9.69999 6.66667C9.04072 6.66667 8.39626 6.86217 7.84809 7.22844C7.29993 7.59471 6.87269 8.1153 6.6204 8.72439C6.3681 9.33348 6.30209 10.0037 6.43071 10.6503C6.55933 11.2969 6.8768 11.8908 7.34297 12.357C7.80915 12.8232 8.40309 13.1407 9.04969 13.2693C9.6963 13.3979 10.3665 13.3319 10.9756 13.0796C11.5847 12.8273 12.1053 12.4001 12.4716 11.8519C12.8378 11.3037 13.0333 10.6593 13.0333 10C13.0333 9.11595 12.6821 8.2681 12.057 7.64298C11.4319 7.01786 10.584 6.66667 9.69999 6.66667V6.66667ZM9.69999 11.6667C9.37036 11.6667 9.04813 11.5689 8.77404 11.3858C8.49996 11.2026 8.28634 10.9424 8.1602 10.6378C8.03405 10.3333 8.00104 9.99815 8.06535 9.67485C8.12966 9.35155 8.2884 9.05458 8.52148 8.82149C8.75457 8.5884 9.05154 8.42967 9.37484 8.36536C9.69815 8.30105 10.0333 8.33406 10.3378 8.4602C10.6423 8.58635 10.9026 8.79997 11.0858 9.07405C11.2689 9.34813 11.3667 9.67037 11.3667 10C11.3667 10.442 11.1911 10.866 10.8785 11.1785C10.5659 11.4911 10.142 11.6667 9.69999 11.6667Z"/>
+        </symbol>
 	</svg>
 
 	<header id="main-header">
@@ -176,7 +234,7 @@ if (!file_exists($templateFile)) {
 			</ul>
 
 			<a href="#">
-				<span>Welcome, admin</span>
+				<span>Bienvenido, <?php echo $_SESSION['user'];?></span>
 				<svg>
 					<use xlink:href="#icon-user"></use>
 				</svg>
@@ -185,7 +243,7 @@ if (!file_exists($templateFile)) {
 	</header> <!-- main-header -->
 
 	<section id="main">
-		<div id="overlay"></div>
+
 
 		<div id="sidebar">
 			<button id="sidebar__collapse">
@@ -199,7 +257,7 @@ if (!file_exists($templateFile)) {
 				<ul>
 					<li class="menu-heading"><span>Nombre Restaurant</span></li>
 					<li>
-						<a href="?section=salon" class="active">
+						<a href="?section=salon"  class="nav-menu active">
 							<svg>
 								<use xlink:href="#icon-dashboard"></use>
 							</svg>
@@ -207,7 +265,7 @@ if (!file_exists($templateFile)) {
 						</a>
 					</li>
 					<li>
-						<a href="?section=ofertas">
+						<a href="?section=ofertas" class="nav-menu">
 							<svg>
                                 <use xlink:href="#icon-posts"></use>
 							</svg>
@@ -215,7 +273,7 @@ if (!file_exists($templateFile)) {
 						</a>
 					</li>
 					<li>
-						<a href="#">
+						<a href="?section=pedidos" class="nav-menu">
 							<svg>
 								<use xlink:href="#icon-plugins"></use>
 							</svg>
@@ -233,7 +291,7 @@ if (!file_exists($templateFile)) {
 						</a>
 					</li>-->
                     <li>
-                        <a href="#">
+                        <a href="?section=reservaciones" class="nav-menu">
                             <svg>
                                 <use xlink:href="#icon-comments"></use>
                             </svg>
@@ -241,7 +299,7 @@ if (!file_exists($templateFile)) {
                         </a>
                     </li>
 					<li>
-						<a href="#">
+						<a href="?section=cierres" class="nav-menu">
 							<svg>
 								<use xlink:href="#icon-pages"></use>
 							</svg>
@@ -249,14 +307,21 @@ if (!file_exists($templateFile)) {
 						</a>
 					</li>
                     <li>
-                        <a href="?section=users">
+                        <a href="?section=users" class="nav-menu">
                             <svg>
                                 <use xlink:href="#icon-users"></use>
                             </svg>
                             <span>Trabajadores</span>
                         </a>
                     </li>
-
+                    <li>
+                        <a href="?section=configuracion" class="nav-menu">
+                            <svg>
+                                <use xlink:href="#icon-settings"></use>
+                            </svg>
+                            <span>Configuraci&oacute;n</span>
+                        </a>
+                    </li>
 				</ul>
 			</nav>
 
@@ -269,10 +334,13 @@ if (!file_exists($templateFile)) {
 					<use xlink:href="#icon-moon"></use>
 				</svg>
 			</div> <!-- sidebar__theme-switcher -->
+            <div class="copyright">
+                <p><a href="#">L'DevGroup 2025 </a></p>
+            </div>
 		</div> <!-- sidebar -->
 
-		<div id="main-content">
-			<div id="main-content__container">
+		<div id="main-header">
+			<div id="main-content__container" style="display: contents!important;">
 				 <?php
                         // Carga la sección dinámica
                         include $templateFile;
@@ -281,6 +349,315 @@ if (!file_exists($templateFile)) {
 		</div> <!-- main-content -->
 	</section> <!-- main -->
 
-	<script src="app.js"></script>
+
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="app.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/dropify.min.js"></script>
+    <script src="assets/js/dropify-init.js"></script>
+   <!-- <script src="assets/js/common.min.js"></script>
+
+    <script src="assets/js/settings.js"></script>
+    <script src="assets/js/quixnav.js"></script>
+    <script src="assets/js/styleSwitcher.js"></script>
+    <script src="assets/js/dropify.min.js"></script>
+    <script src="assets/js/dropify-init.js"></script>
+    <script src="assets/js/switchery.min.js"></script>
+    <script src="assets/js/switchery-init.js"></script>-->
+
+    <script src="assets/fullcalendar/js/fullcalendar.min.js"></script>
+    <script src="assets/fullcalendar/js/sweetalert2.min.js"></script>
+    <script src="assets/js/tabulator.min.js"></script>
+    <script type="text/javascript">
+        const navLinks = document.querySelectorAll('.nav-menu');
+        // Función para establecer el enlace activo
+        if (!esNuloOVacio(navLinks)){
+            // Al hacer clic en un enlace, se guarda como activo
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // e.preventDefault();
+                    setActiveLink(this);
+
+                });
+            });
+        }
+        function setActiveLink(link) {
+            if (esNuloOVacio(link)){
+                const defaultLink = "?section=salon";
+                link= document.querySelector(`.nav-menu[href="${defaultLink}"]`);
+            }
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            link.classList.add('active');
+            localStorage.setItem('activeLink', link.getAttribute('href')); // Guarda el href como identificador
+        }
+
+
+        // Al cargar la página, revisa si hay un enlace guardado
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedHref = localStorage.getItem('activeLink');
+            console.log(savedHref);
+            const params = new URLSearchParams(window.location.search);
+            const nombre = "?section="+params.get('section');
+            if (savedHref) {
+                const savedLink = document.querySelector(`.nav-menu[href="${savedHref}"]`);
+                if (savedLink===nombre) {
+                    console.log(savedHref);
+                    setActiveLink(savedLink);
+                    console.log(savedLink);
+                  //  savedLink.click();
+                }else{
+                    const savedLink = document.querySelector(`.nav-menu[href="${nombre}"]`);
+                    setActiveLink(savedLink);
+                }
+            }
+        });
+        function esNuloOVacio(v) {
+            return v === null || v === undefined || v === "";
+        }
+        function editarCuenta(){
+            var updateConfig=  document.getElementById("actualizar");
+            var mostrarConfig=  document.getElementById("mostrar");
+            if (updateConfig!==undefined && mostrarConfig!==undefined){
+                updateConfig.style.display = "block";
+                mostrarConfig.style.display = "none";
+            }
+        }
+        $(document).ready(function () {
+
+          var updateConfig=  document.getElementById("actualizar");
+            if (updateConfig!==undefined && updateConfig!==null){
+                updateConfig.style.display = "none";
+            }
+
+
+        /*    $('#external-events .fc-event').each(function () {
+             var t= $.trim($(this).text())
+                $(this).data('eventObject', {
+                    title:t ,
+                    stick: true
+                });
+                var eventObject = $(this).data('event');
+                $(this).data('eventObject',eventObject);
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,
+                    revertDuration: 0
+                });
+               //
+            });*/
+            $('.fc-event').each(function() {
+                // Almacena datos necesarios para que FullCalendar pueda leerlos al soltar
+               /* $(this).data('event', {
+                    title: $(this).text(),
+                    stick: true
+                });*/
+                var eventObject = $(this).data('event');
+                console.log(this);
+                $(this).data('eventObject',eventObject);
+                // Hace que el elemento sea arrastrable
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,
+                    revertDuration: 0
+                });
+                console.log(this);
+            });
+
+
+
+            $('#calendar').fullCalendar({
+                locale:'es',
+                editable: true,
+                droppable: true,
+                selectable: true,
+                defaultView: 'month',
+                events: 'controllers/calendar/load.php',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+               /* drop: function (date) {
+                    var title = $(this).text();
+                    var start = date.format();
+
+                    $.post('controllers/calendar/insert.php', { title: title, start: start, end: start }, function (response) {
+                        Swal.fire('Evento agregado', '', 'success');
+                        $('#calendar').fullCalendar('refetchEvents');
+                    });
+                },*/
+                drop: function(date, jsEvent, ui, resourceId) {
+                    var originalEventObject = $(ui.helper).data('eventObject');
+
+                    // crea una copia para no modificar el original
+                    var copiedEventObject = $.extend({}, originalEventObject);
+                    console.log(JSON.stringify(originalEventObject));
+                    console.log(JSON.stringify(copiedEventObject));
+                    console.log(JSON.stringify(date));
+                   // console.log(JSON.stringify(jsEvent.end));
+                    // asignar la fecha soltada
+                    copiedEventObject.start = date;
+                   // var end = copiedEventObject.end;
+                    var title= originalEventObject.title;
+                    var id= originalEventObject.id;
+                    // aquí puedes hacer la llamada AJAX para guardar en BD
+
+                 /*   $.ajax({
+                        url: 'controllers/calendar/insert.php',
+                        method: 'POST',
+                        data: {
+                            id: id,
+                            start:copiedEventObject.start,
+                            end: copiedEventObject.start,
+                            title: title
+                        },
+                        success: function(response) {
+                            // Si es necesario, puedes realizar alguna acción después de que el evento se haya guardado correctamente
+                            $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                        },
+                        error: function() {
+                            // Si hay un error, revertir la acción de arrastre
+                            $('#calendar').fullCalendar('refetchEvents');
+                        }
+                    });*/
+
+
+
+
+
+                    $.post('controllers/calendar/insert.php', { title: title, start: date, end: date }, function (response) {
+                        console.log(JSON.stringify(response));
+                        Swal.fire('Evento agregado', '', 'success');
+                        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                    });
+
+                },
+                select: function (start, end) {
+                    Swal.fire({
+                        title: 'Nuevo evento',
+                        input: 'text',
+                        showCancelButton: true,
+                        confirmButtonText: 'Agregar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.post('controllers/calendar/insert.php', {
+                                title: result.value,
+                                start: start.format(),
+                                end: end.format()
+                            }, function () {
+                                $('#calendar').fullCalendar('refetchEvents');
+                            });
+                        }
+                    });
+                    $('#calendar').fullCalendar('unselect');
+                },
+                eventClick: function (event) {
+                    Swal.fire({
+                        title: '¿Qué deseas hacer?',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Editar',
+                        denyButtonText: 'Eliminar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Editar evento',
+                                input: 'text',
+                                inputValue: event.title,
+                                showCancelButton: true,
+                                confirmButtonText: 'Guardar'
+                            }).then(res => {
+                                if (res.isConfirmed) {
+                                    $.post('controllers/calendar/update.php', {
+                                        id: event.id,
+                                        title: res.value,
+                                        start: event.start.format(),
+                                        end: event.end ? event.end.format() : event.start.format()
+                                    }, function () {
+                                        $('#calendar').fullCalendar('refetchEvents');
+                                    });
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            $.post('controllers/calendar/delete.php', { id: event.id }, function () {
+                                $('#calendar').fullCalendar('refetchEvents');
+                            });
+                        }
+                    });
+                },
+                eventDrop: function (event) {
+                    console.log(JSON.stringify(event));
+                    $.post('controllers/calendar/update.php', {
+                        id: event.id,
+                        title: event.title,
+                        start: event.start.format(),
+                        end: event.end ? event.end.format() : event.start.format()
+                    });
+                }
+            });
+        });
+
+        //Salon script
+        const mesa = document.getElementById('mesa');
+        const selector = document.getElementById('selectorSillas');
+        if (!esNuloOVacio(selector)){
+            selector.addEventListener('change', function () {
+                // Limpiar sillas anteriores
+                mesa.innerHTML = '';
+
+                const cantidad = parseInt(this.value);
+                document.getElementById("cantidad").value=cantidad;
+
+                for (let i = 0; i < cantidad; i++) {
+                    const angle = (360 / cantidad) * i;
+                    const rad = angle * (Math.PI / 180);
+                    const x = 60 * Math.cos(rad);
+                    const y = 60 * Math.sin(rad);
+
+                    const silla = document.createElement('div');
+                    silla.classList.add('silla');
+                    silla.style.left = `calc(50% + ${x}px - 20px)`;
+                    silla.style.top = `calc(50% + ${y}px - 20px)`;
+
+                    mesa.appendChild(silla);
+
+                    // Forzar animación
+                    setTimeout(() => silla.classList.add('visible'), 10);
+                }
+            });
+        }
+
+
+
+
+        function  agregarPedidos(nro_mesa){
+            document.getElementById("nromesa_pedido").value=nro_mesa;
+            // $('#pedidoModalCenter').modal('show');
+
+        }
+        function agregarCliente(nro_mesa){
+            $.ajax({
+                // url: '/mipymessales/controllers/salonController.php',
+                url: '/mipymessales/controllers/mesaController.php',
+                method: 'POST',
+                data: {
+                    mesa: nro_mesa
+                },
+                success: function(data) {
+                    console.log(JSON.stringify(data));
+                    $('#contenido').html(data);
+                    // $('#qrModalCenter').modal('show');
+                    $('#qrModalCenter').modal('show');
+                    // window.location=('index.php?section=salon');
+                    // $('#respuesta').html(data); // Muestra la respuesta del servidor
+                    //$('#miFormulario')[0].reset(); // Limpia el formulario si quieres
+                }
+            });
+
+        }
+
+    </script>
 </body>
 </html>

@@ -1,9 +1,14 @@
 <?php
-$usuario = "if0_38726532";
+/*$usuario = "if0_38726532";
 $contraseña = "ZauvXbCUiigd";
 $nombreBaseDeDatos = "if0_38726532_restaurant_uno";
-# Puede ser 127.0.0.1 o el nombre de tu equipo; o la IP de un servidor remoto
 $rutaServidor = "sql310.infinityfree.com";
+$puerto = "3306";*/
+
+$usuario = "root";
+$contraseña = "123ok";
+$nombreBaseDeDatos = "if0_38726532_restaurant_uno";
+$rutaServidor = "localhost";
 $puerto = "3306";
 try {
     global $base_de_datos;

@@ -8,8 +8,8 @@
 
 
 
-include_once "../pdo/conexion.php";
-
+defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
+require_once ROOT_DIR."pdo/conexion.php";
 if (isset($_POST["agregarmesa"]) ) {
 global $base_de_datos;
 
@@ -47,8 +47,7 @@ window.location=('../index.php');
 }
 if (isset($_POST["mesa"]) ) {
     $id_mesa = $_POST['mesa'];
-    $sentencia = $base_de_datos->prepare("UPDATE mesa
-	SET  disponible=0 WHERE id=:id_c");
+    $sentencia = $base_de_datos->prepare("UPDATE mesa	SET disponible=0 WHERE id=:id_c");
     $sentencia->bindParam(':id_c',$id_mesa);
     $sentencia->execute();
     if (!$sentencia) {

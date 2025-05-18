@@ -1,35 +1,36 @@
 <?php
 
-include_once '../pdo/conexion.php';
-
+defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
+require_once ROOT_DIR."pdo/conexion.php";
 global $base_de_datos;
-
-$categoria = $_POST['categoria'] ?? '';
-
-$stmt = $base_de_datos->prepare('SELECT id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto FROM '. $categoria .' ');
+if(isset($_POST['categoria']))
+$categoria = $_POST['categoria'];
+else $categoria = 'entrantes';
+$stmt = $base_de_datos->prepare("SELECT id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto FROM ". $categoria ."; ");
 //$stmt->bind_param('s', $categoria);
 $stmt->execute();
-$resultado = $stmt->get_result();
-$a="";
-if ($resultado->num_rows > 0) {
+$resultado = $stmt->fetchAll(PDO::FETCH_OBJ);;
+$a="<div class='row'>";
+if (!empty($resultado) && isset($resultado)) {
    /* echo '<ul>';
     while ($fila = $resultado->fetch_assoc()) {
         echo '<li>' . htmlspecialchars($fila['nombre']) . ' - $' . number_format($fila['precio'], 2) . '</li>';
     }
     echo '</ul>';*/
 
-    while ($fila = $resultado->fetch_assoc()) {
-        $id_bebida= $fila['id'];
-        $disponible= $fila['disponible'];
-        $foto= $fila['foto'];
-        $nombre= $fila['nombre'];
-        $ingredientes= $fila['ingredientes'];
-        $tipo= $fila['tipo'];
-        $precio= $fila['precio'];
-        $valoracion= $fila['valoracion'];
+    foreach($resultado as $fila) {
+        $id_bebida= $fila->id;
+        $disponible= $fila->disponible;
+        $foto= $fila->foto;
+        $nombre= $fila->nombre;
+        $ingredientes= $fila->ingredientes;
+        $tipo= $fila->tipo;
+        $precio= $fila->precio;
+        $valoracion= $fila->valoracion;
         $a.= "
-    <div class='col-sm-6'>
-            <div class='card vertical-card__menu'>";
+
+     <div class='col-xl-3 col-lg-6 col-sm-6'>
+            <div class='card vertical-card__menu' style=' border: 1px solid #aca9a9 !important;'>";
 
 
                if($disponible){
@@ -45,13 +46,14 @@ if ($resultado->num_rows > 0) {
                    $a.= "<div class='card-header p-0'>
                         <div class='vertical-card__menu--image'>";
 
-                        
 
-                            $target_file=str_replace(''\'','/', $_SERVER['DOCUMENT_ROOT']).'/RestaurantDashboard/main/images/'.$foto;
+
+                    $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$foto;
                             if (file_exists($target_file)) {
-                                $a.= " <img src=' ../images/". $foto." ' alt='No hay fotos'> ";
+                                $a.= " <img src='/mipymessales/images/". $foto." ' style='height: 287px;' alt='No hay fotos' > ";//width: 259px;padding: 10px;
+
                               }else{
-                                $a.= " <img src='../images/blank1.jpg'  alt='Menu'>";
+                                $a.= " <img src='/mipymessales/images/blank1.jpg'  style='height: 287px;'  alt=''>";
                                 }  
 
 
@@ -60,7 +62,7 @@ if ($resultado->num_rows > 0) {
                 }else{
                     $a.= "  <div class='card-header p-0'> ";
                     $a.= " <div class='vertical-card__menu--image'>
-                            <img src='../images/blank1.jpg'  alt='Menu'>
+                            <img src='/mipymessales/images/blank1.jpg'  style='height: 287px;'  alt=''>
                         </div>
                     </div> ";
                 }
@@ -78,7 +80,7 @@ if ($resultado->num_rows > 0) {
                                 <a href='javascript:void()'><i class='fa fa-heart-o'></i></a>
                             </div>
                         </div> ";
-                       $a.= " <p>". $ingredientes."  </p>";
+                       $a.= " <p class='mb-2'>". $ingredientes."  </p>";
 
                       $a.= "   <div class='d-flex justify-content-between align-items-center'>
                             <h2 class='vertical-card__menu--price'>$<span>". $precio."   cup</span></h2>";
@@ -145,13 +147,15 @@ if ($resultado->num_rows > 0) {
                $a.= "  </div>";
 
          $a.= "  </div>";
-    
-    
+
+        include "../controllers/modal_editarcategoria.php";
+        include "../controllers/modal_eliminarcategoria.php";
       }
     
 } else {
-    $a.= 'No hay elementos en esta categoría.';
+    $a.= "<div class='col-xl-3 col-lg-6 col-sm-6'>No hay elementos en esta categoría.</div>";
 }
+$a.= "  </div>";
 echo $a;
 
 $stmt->close();

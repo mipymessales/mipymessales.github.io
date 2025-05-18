@@ -6,10 +6,13 @@
  * Time: 10:21
  */
 global $_SESSION;
+/*$basePath = realpath(dirname(__FILE__),"");
+echo $_SERVER['REQUEST_URI']*/
 ?>
 
 
 
+<!--<link href="assets/css/switchery.min.css" rel="stylesheet"/>-->
 
 <div class="content-body">
 
@@ -24,7 +27,26 @@ global $_SESSION;
 
         <div class="row">
             <div class="col-12">
-                <h3 class="content-heading">Mesas del salón</h3>
+                <h3 class="content-heading"><span>Mesas del salón</span></h3>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="qrModalCenter">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Escan&eacute;ame !</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="contenido">El QR no se pudo crear</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success btn-ft">Hecho!</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -33,7 +55,8 @@ global $_SESSION;
 
 
             <?php
-            include_once "../pdo/conexion.php";
+            defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
+            include_once ROOT_DIR."pdo/conexion.php";
 
             global $base_de_datos;
             $sentencia = $base_de_datos->query("select disponible as tiene_cliente,id as nro_mesa from mesa");
@@ -51,7 +74,7 @@ global $_SESSION;
                 <?php
                 $b= $mesa->tiene_cliente;
                 $nro_mesa= $mesa->nro_mesa;
-                if(!$b){
+                if($b){
                 ?>
                 <div class="card bg-light">
 
@@ -60,7 +83,7 @@ global $_SESSION;
 
                     // echo $nro_mesa;
 
-                    $sentencia1 = $base_de_datos->prepare("SELECT cl.id,s.id_mesa,cl.id_pedidos,cl.estado_pedidos,cl.estado_cerrar_cuenta,p.id_entrantes,p.id_platos,p.id_postres,p.id_bebidas,p.total_pagar FROM cliente cl INNER JOIN salon s ON s.id_cliente = cl.id INNER JOIN pedidos p ON p.id = cl.id_pedidos WHERE s.id_mesa = ?;");
+                    $sentencia1 = $base_de_datos->prepare("SELECT cl.id,s.id_mesa,cl.lista_pedidos,cl.estado_cuenta,cl.monto_cuenta FROM cliente cl INNER JOIN salon s ON s.id_cliente = cl.id WHERE s.id_mesa = ?;");
                     $sentencia1->execute([$nro_mesa]);
                     $cliente = $sentencia1->fetch(PDO::FETCH_OBJ);
 
@@ -72,7 +95,7 @@ global $_SESSION;
 
                     if($cliente!=null){
 
-                    $estado_ped=$cliente->estado_pedidos;
+                    $estado_ped=$cliente->lista_pedidos;
 
                     // echo $estado_ped;
                     if($estado_ped){
@@ -85,7 +108,7 @@ global $_SESSION;
 
                         <!--    Cerrar Cuenta-->
                         <?php
-                        $estado_cerrar_cuenta = $cliente->estado_cerrar_cuenta;
+                        $estado_cerrar_cuenta = $cliente->estado_cuenta;
                         // echo $estado_ped;
                         if ($estado_cerrar_cuenta){
                         ?>
@@ -116,14 +139,14 @@ global $_SESSION;
                                         <!-- <span class="ribbon ribbon__one vertical-card__menu--status">Available <em class="ribbon-curve"></em></span>-->
                                         <?php
 
-                                        if(!$b){
+                                        if($b){
                                             ?>
                                             <h5 class="card-title text-dark">
                                                 Mesa <?php echo $nro_mesa; ?></h5>
                                             <!--  <p class="card-text">Some quick example text to build on the card title and
                                                   make up the bulk of the card's content.</p>-->
-                                            <a href="javascript:void()" class="btn btn-ft rounded-0 btn-outline-secondary">Historial</a>
-                                            <a href="javascript:void()" onclick="agregarCliente(<?=$nro_mesa?>)" class="btn btn-success btn-ft">Agregar clientes</a>
+                                            <button  class="btn btn-ft rounded-0 btn-outline-secondary">Historial</button>
+                                            <button onclick="agregarCliente(<?=$nro_mesa?>)" class="btn btn-success btn-ft">Agregar clientes</button>
                                         <?php }else { ?>
                                             <h5 class="card-title text-dark ">
                                                 Mesa <?php echo $mesa->nro_mesa ?></h5>
@@ -141,8 +164,8 @@ global $_SESSION;
 
                                                     ?>
 
-                                                    <a href="javascript:void()" class="btn btn-ft rounded-0 btn-outline-warning">
-                                                        Listar pedidos</a>
+                                                    <button class="btn btn-ft rounded-0 btn-outline-warning">
+                                                        Listar pedidos</button>
 
 
                                                 <?php } else { ?>
@@ -154,14 +177,14 @@ global $_SESSION;
                                                     if ($estado_cerrar_cuenta) {
                                                         ?>
 
-                                                        <a href="javascript:void()" class="btn btn-ft rounded-0 btn-outline-danger">
-                                                            Ver cuenta</a>
+                                                        <button class="btn btn-ft rounded-0 btn-outline-danger">
+                                                            Ver cuenta</button>
 
 
                                                     <?php } else { ?>
 
 
-                                                        <a href="javascript:void()" class="btn btn-ft rounded-0 btn-outline-success">Observar pedidos</a>
+                                                        <button class="btn btn-ft rounded-0 btn-outline-success">Observar pedidos</button>
 
 
                                                     <?php } ?>
@@ -173,8 +196,8 @@ global $_SESSION;
                                             }else{
                                                 ?>
 
-                                                <a href="javascript:void()" class="btn btn-ft rounded-0 btn-outline-success">Listar</a>
-                                                <a href="javascript:void()" onclick="agregarPedidos(<?=$nro_mesa?>)" class="btn btn-outline-warning btn-ft">Agregar</a>
+                                                <button class="btn btn-ft rounded-0 btn-outline-success">Listar pedidos</button>
+                                                <button data-toggle="modal" data-target="#pedidoModalCenter" onclick="agregarPedidos(<?=$nro_mesa?>)" class="btn btn-outline-warning btn-ft">Agregar pedido</button>
 
                                             <?php } ?>
 
@@ -184,7 +207,7 @@ global $_SESSION;
 
                                     <?php
 
-                                    if(!$b){
+                                    if($b){
                                     ?>
 
                                     <div class="card-footer bg-transparent border-0 text-dark">Esperando clientes...
@@ -262,7 +285,7 @@ global $_SESSION;
                                 <!-- Modal  INSERT-->
 
                                 <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="../controllers/salonController.php" method="POST" id="main-contact-form">
+                                    <form enctype="multipart/form-data" class="form-valide" action="/mipymessales/controllers/salonController.php" method="POST" id="main-contact-form">
                                         <div class="modal fade" id="exampleModalCenter">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
@@ -317,7 +340,7 @@ global $_SESSION;
                                 <!-- Modal  Insertar Pedidos-->
 
                                 <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="../php/salonController.php" method="POST" id="main-contact-form">
+                                    <form enctype="multipart/form-data" class="form-valide" action="/mipymessales/controllers/salonController.php" method="POST" id="main-contact-form">
 
                                         <div class="modal fade" id="pedidoModalCenter">
                                             <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%;">
@@ -339,7 +362,7 @@ global $_SESSION;
 
                                                                 if($pedidosList!=null){
                                                                     ?>
-                                                                    <div class="col-xl-4 col-lg-6 col-xxl-6">
+                                                                    <div class="col-xl-3 col-lg-3 col-xxl-3">
                                                                         <div class="card top_menu_widget">
                                                                             <div class="card-body">
                                                                                 <h4 class="card-title"> <?php echo $arraypedidos;  ?></h4>
@@ -349,32 +372,33 @@ global $_SESSION;
                                                                                     $foto=$listaItem->foto;
                                                                                     $nombre=$listaItem->nombre;
                                                                                     $precio=$listaItem->precio;
-                                                                                    $tiempo_elavoracion=$listaItem->tiempo_elavoracion;
                                                                                     ?>
 
-                                                                                    <div class="media border-bottom pt-3 pb-3">
+                                                                                    <div class="media border-bottom pt-3 pb-3" style="align-items: center !important;">
                                                                                         <?php if($foto!=null){?>
 
                                                                                             <?php
-                                                                                            $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/RestaurantDashboard/main/images/".$foto;
+                                                                                            $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$foto;
                                                                                             if (file_exists($target_file)) {  ?>
-                                                                                                <img width="50" height="50" alt="#" class="mr-3" src="../images/<?php echo $foto;?>">
+                                                                                                <image src="/mipymessales/images/<?php echo $foto;?>" style="height: 50px" />
                                                                                             <?php  }else{?>
-                                                                                                <input type="file" class="dropify" name="image" id="image" data-default-file="../images/blank1.jpg" />
+                                                                                                <image src="/mipymessales/images/blank1.jpg" style="height: 50px"/>
                                                                                             <?php }  ?>
 
 
 
                                                                                         <?php }else{?>
-                                                                                            <input type="file" class="dropify" name="image" id="image" data-default-file="../images/blank1.jpg" />
+                                                                                            <image src="/mipymessales/images/blank1.jpg" style="height: 50px"/>
 
                                                                                         <?php }?>
 
                                                                                         <div class="media-body">
                                                                                             <h5 class="mb-1 mt-sm-1 mt-0"> <?php echo $nombre; ?></h5>
-                                                                                            <span> <?php echo $tiempo_elavoracion; ?></span>
                                                                                         </div>
                                                                                         <h5 class="badge-lighten-primary">$ <?php echo $precio; ?> </h5>
+                                                                                        <div class="form-group mb-0">
+                                                                                           <span><input id="chk_2" type="checkbox" class="js-switch js-switch-1 js-switch-md" data-size="small" /></span>
+                                                                                        </div>
                                                                                     </div>
                                                                                 <?php } ?>
 
@@ -407,14 +431,6 @@ global $_SESSION;
 
                                 <!--end modal insert pedidos-->
 
-
-
-                                <?php
-                                include_once "pie.php";?>
-
-
-
-
                                 <!--**********************************
                                     Right sidebar end
                                 ***********************************-->
@@ -426,102 +442,15 @@ global $_SESSION;
                             <!--**********************************
                                 Scripts
                             ***********************************-->
-                            <script src="../../assets/plugins/common/common.min.js"></script>
-                            <script src="../js/custom.min.js"></script>
-                            <script src="../js/settings.js"></script>
-                            <script src="../js/quixnav.js"></script>
-                            <script src="../js/styleSwitcher.js"></script>
 
-                            <script type="application/javascript">
-                                const mesa = document.getElementById('mesa');
-                                const selector = document.getElementById('selectorSillas');
+                           <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-                                selector.addEventListener('change', function () {
-                                    // Limpiar sillas anteriores
-                                    mesa.innerHTML = '';
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-                                    const cantidad = parseInt(this.value);
-                                    document.getElementById("cantidad").value=cantidad;
-
-                                    for (let i = 0; i < cantidad; i++) {
-                                        const angle = (360 / cantidad) * i;
-                                        const rad = angle * (Math.PI / 180);
-                                        const x = 60 * Math.cos(rad);
-                                        const y = 60 * Math.sin(rad);
-
-                                        const silla = document.createElement('div');
-                                        silla.classList.add('silla');
-                                        silla.style.left = `calc(50% + ${x}px - 20px)`;
-                                        silla.style.top = `calc(50% + ${y}px - 20px)`;
-
-                                        mesa.appendChild(silla);
-
-                                        // Forzar animación
-                                        setTimeout(() => silla.classList.add('visible'), 10);
-                                    }
-                                });
+                            <script src="assets/js/switchery.min.js"></script>
+                            <script src="assets/js/switchery-init.js"></script>
+                            <script src="assets/js/jquery-ui.min.js"></script>-->
 
 
-                                function  agregarPedidos(nro_mesa){
-
-                                    document.getElementById("nromesa_pedido").value=nro_mesa;
-                                    $("#pedidoModalCenter").modal('show');
-
-
-
-                                }
-                                function agregarCliente(nro_mesa){
-
-                                    e.preventDefault(); // Evita que el formulario recargue la página
-
-                                    $.ajax({
-                                        url: 'procesar.php',
-                                        method: 'POST',
-                                        //data: $(this).serialize(), // Envía los datos del formulario
-                                        success: function(data) {
-                                            // $('#respuesta').html(data); // Muestra la respuesta del servidor
-                                            // $('#miFormulario')[0].reset(); // Limpia el formulario si quieres
-                                        }
-                                    });
-
-                                }
-
-                            </script>
-                            <style>
-                                body {
-                                    font-family: Arial, sans-serif;
-                                    text-align: center;
-                                }
-
-                                .mesa {
-                                    width: 120px;
-                                    height: 120px;
-                                    background-color: #13268BB0;
-                                    border-radius: 30%;
-                                    margin: 100px auto;
-                                    position: relative;
-                                }
-
-                                .silla {
-                                    width: 40px;
-                                    height: 40px;
-                                    background-color: #ccc;
-                                    border-radius: 10px;
-                                    position: absolute;
-                                    opacity: 0;
-                                    transform: scale(0);
-                                    transition: all 0.5s ease;
-                                }
-
-                                .silla.visible {
-                                    opacity: 1;
-                                    transform: scale(1);
-                                }
-
-                                select {
-                                    padding: 10px;
-                                    font-size: 16px;
-                                }
-                            </style>
 
 

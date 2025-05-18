@@ -59,9 +59,9 @@ Table of Sass Contents
 @import url(../icons/material-design-iconic-font/materialdesignicons.min.css);
 @import url(../icons/pe-icon-set-weather/css/pe-icon-set-weather.min.css);
 @import url(../icons/linear-icons/style.css);
-@import url(../../assets/plugins/animate/animate.min.css);
+/*@import url(../../assets/plugins/animate/animate.min.css);
 @import url(../../assets/plugins/metismenu/css/metisMenu.min.css);
-@import url(../../assets/plugins/toastr/css/toastr.min.css);
+@import url(../../assets/plugins/toastr/css/toastr.min.css);*/
 .dropdown-mega-menu .ext-link.link-1 a, .pricing-wrapper .single-pricing-table .upper-border.style-1, .pricing-wrapper .single-pricing-table .plan-price.style-1, .pricing-wrapper .single-pricing-table .btn.style-1:hover {
   background: #f0a907;
   background: -moz-linear-gradient(top, #f0a907 0%, #f53c79 100%);
@@ -3965,7 +3965,8 @@ input[type="button"].btn-block {
 
 .media {
   display: flex;
-  align-items: flex-start; }
+  align-items: flex-start;
+}
 
 .media-body {
   flex: 1; }
@@ -5743,7 +5744,9 @@ button.bg-dark:focus {
 
 .mb-2,
 .my-2 {
-  margin-bottom: 0.5rem !important; }
+  margin-bottom: 0.5rem !important;
+text-align: left;
+}
 
 .ml-2,
 .mx-2 {
@@ -10700,7 +10703,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   top: 0.625rem; }
 
 .content-body {
-  margin-left: 15rem;
+
   z-index: 0; }
   @media only screen and (min-width: 1200px) and (max-width: 1350px) {
     .content-body {
@@ -15510,7 +15513,7 @@ button {
   margin-bottom: 1.875rem;
   transition: all .5s ease-in-out;
   position: relative;
-  border: 0px solid #e3eaef;
+  border: 1px solid #aaa7a7;
   box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15); }
 
 
@@ -16295,7 +16298,7 @@ button {
     padding: 3px 10px;
     background: #3AB54B;
     color: #fff;
-    font-size: 0.625rem; }
+    }
     .ribbon__one::after {
       position: absolute;
       width: 0;
@@ -16305,6 +16308,31 @@ button {
       left: 0;
       content: "";
       bottom: -10px; }
+
+.ribbon__oneestatus {
+  top: 15px;
+  left: -11px;
+  min-height: 20px;
+  min-width: 52px;
+  text-align: center;
+  padding: 3px 10px;
+  background: #ffbc00;
+  color: #fff;
+}
+.ribbon__oneestatus::after {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 10px solid #ffbc00;
+  border-left: 11px solid transparent;
+  left: 0;
+  content: "";
+  bottom: -10px; }
+
+
+
+
+
   .ribbon__two {
     width: 50px;
     height: 50px;
@@ -16409,10 +16437,9 @@ button {
     color: #fff; }
   .ribbon-curve {
     position: absolute;
-    top: 0;
+    top: 0px;
     right: -6px;
     width: 10px;
-    height: 11px;
     border-top: 11px solid #3AB54B;
     border-bottom: 10px solid #3AB54B;
     border-right: 5px solid transparent; }

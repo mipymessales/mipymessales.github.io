@@ -100,7 +100,7 @@
     <h1>404</h1>
     <h2>Oops! Página no encontrada</h2>
     <p>Tal parece que la página que buscas no ha sido encontrada o fue movida.</p>
-    <a href="dashboard.php" class="button">Regresar a inicio</a>
+<!--    <a href="../index.php" class="button">Regresar a inicio</a>-->
 </div>
 
 
