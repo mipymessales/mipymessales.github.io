@@ -92,7 +92,8 @@ try {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="/mipymessales/">
+    <!--<base href="/mipymessales/">-->
+    <base href="/">
     <title>Sales Manager</title>
     <style>
         .tabs {
@@ -432,7 +433,7 @@ try {
         if (value>1){
            //Eliminar una fila con ese id de plato
             $.ajax({
-                url: '/mipymessales/controllers/pedidosController.php',
+                url: '/controllers/pedidosController.php',
                 /*  headers: {
                       "Content-Type": "application/x-www-form-urlencoded",
                   },*/
@@ -462,7 +463,7 @@ try {
     function incremnetPedido(idplato,idmesa,idcliente,estadopedido,categoria,idpedidos){
         if (estadopedido==="Enviado"){
             $.ajax({
-                url: '/mipymessales/controllers/pedidosController.php',
+                url: '/controllers/pedidosController.php',
                 /*  headers: {
                       "Content-Type": "application/x-www-form-urlencoded",
                   },*/
@@ -618,7 +619,7 @@ try {
         //console.log((categoria).getAttribute("id"))
 
         $.ajax({
-            url: '/mipymessales/controllers/obtener_menu_cliente.php',
+            url: '/controllers/obtener_menu_cliente.php',
             /*  headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
               },*/
@@ -698,7 +699,7 @@ try {
             idcliente= <?php echo ($idcliente) ?? "undefined"; ?>;
         }
         $.ajax({
-            url: '/mipymessales/controllers/obtener_pedido.php',
+            url: '/controllers/obtener_pedido.php',
             /*  headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
               },*/

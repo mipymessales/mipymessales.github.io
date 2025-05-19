@@ -18,7 +18,7 @@ if (isset($_REQUEST["id_categoria"])){
     $categoria=$_REQUEST["categoria"];
 
     if (!hash_equals($imagess,"blank1.jpg")){
-        $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$imagess;
+        $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$imagess;
         unlink($target_file);
     }
 

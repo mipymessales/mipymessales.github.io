@@ -105,7 +105,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12 ">
-                                            <input type="file" class="dropify" name="image" data-height="200" id="image" data-default-file="/mipymessales/images/blank1.jpg" />
+                                            <input type="file" class="dropify" name="image" data-height="200" id="image" data-default-file="/images/blank1.jpg" />
                                         </div>
                                     </div>
                                     <div class="row">
@@ -203,7 +203,7 @@
         //console.log((categoria).getAttribute("id"))
 
         $.ajax({
-            url: '/mipymessales/controllers/obtener_menu.php',
+            url: '/controllers/obtener_menu.php',
           /*  headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },*/

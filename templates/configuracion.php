@@ -1,5 +1,5 @@
 <?php
-$ruta=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/transferencia_transfermovil.png";
+$ruta=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/transferencia_transfermovil.png";
 defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
 include_once ROOT_DIR."pdo/conexion.php";
 global $base_de_datos;
@@ -67,7 +67,7 @@ $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
                 </div>
                 <div class="card horizontal-card__menu mb-0 horizontal">
                     <div class="horizontal-card__menu--image">
-                        <img src="/mipymessales/images/transferencia_transfermovil.png"  alt="menu">
+                        <img src="/images/transferencia_transfermovil.png"  alt="menu">
                     </div>
                     <div class="card-body">
                         <div id="mostrar">

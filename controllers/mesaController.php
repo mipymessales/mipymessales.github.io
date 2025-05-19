@@ -35,7 +35,7 @@ if (isset($_POST["mesa"]) && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST
 // 4. Generar el código QR
     //$nombreArchivo = 'qr_mesa1' . time() . '.png';
     $nombreArchivo = 'qr_mesa'.$nroMesa.'.png';
-    $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$nombreArchivo;
+    $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$nombreArchivo;
     $rutaCompleta = $target_file;
 
     QRcode::png($loginURL, $rutaCompleta, QR_ECLEVEL_L, 4);
@@ -45,7 +45,7 @@ if (isset($_POST["mesa"]) && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST
     echo "<h3>QR de login generado para la Mesa # $nroMesa </h3>";
     echo "<p style='margin: 10px 0 0 0;'><strong>Usuario:</strong> $usuario_generado <br><strong>Contraseña:</strong> $contrasena_generada</p>";
     //echo "<p><strong>Contraseña:</strong> $contrasena_generada</p>";
-    $srcImg="/mipymessales/images/".$nombreArchivo;
+    $srcImg="/images/".$nombreArchivo;
     echo "<img style='height: 287px;'  alt='Menu' src='$srcImg' />";
     echo "<p class='mb-2' style='margin: 10px 0 0 0;'>$loginURL</p>";
     echo "</div>";

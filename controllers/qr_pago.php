@@ -3,10 +3,10 @@ include '../controllers/auth_check.php';
 require_once "../library/phpqrcode/qrlib.php";
 if(isset($_POST['nro_tarjeta']) && isset($_POST['telefono'])){
     $trasnfermovil="TRANSFERMOVIL_ETECSA,TRANSFERENCIA,".$_POST['nro_tarjeta'].",".$_POST['telefono'];
-    $ruta=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/transferencia_transfermovil.png";
+    $ruta=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/transferencia_transfermovil.png";
     QRcode::png($trasnfermovil, $ruta, QR_ECLEVEL_L, 4);
 
-    $srcImg="/mipymessales/images/transferencia_transfermovil.png";
+    $srcImg="/images/transferencia_transfermovil.png";
     echo "<img style='height: 287px;'  alt='Menu' src='$srcImg' />";
 
     defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');

@@ -640,7 +640,7 @@ if (!file_exists($templateFile)) {
         function agregarCliente(nro_mesa){
             $.ajax({
                 // url: '/mipymessales/controllers/salonController.php',
-                url: '/mipymessales/controllers/mesaController.php',
+                url: '/controllers/mesaController.php',
                 method: 'POST',
                 data: {
                     mesa: nro_mesa

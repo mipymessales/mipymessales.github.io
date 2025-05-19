@@ -56,12 +56,12 @@ if (!empty($resultado) && isset($resultado)) {
 
 
 
-                    $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$foto;
+                    $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$foto;
                             if (file_exists($target_file)) {
-                                $a.= " <img src='/mipymessales/images/". $foto." ' style='height: 287px;' alt='No hay fotos' > ";//width: 259px;padding: 10px;
+                                $a.= " <img src='/images/". $foto." ' style='height: 287px;' alt='No hay fotos' > ";//width: 259px;padding: 10px;
 
                               }else{
-                                $a.= " <img src='/mipymessales/images/blank1.jpg'  style='height: 287px;'  alt=''>";
+                                $a.= " <img src='/images/blank1.jpg'  style='height: 287px;'  alt=''>";
                                 }  
 
 
@@ -70,7 +70,7 @@ if (!empty($resultado) && isset($resultado)) {
                 }else{
                     $a.= "  <div class='card-header p-0'> ";
                     $a.= " <div class='vertical-card__menu--image'>
-                            <img src='/mipymessales/images/blank1.jpg'  style='height: 287px;'  alt=''>
+                            <img src='/images/blank1.jpg'  style='height: 287px;'  alt=''>
                         </div>
                     </div> ";
                 }

@@ -49,7 +49,7 @@
                                                 <div class="card-header p-0">
                                                     <div class="vertical-card__menu--image">
 
-                                                        <img src="/mipymessales/images/<?php echo $foto;?> "  alt="No hay fotos">
+                                                        <img src="/images/<?php echo $foto;?> "  alt="No hay fotos">
 
 
 
@@ -58,7 +58,7 @@
                                             <?php }else{?>
                                                 <div class="card-header p-0">
                                                     <div class="vertical-card__menu--image">
-                                                        <img src="/mipymessales/images/blank1.jpg"  alt="">
+                                                        <img src="/images/blank1.jpg"  alt="">
                                                     </div>
                                                 </div>
                                             <?php }?>

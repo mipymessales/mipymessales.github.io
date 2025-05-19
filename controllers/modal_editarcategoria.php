@@ -41,17 +41,17 @@
                                             <?php if($foto!=null){?>
 
                                                 <?php
-                                                $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$foto;
+                                                $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$foto;
                                                 if (file_exists($target_file)) {  ?>
-                                                    <input type="file" class="dropify" name="image" id="image" data-default-file="/mipymessales/images/<?php echo $foto;?>" />
+                                                    <input type="file" class="dropify" name="image" id="image" data-default-file="/images/<?php echo $foto;?>" />
                                                 <?php  }else{?>
-                                                    <input type="file" class="dropify" name="image" id="image" data-default-file="/mipymessales/images/blank1.jpg" />
+                                                    <input type="file" class="dropify" name="image" id="image" data-default-file="/images/blank1.jpg" />
                                                 <?php }  ?>
 
 
 
                                             <?php }else{?>
-                                                <input type="file" class="dropify" name="image" id="image" data-default-file="/mipymessales/images/blank1.jpg" />
+                                                <input type="file" class="dropify" name="image" id="image" data-default-file="/images/blank1.jpg" />
 
                                             <?php }?>
 

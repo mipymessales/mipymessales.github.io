@@ -340,7 +340,7 @@ echo $_SERVER['REQUEST_URI']*/
                                 <!-- Modal  Insertar Pedidos-->
 
                                 <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="/mipymessales/controllers/salonController.php" method="POST" id="main-contact-form">
+                                    <form enctype="multipart/form-data" class="form-valide" action="/controllers/salonController.php" method="POST" id="main-contact-form">
 
                                         <div class="modal fade" id="pedidoModalCenter">
                                             <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%;">
@@ -378,17 +378,17 @@ echo $_SERVER['REQUEST_URI']*/
                                                                                         <?php if($foto!=null){?>
 
                                                                                             <?php
-                                                                                            $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$foto;
+                                                                                            $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$foto;
                                                                                             if (file_exists($target_file)) {  ?>
-                                                                                                <image src="/mipymessales/images/<?php echo $foto;?>" style="height: 50px" />
+                                                                                                <image src="/images/<?php echo $foto;?>" style="height: 50px" />
                                                                                             <?php  }else{?>
-                                                                                                <image src="/mipymessales/images/blank1.jpg" style="height: 50px"/>
+                                                                                                <image src="/images/blank1.jpg" style="height: 50px"/>
                                                                                             <?php }  ?>
 
 
 
                                                                                         <?php }else{?>
-                                                                                            <image src="/mipymessales/images/blank1.jpg" style="height: 50px"/>
+                                                                                            <image src="/images/blank1.jpg" style="height: 50px"/>
 
                                                                                         <?php }?>
 
