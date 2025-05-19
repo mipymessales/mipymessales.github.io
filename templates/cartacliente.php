@@ -378,7 +378,7 @@ try {
 
                 </div>
 
-            <div class="content-body">
+            <div class="content-body" style="margin-left: auto!important;">
 
                 <div class="container-fluid">
 
