@@ -231,11 +231,12 @@
                     });
             }
         });
-        cargarPedidoMesa(idmesa);
+        if (!esNuloOVacio(idmesa))
+           cargarPedidoMesa(idmesa);
     };
     function cargarPedidoMesa(mesa) {
         $.ajax({
-            url: "controllers/obtener_pedido_mesa.php",
+            url: "/controllers/obtener_pedido_mesa.php",
             type: "POST",
             data: { mesa: mesa },
             dataType: "json",
