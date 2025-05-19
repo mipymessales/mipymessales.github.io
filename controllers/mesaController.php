@@ -1,9 +1,6 @@
 <?php
 require_once 'error_handler.php';
 defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
-$address=ROOT_DIR;
-echo "<script type='text/javascript'>
-     console.log({$address})";
 include_once "cifrado.php";
 include_once "Host.php";
 require_once "class.SqlInjectionUtils.php";
