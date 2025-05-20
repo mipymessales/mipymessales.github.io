@@ -33,7 +33,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !SqlInjectionUtils::checkSqlInjecti
             http_response_code(400);
             echo "Faltan parámetros para la actualización";
         }
-    } else {
+    } elseif ($action === 'delete')  {
+        $id_pedidos = $_POST['id'];
+        $sentencia = $base_de_datos->prepare("DELETE FROM pedidos WHERE id=:idpedidos");
+        $sentencia->bindParam(':idpedidos',$id_pedidos);
+        if ($sentencia->execute()) {
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error"]);
+        }
+
+    }else{
         http_response_code(400);
         echo "Acción no válida";
     }

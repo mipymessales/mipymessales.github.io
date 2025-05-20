@@ -489,6 +489,28 @@ try {
 
     }
 
+    function cancelarPedido(idpedidos,idcliente,idmesa){
+
+        $.ajax({
+            url: '/controllers/edit_pedido_mesa.php',
+            /*  headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+              },*/
+            dataType:'json',
+            method: 'POST',
+            data: { action:'delete',id:idpedidos },
+            success: function(data) {
+                // document.getElementById('contenido').innerHTML =data;
+                if (data['status']=='success'){
+                    // console.log("GOOD");
+                    // location.reload();
+                    cargarPedido(idmesa,idcliente);
+                }
+
+
+            }
+        });
+    }
     var categoriaO = "entrantes";
     var idmesa = null;
     var idcliente = null;

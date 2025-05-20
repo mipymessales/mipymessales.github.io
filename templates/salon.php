@@ -14,7 +14,7 @@ echo $_SERVER['REQUEST_URI']*/
 
 <!--<link href="assets/css/switchery.min.css" rel="stylesheet"/>-->
 
-<div class="content-body">
+<div class="content-body" style="margin-left: auto!important;">
 
     <div class="container-fluid">
         <div class="row justify-content-between mb-3">

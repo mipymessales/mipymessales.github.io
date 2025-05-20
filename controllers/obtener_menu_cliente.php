@@ -14,7 +14,7 @@ else die();
 if(isset($_POST['idcliente']))
     $idcliente = $_POST['idcliente'];
 else die();
-$stmt = $base_de_datos->prepare("SELECT id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto FROM ". $categoria ."; ");
+$stmt = $base_de_datos->prepare("SELECT id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto FROM ". $categoria ."; WHERE disponible=1");
 //$stmt->bind_param('s', $categoria);
 $stmt->execute();
 $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);;

@@ -166,7 +166,7 @@ if (!empty($pedidos) && count($pedidos) > 0) {
         <?php if (hash_equals($estado, 'Enviado')) { ?>
             <?php $a .= " <div class='horizontal-card__menu--footer d-flex justify-content-between align-items-center'>
   <div class='vertical-card__menu--button'>
-<button class='btn btn-danger btn-cancelar' id='btn-{$categoriapedido}{$idcategoria}{$idcliente}' onclick=cancelarPedido('$categoriapedido','$idcategoria','$idcliente')>Cancelar pedido</button>
+<button class='btn btn-danger btn-cancelar' id='btn-{$categoriapedido}{$idcategoria}{$idcliente}' onclick=cancelarPedido('$idpedidos','$idcliente','$nro_mesa')>Cancelar pedido</button>
 
   </div>
  </div>
