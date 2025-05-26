@@ -3,12 +3,14 @@
 defined('ROOT_DIR') || define('ROOT_DIR', dirname(__FILE__, 2) . '/');
 include_once ROOT_DIR . "pdo/conexion.php";
 require_once ROOT_DIR . "controllers/class.SqlInjectionUtils.php";
+require_once ROOT_DIR . "controllers/Host.php";
 global $base_de_datos;
 $pedidos = array();
 if (isset($_POST['mesa']) && isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
     $nro_mesa = $_POST['mesa'];;
     $idcliente = $_POST['idcliente'];
-    $sentencia1 = $base_de_datos->prepare("SELECT cl.id as idcliente,cl.id_mesa as idmesa,cl.monto_cuenta ,s.* FROM cliente cl LEFT JOIN pedidos s ON cl.id_mesa = s.id_mesa and cl.id = s.id_cliente WHERE cl.id_mesa = ? and cl.estado_cuenta=1 and cl.id=? order by s.fecha desc ");
+    $f = $_POST['f'];
+    $sentencia1 = $base_de_datos->prepare("SELECT cl.id as idcliente,cl.id_mesa as idmesa,cl.estado_cuenta ,s.* FROM cliente cl LEFT JOIN pedidos s ON cl.id_mesa = s.id_mesa and cl.id = s.id_cliente WHERE cl.id_mesa = ? and cl.estado_cuenta=1 and cl.id=? order by s.fecha desc ");
 
     try {
         $sentencia1->execute([$nro_mesa, $idcliente]);
@@ -17,10 +19,13 @@ if (isset($_POST['mesa']) && isset($_POST['idcliente']) && !SqlInjectionUtils::c
         while ($cliente = $sentencia1->fetch(PDO::FETCH_ASSOC)) {
             $categoria = $cliente['categoria'];
             $cantidad =intval($cliente['cantidad']);
-            echo "<script type='text/javascript'>
-     console.log({$cantidad});
+           if (intval($cliente['estado_cuenta'])==0){
+               header('Location: ' . Host::getHOSTNAME()."templates/404.php");
+           }
 
-</script>";
+            //Chequear si la cuenta de cliente se cerro para mandar a 404.php
+
+
             if (empty($categoria)) {
                 continue;
             }
@@ -70,8 +75,23 @@ if (isset($_POST['mesa']) && isset($_POST['idcliente']) && !SqlInjectionUtils::c
 
 <?php
 $a = " ";
+$factura="<div class='card'>
+                                        <div class='card-body'>
+                                            <h4 class='card-title'>Factura</h4>
+                                            <div class='table-responsive'>
+                                                <table class='table'>
+                                                    <thead style='background-color: #ccc !important'>
+                                                    <tr>
+
+                                                        <th>Descripcion</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Precio</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>   ";
 if (!empty($pedidos) && count($pedidos) > 0) {
-    $a .= "<h3 class='content-heading'>Lista de pedidos</h3>";
+    $a .= "<h3 class='content-heading'>Lista de pedidos de la mesa #$nro_mesa</h3>";
     $a .= "<h5 class='align-content-center'>
   Los pedidos tendrán un margen de 2 minutos para su cancelación, despues de haber llegado este tiempo, su pedido llegara a la cocina
   donde será visto y aprobado para su preparación.</h5>";
@@ -92,7 +112,7 @@ if (!empty($pedidos) && count($pedidos) > 0) {
         $idcategoria = $pedidos[$i][0]->id;
         $idplato = $pedidos[$i][0]->id_plato;
         $categoriapedido = $pedidos[$i][1];
-        $foto = $pedidos[$i][0]->foto;
+        $foto = empty($pedidos[$i][0]->foto)?"blank1.jpg":$pedidos[$i][0]->foto;
         $estado = $pedidos[$i][2];
         $nombre = $pedidos[$i][0]->nombre;
         $ingredientes = $pedidos[$i][0]->ingredientes;
@@ -100,10 +120,23 @@ if (!empty($pedidos) && count($pedidos) > 0) {
         $valoracion = $pedidos[$i][0]->valoracion;
         $value = $pedidos[$i][0]->cantidad;
         $idpedidos= $pedidos[$i][0]->idpedidos;
+        $ccc=($precio*$value);
+        $total=$ccc+$total;
+        if ($f) {
+            $factura .= "            
+                 
+                                                        <tr>
+                                                            <td>$nombre</td>
+                                                            <td>$value</td>
+                                                            <td>$precio</td>
+                                                            <td>$ $ccc</td>
 
+                                                        </tr>
+                                                       
 
-        //id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto
-
+                                                    ";
+            continue;
+        }
 
         $a .= "  <div class='card horizontal-card__menu mb-0 horizontal' style='border: none!important;box-shadow:none!important;'>"; ?>
 
@@ -117,7 +150,7 @@ if (!empty($pedidos) && count($pedidos) > 0) {
  <img  src='images/$foto' alt=''>"; ?>
         <?php if (hash_equals($estado, 'Enviado')) {
             $a .= "<div class='btn btn-rest' id='btnrestpedido{$categoriapedido}{$idcategoria}{$idcliente}' style='position: relative;right: auto;padding: 10px 20px' onclick=deletePedido('$idcategoria','$nro_mesa','$idcliente','$estado','$value','$idpedidos')>-</div>
- <div class='btn btn-add' id='btnaddpedido{$categoriapedido}{$idcategoria}{$idcliente}' style='position: relative;right: auto;;padding: 10px 20px' onclick=incremnetPedido('$idcategoria','$nro_mesa','$idcliente','$estado','$categoriapedido','$idpedidos')>+</div>
+ <div class='btn btn-add' id='btnaddpedido{$categoriapedido}{$idcategoria}{$idcliente}' style='position: relative;right: auto;;padding: 10px 20px' onclick=incremnetPedido('$idcategoria','$nro_mesa','$idcliente','$estado','$categoriapedido','$value','$idpedidos')>+</div>
 ";
         } else {
             $a .= "<div class='btn btn-rest' id='btnrestpedido{$categoriapedido}{$idcategoria}{$idcliente}' style='display: none'>-</div>
@@ -137,25 +170,20 @@ if (!empty($pedidos) && count($pedidos) > 0) {
   <h4 class='horizontal-card__menu--price'>$<span> $precio</span></h4>
   <div class='horizontal-card__menu--rating c-pointer'>";
         if ($valoracion == 1) {
-            $a .= "<span class='icon'><i class='fa fa-star'></i></span>";
+            $a.= "       <span class='icon'>★</span>
+                                        ";
         } elseif ($valoracion == 2) {
-            $a .= "<span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>";
+            $a.= "       <span class='icon'>★★</span>
+                                        ";
         } elseif ($valoracion == 3) {
-            $a .= "<span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>";
+            $a.= "       <span class='icon'>★★★</span>
+                                        ";
         } elseif ($valoracion == 4) {
-            $a .= "  <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>";
+            $a.= "       <span class='icon'>★★★★</span>
+                                        ";
         } elseif ($valoracion == 5) {
-            $a .= " <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star'></i></span>
- <span class='icon'><i class='fa fa-star-o'></i></span>";
+            $a.= "       <span class='icon'>★★★★★</span>
+                                        ";
         }
         $a .= "</div>
  </div>";
@@ -166,7 +194,7 @@ if (!empty($pedidos) && count($pedidos) > 0) {
         <?php if (hash_equals($estado, 'Enviado')) { ?>
             <?php $a .= " <div class='horizontal-card__menu--footer d-flex justify-content-between align-items-center'>
   <div class='vertical-card__menu--button'>
-<button class='btn btn-danger btn-cancelar' id='btn-{$categoriapedido}{$idcategoria}{$idcliente}' onclick=cancelarPedido('$idpedidos','$idcliente','$nro_mesa')>Cancelar pedido</button>
+<button class='btn btn-danger btn-cancelar' id='btn-{$categoriapedido}{$idcategoria}{$idcliente}' onclick=cancelarPedido('$categoriapedido','$idcategoria','$idcliente')>Cancelar pedido</button>
 
   </div>
  </div>
@@ -225,7 +253,21 @@ echo "<script type='text/javascript'>
         pedidos.forEach(mostrarPlato);
 </script>";
 
+if ($f){
+    $factura.=" <tr>
+                                                        <th></th>
+                                                        <td></td>
+                                                        <td>SubTotal</td>
+                                                        <td class='color-success'>$ $total</td>
+                                                    </tr>
 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>";
+    echo $factura;
+}else
 echo $a;
 
 //$stmt->close();

@@ -245,7 +245,7 @@ if (!file_exists($templateFile)) {
 	<section id="main">
 
 
-		<div id="sidebar">
+		<div id="sidebar" style="z-index: 999!important;">
 			<button id="sidebar__collapse">
 				<svg>
 					<use xlink:href="#icon-collapse"></use>

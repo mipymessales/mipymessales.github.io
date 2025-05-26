@@ -30,7 +30,16 @@
             color: #fff; }
 
         #contenido {
-           /* margin-top: 20px;*/
+            min-width: 700px; /* Fuerza el scroll en pantallas pequeñas */
+        }
+
+        @media (max-width: 768px) {
+            #contenido {
+                font-size: 12px;
+            }
+        }
+        #contenido .tabulator-cell {
+            white-space: nowrap;
         }
         select {
             padding: 8px;
@@ -41,6 +50,14 @@
 
         option {
             padding: 5px;
+        }
+        .tabla-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* scroll más suave en iOS */
+            scrollbar-width: thin;
+            width: 100%;
+            position: relative;
+            z-index: 1;
         }
     </style>
         <link href="assets/css/dropify.min.css" rel="stylesheet">
@@ -69,52 +86,22 @@
 
 
 
-    <?php
-    defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
-    include_once ROOT_DIR."pdo/conexion.php";
-
-    global $base_de_datos;
-    $sentencia = $base_de_datos->query("select * from mesa where disponible=0");
-    $mesas = $sentencia->fetchAll(PDO::FETCH_OBJ);
-    if (!$mesas) {
-        #No existe
-        echo "<h1>No existe pedidos en el salon !</h1>";
-        //  exit();
-    }else{
-        $i=1;
-    ?>
 
 
 
         <h1>Selecciona una mesa para ver los pedidos.</h1>
-        <div class="tabs">
-            <?php foreach($mesas as $mesa){
-                $nro_mesa= $mesa->id;
-                ?>
-                <?php if ($i==1){?>
-            <div class="tab active" id="mesa<?php echo $nro_mesa; ?>" onclick="cargarPedidoMesa(<?php echo $nro_mesa; ?>)">Mesa<?php echo $nro_mesa; ?> </div>
-                    <?php  echo "<script type='text/javascript'>
-                          var idmesa='$nro_mesa';
-                    </script>"; ?>
 
+        <div id="contenidomesa"></div>
 
-                 <?php }else{  ?>
-                    <div class="tab" id="mesa<?php echo $nro_mesa; ?>" onclick="cargarPedidoMesa(<?php echo $nro_mesa; ?>)">Mesa<?php echo $nro_mesa; ?> </div>
-                <?php }  ?>
-            <?php $i++;  }  ?>
-        </div>
-        <div class="content-body" style="margin-left: auto!important;">
+    <div id="btn-change-llamada"></div>
 
-            <div class="container-fluid">
-
-        <div id="contenido">No hay pedidos.</div>
-
-        </div>
+        <div class="content-body">
+            <div class="container-fluid tabla-scroll">
+                <div id="contenido" style="width: 100%;">No hay pedidos.</div>
+            </div>
+            <div id="btn-cerrar-cuenta"></div>
         </div>
 
-
-    <?php }  ?>
-    </div>
 
    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/js/dropify.min.js"></script>
@@ -122,133 +109,435 @@
 
 <script>
     function esNuloOVacio(v) {
-        return v === null || v === undefined || v === "";
+        return (v === null || v == null || v === undefined || v == undefined || v === "" || v == ""|| v == "undefined");
     }
     var table;
+    var intervaloActualPedidoMesa=null;
+    var intervaloActualListado=null;
+    var datosAnterioresPedidoMesa = null;
+    var datosAnterioresListadoMesa = null;
+    var idmesa=null;
+    //console.log(callwaiter);
     window.onload = function () {
         $('.dropify').dropify();
-        table = new Tabulator("#contenido", {
-            height: "auto",
-            layout: "fitColumns",
-            responsiveLayout: "collapse",
-            columns: [
-                { title: "id", field: "id", visible: false },
-                { title: "Nombre", field: "nombre" },
-                { title: "Precio", field: "precio", hozAlign: "right" },
-                { title: "Cantidad", field: "cantidad" },
-                { title: "Subtotal (Precio * Cantidad)", field: "subtotal", hozAlign: "right" },
-                { title: "Categoría", field: "categoria" },
-                {
-                    title: "Estado",
-                    field: "estado",
-                    formatter: function(cell) {
-                        const value = cell.getValue();
-                        let color = "";
-                        if (value === "Aprobado") {
-                            color = "#0acf97";
-                        } else if (value === "Enviado") {
-                            color = "#ffbc00";
-                        } else {
-                            color = "gray";
-                        }
-                        return `<span style="color: white; background-color: ${color}; padding: 4px 8px; border-radius: 4px; display: inline-block; text-align: center; min-width: 70px;">${value}</span>`;
-                    },
-                    cellClick: function (e, cell) {
-                        const currentValue = cell.getValue();
+        if (document.getElementById("contenido")) {
+            table = new Tabulator("#contenido", {
+                height: "auto",
+                layout: "fitColumns",
+                responsiveLayout: "collapse",
+                columns: [
+                    {title: "id", field: "id", visible: false},
+                    {title: "Categoría", field: "categoria", minWidth: 30},
+                    {title: "Nombre", field: "nombre", minWidth: 80},
+                    {
+                        title: "Cantidad",
+                        field: "cantidad",
+                        minWidth: 100,
+                        formatter: function(cell) {
+                            const value = cell.getValue();
+                            const rowData = cell.getRow().getData();
+                            if (rowData.estado=== "Aprobado"){
+                                return `
 
-                        Swal.fire({
-                            title: "¿Cambiar estado?",
-                            input: "select",
-                            inputOptions: {
-                                Enviado: "Enviado",
-                                Aprobado: "Aprobado"
-                            },
-                            inputValue: currentValue,
-                            showCancelButton: true,
-                            confirmButtonText: "Actualizar",
-                            cancelButtonText: "Cancelar"
-                        }).then(result => {
-                            if (result.isConfirmed && result.value !== currentValue) {
-                                cell.setValue(result.value);
+      <span class="cantidad-valor">${value}</span>
 
-                                fetch("controllers/edit_pedido_mesa.php", {
-                                    method: "POST",
-                                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                                    body: new URLSearchParams({
-                                        action: "update",
-                                        id: cell.getRow().getData().id,
-                                        estado: result.value
-                                    })
-                                })
-                                    .then(res => res.text())
-                                    .then(() => {
-                                        Swal.fire("✅ Estado actualizado", "", "success");
-                                    })
-                                    .catch(error => {
-                                        Swal.fire("❌ Error al actualizar", error.message, "error");
-                                    });
+    `;
+                            }else{
+                                return `
+      <button class="btn btn-danger btn-decrement" style="margin-right: 10px">−</button>
+      <span class="cantidad-valor">${value}</span>
+      <button class="btn btn-success btn-increment" style="margin-left: 10px">+</button>
+    `;
                             }
-                        });
-                    }
-                },
 
-                { title: "Cliente ID", field: "idcliente", visible: false },
-                { title: "ID Plato", field: "idplato", visible: false },
-                {
-                    formatter: "buttonCross",
-                    width: 30,
-                    align: "center",
-                    cellClick: function (e, cell) {
-                        if (confirm("¿Eliminar este registro?")) {
-                            const row = cell.getRow();
+                        },
+                        cellClick: function(e, cell) {
+                            const target = e.target;
+                            let value = cell.getValue();
+                            const rowData = cell.getRow().getData(); // Aquí puedes obtener ID u otros datos necesarios
+
+                            if (target.classList.contains("btn-increment")) {
+                                value++;
+                            } else if (target.classList.contains("btn-decrement")) {
+                                if (value > 0) value--;
+                            } else {
+                                return; // clic en otra parte, no hace nada
+                            }
+
+                            // Actualiza la celda visualmente
+                            cell.setValue(value);
+
+                            // ✅ AJAX para actualizar en la base de datos
                             fetch("controllers/edit_pedido_mesa.php", {
                                 method: "POST",
-                                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                                body: `action=delete&id=${row.getData().id}`
-                            }).then(() => row.delete());
+
+                                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                                body: `action=updatecantidad&id=${rowData.id}&cantidad=${value}`,
+
+
+                             /*   headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    id: rowData.id,
+                                    action:"updatecantidad",// usa el ID real del ítem
+                                    cantidad: value
+                                }),*/
+
+
+
+
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log("Actualizado correctamente:", data);
+                                })
+                                .catch(error => {
+                                    console.error("Error al actualizar:", error);
+                                });
+                        }
+                    },
+
+                    {
+                        title: "Estado",
+                        field: "estado",
+                        minWidth: 70,
+                        formatter: function (cell) {
+                            const value = cell.getValue();
+                            let color = "";
+                            if (value === "Aprobado") {
+                                color = "#0acf97";
+                            } else if (value === "Enviado") {
+                                color = "#ffbc00";
+                            } else {
+                                color = "gray";
+                            }
+                            return `<span style="color: white; background-color: ${color}; padding: 4px 8px; border-radius: 4px; display: inline-block; text-align: center; min-width: 70px;">${value}</span>`;
+                        },
+                        cellClick: function (e, cell) {
+                            const currentValue = cell.getValue();
+
+                            Swal.fire({
+                                title: "¿Cambiar estado?",
+                                input: "select",
+                                inputOptions: {
+                                    Enviado: "Enviado",
+                                    Aprobado: "Aprobado"
+                                },
+                                inputValue: currentValue,
+                                showCancelButton: true,
+                                confirmButtonText: "Actualizar",
+                                cancelButtonText: "Cancelar"
+                            }).then(result => {
+                                if (result.isConfirmed && result.value !== currentValue) {
+                                    cell.setValue(result.value);
+
+                                    fetch("controllers/edit_pedido_mesa.php", {
+                                        method: "POST",
+                                        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                                        body: new URLSearchParams({
+                                            action: "update",
+                                            id: cell.getRow().getData().id,
+                                            estado: result.value
+                                        })
+                                    })
+                                        .then(res => res.text())
+                                        .then(() => {
+                                            Swal.fire("✅ Estado actualizado", "", "success");
+                                        })
+                                        .catch(error => {
+                                            Swal.fire("❌ Error al actualizar", error.message, "error");
+                                        });
+                                }
+                            });
+                        }
+                    },
+                    {
+                        title: "Eliminar",
+                        minWidth: 30,
+                        align: "center",
+                        formatter: function (cell, formatterParams, onRendered) {
+                            const data = cell.getData();
+                            if (data.estado !== "Aprobado") {
+                                // Devolvemos el símbolo de botón ❌ o puedes usar HTML
+                                return "<button class='btn btn-danger btn-sm'>Eliminar</button>";
+                            } else {
+                                // Puedes dejarlo vacío o poner un guion
+                                return "<span style='color: #0acf97;font-weight: bold'>Aprobado</span>";
+                            }
+                        },
+                        cellClick: function (e, cell) {
+                            const data = cell.getData();
+
+                            // Solo ejecutar si estado === 'Aprobado'
+                            if (data.estado !== "Aprobado") {
+                                Swal.fire({
+                                    title: "¿Eliminar pedido?",
+                                    showCancelButton: true,
+                                    confirmButtonText: "Eliminar",
+                                    cancelButtonText: "Cancelar"
+                                }).then(result => {
+                                    if (result.isConfirmed) {
+                                        const row = cell.getRow();
+                                        fetch("controllers/edit_pedido_mesa.php", {
+                                            method: "POST",
+                                            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                                            body: `action=delete&id=${row.getData().id}`
+                                        }).then(() => row.delete());
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            ],
-            cellEdited: function (cell) {
-                const data = cell.getRow().getData();
 
-                fetch("controllers/edit_pedido_mesa.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams({
-                        action: "update",
-                        id: data.id,
-                        estado: data.estado
+                    /*     {
+                             formatter: "buttonCross",
+                             minWidth: 50,
+                             align: "center",
+                             title: "Eliminar",
+                             cellClick: function (e, cell) {
+
+                                 Swal.fire({
+                                     title: "¿Eliminar pedido?",
+                                     showCancelButton: true,
+                                     confirmButtonText: "Eliminar",
+                                     cancelButtonText: "Cancelar"
+                                 }).then(result => {
+                                     if (result.isConfirmed) {
+                                         const row = cell.getRow();
+                                         fetch("controllers/edit_pedido_mesa.php", {
+                                             method: "POST",
+                                             headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                                             body: `action=delete&id=${row.getData().id}`
+                                         }).then(() => row.delete());
+                                     }
+                                 });
+                             }
+                         }*/,
+                    {title: "Precio", field: "precio", hozAlign: "right", minWidth: 20},
+
+                    {
+                        title: "Subtotal (Precio * Cantidad)",
+                        field: "subtotal",
+                        hozAlign: "right",
+                        minWidth: 30,
+                        bottomCalc: "sum"
+                    },
+
+
+                    {title: "Cliente ID", field: "idcliente", visible: false},
+                    {title: "ID Plato", field: "idplato", visible: false}
+
+                ],
+                cellEdited: function (cell) {
+                    const data = cell.getRow().getData();
+
+                    fetch("controllers/edit_pedido_mesa.php", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                        body: new URLSearchParams({
+                            action: "update",
+                            id: data.id,
+                            estado: data.estado
+                        })
                     })
-                })
-                    .then(response => response.text())
-                    .then(res => {
-                        console.log("✅ Actualización exitosa:", res);
-                    })
-                    .catch(error => {
-                        console.error("❌ Error al actualizar:", error);
-                    });
+                        .then(response => response.text())
+                        .then(res => {
+                            console.log("✅ Actualización exitosa:", res);
+                        })
+                        .catch(error => {
+                            console.error("❌ Error al actualizar:", error);
+                        });
+                }
+            });
+        }
+
+        iniciarAutoCargaListadoMesa();
+        esperarZ((idmesa) => {
+          //  console.log('z está lista:', idmesa);
+            if (idmesa!=='-1')
+            iniciarAutoCargaPedidoMesa(idmesa);
+            else{
+                $('#contenido').html('');
             }
         });
-        if (!esNuloOVacio(idmesa))
-           cargarPedidoMesa(idmesa);
+
+       /*if (!esNuloOVacio(idmesa)){
+            console.log("ID OK"+idmesa);
+            iniciarAutoCargaPedidoMesa(idmesa);
+        }else{
+            idmesa= document.getElementById("idmesap").value;
+            console.log("ID CCC"+idmesa);
+            iniciarAutoCargaPedidoMesa(idmesa);
+        }*/
     };
-    function cargarPedidoMesa(mesa) {
+    function esperarZ(callback) {
+        const intervalo = setInterval(() => {
+            if (typeof window.idmesa !== 'undefined' && window.idmesa !== null) {
+                clearInterval(intervalo);
+                callback(window.idmesa);
+            }
+        }, 50);
+    }
+   /* window.onZReady = function(idmesa) {
+        iniciarAutoCargaPedidoMesa(idmesa);
+    };*/
+
+    function iniciarAutoCargaPedidoMesa(idmesa,e) {
+        if (!esNuloOVacio(e)){
+            const navLinks = document.querySelectorAll('.tab');
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            e.classList.add('active');
+        }
+        if (intervaloActualPedidoMesa !== null) {
+            clearInterval(intervaloActualPedidoMesa);
+        }
+        cargarPedidoMesa(idmesa);
+        intervaloActualPedidoMesa =setInterval(function () {
+            console.log("intervaloActualPedidoMesa");
+            cargarPedidoMesa(idmesa);
+        }, 2000);
+    }
+    function iniciarAutoCargaListadoMesa() {
+
+        if (intervaloActualListado !== null) {
+            clearInterval(intervaloActualListado);
+        }
+        cargarListadoMesa();
+        intervaloActualListado =setInterval(function () {
+            console.log("intervaloActualListado");
+            cargarListadoMesa();
+        }, 2000);
+    }
+    function cargarListadoMesa() {
         $.ajax({
-            url: "/controllers/obtener_pedido_mesa.php",
-            type: "POST",
-            data: { mesa: mesa },
-            dataType: "json",
+            url: "controllers/obtener_mesas_pedidos.php",
+            type: "GET",
+            // data: { mesa: mesa },
+            dataType: "html",
             success: function (data) {
-                console.log("✅ Datos recibidos:", data);
-                table.setData(data);  // Carga datos en la tabla ya creada
+                const nuevosDatosM = JSON.stringify(data);
+                if (nuevosDatosM === datosAnterioresListadoMesa) {
+                    console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                }else{
+                    datosAnterioresListadoMesa = nuevosDatosM;
+                    console.log("✅ Datos recibidos:", data);
+                    $('#contenidomesa').html(data);
+                }
             },
             error: function (xhr, status, error) {
                 console.error("❌ Error AJAX:");
                 console.error("Estado:", status);
                 console.error("Error:", error);
                 console.error("Respuesta completa:", xhr.responseText);
+            }
+        });
+
+    }
+
+    function cargarPedidoMesa(mesa) {
+        $.ajax({
+            url: "controllers/obtener_pedido_mesa.php",
+            type: "POST",
+            data: { mesa: mesa },
+            dataType: "json",
+            success: function (data) {
+                const nuevosDatosP = JSON.stringify(data);
+                if (nuevosDatosP === datosAnterioresPedidoMesa) {
+                    console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                }else{
+                    datosAnterioresPedidoMesa = nuevosDatosP;
+                    console.log("✅ Datos recibidos:", data);
+                    table.setData(data);  // Carga datos en la tabla ya creada
+                    table.redraw(true);
+                }
+                var button= document.getElementById("btn-change-llamada");
+                button.replaceChildren();
+                if (!esNuloOVacio(callwaiter[mesa])){
+                    console.log("No es nulo");
+
+                    const boton = document.createElement('button');
+                    boton.textContent = '🛎️ El cliente de la mesa #'+mesa+' necesita su atención';
+                    boton.classList.add('btn','btn-outline-warning','btn-block', 'border-0', 'text-black-50');
+                    boton.style.width="auto";
+                    // Asignar la función al onclick usando una función anónima
+                    boton.onclick = function() {
+                        saludar(mesa);
+                        delete callwaiter[mesa];
+                    };
+                    button.appendChild(boton);
+
+                }
+                var buttonCerrarCuenta= document.getElementById("btn-cerrar-cuenta");
+                buttonCerrarCuenta.replaceChildren();
+                const botonC = document.createElement('button');
+                botonC.textContent = 'Cerrar cuenta';
+                botonC.classList.add('btn','btn-danger','btn-block', 'border-0', 'text-black-50');
+                botonC.style.width="auto";
+                botonC.style.marginTop="5px";
+                // Asignar la función al onclick usando una función anónima
+                botonC.onclick = function() {
+                    cerrarCuenta(data[0]['idcliente'],mesa);
+
+                };
+                buttonCerrarCuenta.appendChild(botonC);
+
+
+
+            },
+            error: function (xhr, status, error) {
+                console.error("❌ Error AJAX:");
+                console.error("Estado:", status);
+                console.error("Error:", error);
+                console.error("Respuesta completa:", xhr.responseText);
+            }
+        });
+    }
+    function cerrarCuenta(idcliente,mesa) {
+        //alert(idcliente);
+       $.ajax({
+            url: '/controllers/edit_pedido_mesa.php',
+            dataType:'json',
+            method: 'POST',
+            data: { idcliente: idcliente,idmesa:mesa,action:'cerrarcuenta'},
+            success: function(data) {
+                // document.getElementById('contenido').innerHTML =data;
+                //console.log(data);
+                if (data["status"]==="success"){
+                    var pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+                    idcliente = Number(idcliente);
+                   // console.log(JSON.stringify(pedidos));
+                    pedidos = pedidos.filter(item => item.idcliente !== idcliente);
+                    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+                    //console.log(JSON.stringify(pedidos));
+                    location.reload();
+
+                }
+
+            }
+        });
+    }
+    function saludar(mesaid) {
+        $.ajax({
+            url: '/mipymessales/controllers/call_waiter.php',
+            /*  headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+              },*/
+            dataType:'json',
+            method: 'POST',
+            data: { table_id: mesaid,estado:'visto' },
+            success: function(data) {
+                // document.getElementById('contenido').innerHTML =data;
+                console.log(data);
+                if (data["status"]==="success"){
+                    document.getElementById("span"+mesaid).style.display = 'none';
+                    document.getElementById("btn-change-llamada").replaceChildren();
+                    //location.reload();
+                   // document.getElementById("call-status").innerText = data["message"];
+                   // document.getElementById("call-status").attr("class","show");
+
+                }
+
             }
         });
     }
@@ -267,6 +556,7 @@
     });
     // Al cargar la página, revisa si hay un enlace guardado
     window.addEventListener('DOMContentLoaded', () => {
+
         const savedHref = localStorage.getItem('navOfertas');
         if (savedHref) {
             const savedLink = document.querySelector(`.tab[href="${savedHref}"]`);

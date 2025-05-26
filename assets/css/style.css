@@ -15779,8 +15779,15 @@ button {
   text-align: center; }
   .vertical-card__menu--image img {
     width: 100%;
+    height: 287px !important;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem; }
+
+@media (max-width: 768px) {
+  .vertical-card__menu--image img {
+    height: 200px !important;
+  }
+}
 
 .vertical-card__menu--status.closed {
   background: #fa5c7c; }

@@ -120,24 +120,6 @@ if ($uploadOk == 0) {
         // Ok para continuar
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             $imagess=basename($_FILES["image"]["name"]);
-            //$target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/mipymessales/images/".$imagess;
-           // unlink($target_file);
-            //$imagess=basename($_FILES["image"]["name"]);
-
-            // ImageResize(287,259,$imagess);
-            // include_once "../images/editarIMG.php";
-            //TamañoImagen($imagess,287);
-            // $image = new SimpleImage();
-            //    $new_img_width=287;
-            //   $new_img_height=259;
-            //   $image->load($_FILES["image"]["tmp_name"]);
-            //   $image->resize($new_img_width, $new_img_height);
-            //  $image->save($target_file);
-
-
-
-
-
             echo "El archivo ". basename( $_FILES["image"]["name"]). " Se subio correctamente";
         } else {
             $msg.=  "Error al cargar el archivo";

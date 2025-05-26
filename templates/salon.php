@@ -59,7 +59,7 @@ echo $_SERVER['REQUEST_URI']*/
             include_once ROOT_DIR."pdo/conexion.php";
 
             global $base_de_datos;
-            $sentencia = $base_de_datos->query("select disponible as tiene_cliente,id as nro_mesa from mesa");
+            $sentencia = $base_de_datos->query("select disponible as tiene_cliente,id as nro_mesa,url_login from mesa");
             $mesas = $sentencia->fetchAll(PDO::FETCH_OBJ);
             if (!$mesas) {
                 #No existe
@@ -74,6 +74,7 @@ echo $_SERVER['REQUEST_URI']*/
                 <?php
                 $b= $mesa->tiene_cliente;
                 $nro_mesa= $mesa->nro_mesa;
+                $urlpedidos= $mesa->url_login;
                 if($b){
                 ?>
                 <div class="card bg-light">
@@ -196,8 +197,8 @@ echo $_SERVER['REQUEST_URI']*/
                                             }else{
                                                 ?>
 
-                                                <button class="btn btn-ft rounded-0 btn-outline-success">Listar pedidos</button>
-                                                <button data-toggle="modal" data-target="#pedidoModalCenter" onclick="agregarPedidos(<?=$nro_mesa?>)" class="btn btn-outline-warning btn-ft">Agregar pedido</button>
+                                                <button class="btn btn-ft rounded-0 btn-outline-success" onclick="window.location.href='index.php?section=pedidos'">Listar pedidos</button>
+                                             <button onclick="window.open('<?php echo $urlpedidos;?>', '_blank')" class="btn btn-outline-warning btn-ft">Agregar pedido</button>
 
                                             <?php } ?>
 
@@ -285,7 +286,7 @@ echo $_SERVER['REQUEST_URI']*/
                                 <!-- Modal  INSERT-->
 
                                 <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="/controllers/salonController.php" method="POST" id="main-contact-form">
+                                    <form enctype="multipart/form-data" class="form-valide" action="/mipymessales/controllers/salonController.php" method="POST" id="main-contact-form">
                                         <div class="modal fade" id="exampleModalCenter">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
@@ -333,101 +334,6 @@ echo $_SERVER['REQUEST_URI']*/
                                 </div>
 
                                 <!--end modal insert-->
-
-
-                                <?php $array=["entrantes","platos","postres","bebidas"]; ?>
-
-                                <!-- Modal  Insertar Pedidos-->
-
-                                <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="/controllers/salonController.php" method="POST" id="main-contact-form">
-
-                                        <div class="modal fade" id="pedidoModalCenter">
-                                            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%;">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Agregando nuevo pedido ...</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-
-                                                        <div class="row">
-
-
-                                                            <?php foreach($array as $arraypedidos){
-
-                                                                $sentencia = $base_de_datos->query("select * from ".$arraypedidos." where disponible=true;");
-                                                                $pedidosList = $sentencia->fetchAll(PDO::FETCH_OBJ);
-
-                                                                if($pedidosList!=null){
-                                                                    ?>
-                                                                    <div class="col-xl-3 col-lg-3 col-xxl-3">
-                                                                        <div class="card top_menu_widget">
-                                                                            <div class="card-body">
-                                                                                <h4 class="card-title"> <?php echo $arraypedidos;  ?></h4>
-
-                                                                                <?php foreach($pedidosList as $listaItem){
-
-                                                                                    $foto=$listaItem->foto;
-                                                                                    $nombre=$listaItem->nombre;
-                                                                                    $precio=$listaItem->precio;
-                                                                                    ?>
-
-                                                                                    <div class="media border-bottom pt-3 pb-3" style="align-items: center !important;">
-                                                                                        <?php if($foto!=null){?>
-
-                                                                                            <?php
-                                                                                            $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$foto;
-                                                                                            if (file_exists($target_file)) {  ?>
-                                                                                                <image src="/images/<?php echo $foto;?>" style="height: 50px" />
-                                                                                            <?php  }else{?>
-                                                                                                <image src="/images/blank1.jpg" style="height: 50px"/>
-                                                                                            <?php }  ?>
-
-
-
-                                                                                        <?php }else{?>
-                                                                                            <image src="/images/blank1.jpg" style="height: 50px"/>
-
-                                                                                        <?php }?>
-
-                                                                                        <div class="media-body">
-                                                                                            <h5 class="mb-1 mt-sm-1 mt-0"> <?php echo $nombre; ?></h5>
-                                                                                        </div>
-                                                                                        <h5 class="badge-lighten-primary">$ <?php echo $precio; ?> </h5>
-                                                                                        <div class="form-group mb-0">
-                                                                                           <span><input id="chk_2" type="checkbox" class="js-switch js-switch-1 js-switch-md" data-size="small" /></span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                <?php } ?>
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                <?php } }?>
-
-
-
-
-
-
-                                                        </div>
-
-
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <input type="hidden" name="nromesa_pedido" id="nromesa_pedido">
-                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                                        <button  type="submit" class="btn btn-success">Agregar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </form>
-                                </div>
 
                                 <!--end modal insert pedidos-->
 

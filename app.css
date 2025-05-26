@@ -147,6 +147,7 @@ body.sidebar-open #toggle-icon-close {
 	align-items: flex-start;
 	transform: translate3d(-100%, 0, 0);
 	transition: transform .4s ease-in-out, background-color .4s ease-in-out;
+	z-index: 999 !important;
 }
 
 #sidebar svg {

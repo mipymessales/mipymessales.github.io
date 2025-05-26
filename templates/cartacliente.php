@@ -295,51 +295,7 @@ try {
                             </div>
                             <div class="modal-body">
                                 <div class="col-xl-12 col-xxl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title">Factura</h4>
-                                            <div class="table-responsive">
-                                                <table class="table">
-                                                    <thead style="background-color: #ccc !important">
-                                                    <tr>
-
-                                                        <th>Descripcion</th>
-                                                        <th>Cantidad</th>
-                                                        <th>Precio</th>
-                                                        <th>Total</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                    <?php $total=0; for($i = 0; $i < count($pedidos); $i++) {
-
-                                                        $nombre=$pedidos[$i][0]->nombre;
-                                                        $precio=$pedidos[$i][0]->precio;
-                                                        if (isset($pedidosrepetidos[$pedidos[$i][1]][$pedidos[$i][0]->id])){
-                                                            $value=  $pedidosrepetidos[$pedidos[$i][1]][$pedidos[$i][0]->id];
-                                                        }
-                                                        ?>
-                                                        <tr>
-                                                            <td><?php echo $nombre; ?></td>
-                                                            <td><?php echo $value; ?></td>
-                                                            <td><?php echo $precio; ?></td>
-                                                            <td><?php echo "$ ". ($precio*$value); ?></td>
-
-                                                        </tr>
-                                                        <?php $total=($precio*$value)+$total;  } ?>
-
-                                                    <tr>
-                                                        <th></th>
-                                                        <td></td>
-                                                        <td>SubTotal</td>
-                                                        <td class="color-success"><?php echo "$ ". ($total); ?></td>
-                                                    </tr>
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   <div id="show_factura"></div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -367,6 +323,7 @@ try {
             <h4>Has tu pedido, que esperas!</h4>
 
                 <div class="row">
+
                     <div class='col-xl-3 col-lg-6 col-sm-6'>
                     <div class="tabs">
                         <div class="tab active" id="entrantes" onclick="iniciarAutoCarga('entrantes')">Entrantes</div>
@@ -375,13 +332,14 @@ try {
                         <div class="tab" id="bebidas" onclick="iniciarAutoCarga('bebidas')">Bebidas</div>
                     </div>
                     </div>
+                    <button class="btn btn-outline-light notification-text " id="call-waiter-btn" onclick="llamarCamarero(<?php echo $nroMesa ?>)">🔔 Llamar al camarero</button>
 
                 </div>
 
-            <div class="content-body" style="margin-left: auto!important;">
+            <div class="content-body">
 
                 <div class="container-fluid">
-
+                    <p id="call-status" class="alert alert-warning notification" style="display: none"></p>
                     <div id="contenido">No hay productos.</div>
 
                 </div>
@@ -392,7 +350,7 @@ try {
         </div>
         </div>
     </div> <!-- main-content -->
-    <button class="btn-flotante" data-toggle="modal" data-target="#exampleModalCenter" >Factura</button>
+    <button class="btn-flotante" data-toggle="modal" data-target="#exampleModalCenter" onclick="cargarFacturaMesa(<?php  echo $nroMesa?>,<?php  echo $idcliente?>)" >Factura</button>
 </section> <!-- main -->
 
 
@@ -406,6 +364,36 @@ try {
 <script src="assets/js/swiper-bundle.min.js"></script>
 
 <script>
+    function llamarCamarero(mesaid){
+        $.ajax({
+            url: '/mipymessales/controllers/call_waiter.php',
+            /*  headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+              },*/
+            dataType:'json',
+            method: 'POST',
+            data: { table_id: mesaid,estado:'pendiente' },
+            success: function(data) {
+                // document.getElementById('contenido').innerHTML =data;
+                console.log(data);
+               if (data["status"]==="success"){
+                    //location.reload();
+                   const mensaje=  document.getElementById("call-status");
+                   mensaje.innerText = data["message"];
+                   //mensaje.classList.add("class","show");
+                   mensaje.style.display='block';
+                   //boton.classList.add('btn','btn-outline-warning','btn-block', 'border-0', 'text-black-50');
+
+                   setTimeout(() => {
+                       mensaje.style.display = 'none'; // Ocultar después de 5 segundos (5000 ms)
+                   }, 5000);
+
+                }
+
+            }
+        });
+    }
+
 
     function addPedido(id){
         console.log(id);
@@ -460,7 +448,8 @@ try {
             //para que lo cambie manualmente
         }
     }
-    function incremnetPedido(idplato,idmesa,idcliente,estadopedido,categoria,idpedidos){
+    function incremnetPedido(idplato,idmesa,idcliente,estadopedido,categoria,value,idpedidos){
+        var cantidad= parseInt(value);
         if (estadopedido==="Enviado"){
             $.ajax({
                 url: '/controllers/pedidosController.php',
@@ -469,10 +458,10 @@ try {
                   },*/
                 dataType:'json',
                 method: 'POST',
-                data: { action:'incremnetPedido',idplato: idplato,idmesa: idmesa,idcliente: idcliente,estadopedido:estadopedido,categoria:categoria,idpedidos:idpedidos },
+                data: { action:'incremnetPedido',idplato: idplato,idmesa: idmesa,idcliente: idcliente,estadopedido:estadopedido,categoria:categoria,idpedidos:idpedidos,cantidad:cantidad },
                 success: function(data) {
                     // document.getElementById('contenido').innerHTML =data;
-                     console.log(data.status);
+                     //console.log(data.status);
                     if (data['status']=='success'){
                        // console.log("GOOD");
                        // location.reload();
@@ -542,7 +531,7 @@ try {
 
 
 
-       // document.getElementById(id+idcliente).removeChild('p');
+
         const tiempo = document.createElement('p');
         const spanContador = document.createElement('span');
         spanContador.classList.add('contador');
@@ -567,7 +556,6 @@ try {
                 document.getElementById('btnrestpedido'+id+idcliente).disabled = true;
                 document.getElementById('btn-'+id+idcliente).disabled = true;
                 document.getElementById(id+idcliente).removeChild(tiempo);
-
                 clearInterval(interval);
                 //confirmarPlato(id);
             }
@@ -641,7 +629,7 @@ try {
         //console.log((categoria).getAttribute("id"))
 
         $.ajax({
-            url: '/controllers/obtener_menu_cliente.php',
+            url: '/mipymessales/controllers/obtener_menu_cliente.php',
             /*  headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
               },*/
@@ -711,6 +699,7 @@ try {
         }, 20000);
     }
     var datosAnterioresPedido = null;
+    var datosAnterioresPedidoM=null;
     //var dataSPedido= null;
     function cargarPedido(mesa,idcliente) {
         if (esNuloOVacio(mesa)){
@@ -738,6 +727,38 @@ try {
                     datosAnterioresPedido = nuevosDatosP;
                     //console.log(data);
                     $('#contenido_pedidos').html(data);
+                }
+
+
+            }
+        });
+    }
+    function cargarFacturaMesa(mesa,idcliente) {
+        if (esNuloOVacio(mesa)){
+            mesa = <?php echo ($nro_mesa)??"undefined"; ?>;
+
+        }
+        if (esNuloOVacio(idcliente)){
+            idcliente= <?php echo ($idcliente) ?? "undefined"; ?>;
+        }
+        $.ajax({
+            url: '/controllers/obtener_pedido.php',
+            /*  headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+              },*/
+            method: 'POST',
+            data: { mesa: mesa,idcliente: idcliente,f:true },
+            success: function(data) {
+                // document.getElementById('contenido').innerHTML =data;
+                // console.log(data);
+                const nuevosDatosPM = JSON.stringify(data);
+
+                if (nuevosDatosPM === datosAnterioresPedidoM) {
+                    console.log('Datos sin cambios en factura, no se actualiza la vista.');
+                }else{
+                    datosAnterioresPedidoM = nuevosDatosPM;
+                    //console.log(data);
+                    $('#show_factura').html(data);
                 }
 
 

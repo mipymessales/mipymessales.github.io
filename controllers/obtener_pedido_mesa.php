@@ -5,8 +5,9 @@ require_once ROOT_DIR . "controllers/class.SqlInjectionUtils.php";
 global $base_de_datos;
 $pedidos = [];
 if (isset($_POST['mesa']) && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
-    $nro_mesa = $_POST['mesa'];;
-    $sentencia1 = $base_de_datos->prepare("SELECT cl.id as idcliente,cl.id_mesa as idmesa,cl.monto_cuenta ,s.* FROM cliente cl LEFT JOIN pedidos s ON cl.id_mesa = s.id_mesa and cl.id = s.id_cliente WHERE cl.id_mesa = ? and cl.estado_cuenta=1 ");
+    $nro_mesa = $_POST['mesa'];
+    //Poner con 3 minutos de atraso para mostrar los pedidos de los clientes en el panel de administracion
+    $sentencia1 = $base_de_datos->prepare("SELECT cl.id as idcliente,cl.id_mesa as idmesa,cl.monto_cuenta ,s.* FROM cliente cl LEFT JOIN pedidos s ON cl.id_mesa = s.id_mesa and cl.id = s.id_cliente WHERE cl.id_mesa = ? and cl.estado_cuenta=1 and NOW() > DATE_ADD(s.fecha, INTERVAL 3 MINUTE)  ");
 
     try {
         $sentencia1->execute([$nro_mesa]);

@@ -12,17 +12,17 @@ if (isset($_POST["action"]) && hash_equals($_POST["action"],"incremnetPedido") &
     $idmesa=$_POST["idmesa"];
     $idcliente=$_POST["idcliente"];
     $idpedidos=$_POST["idpedidos"];
+    $cantidadpedido=intval($_POST["cantidad"])+1;
+        //Actualizar el pedido con la cantidad que el usuario desea
 
-
-
-    $query="INSERT INTO pedidos (id_cliente, id_mesa, id_plato, categoria) VALUES (:id_cliente, :id_mesa, :id_plato, :categoria);";
+    $query="UPDATE pedidos set cantidad=:cantidad WHERE id=:idpedidos";
     include_once ROOT_DIR."pdo/conexion.php";
     global $base_de_datos;
     $sentencia = $base_de_datos->prepare($query);
-    $sentencia->bindParam(':id_mesa', $idmesa);
-    $sentencia->bindParam(':id_cliente', $idcliente);
-    $sentencia->bindParam(':id_plato', $id_plato);
-    $sentencia->bindParam(':categoria', $categoria);
+   // $sentencia->bindParam(':id_mesa', $idmesa);
+   // $sentencia->bindParam(':id_cliente', $idcliente);
+    $sentencia->bindParam(':cantidad', $cantidadpedido);
+    $sentencia->bindParam(':idpedidos', $idpedidos);
     try{
         if ($sentencia->execute()) {
             echo json_encode(["status" => "success"]);
@@ -44,6 +44,7 @@ if (isset($_POST["action"]) && hash_equals($_POST["action"],"incremnetPedido") &
     $idpedidos=$_POST["idpedidos"];
     include_once ROOT_DIR."pdo/conexion.php";
     global $base_de_datos;
+    //Actualizar el pedido con la cantidad que el usuario desea
     $stmt = $base_de_datos->prepare("DELETE FROM pedidos WHERE id_plato = :idplato and id_mesa = :idmesa and id_cliente = :idcliente and estado = :estadopedido limit 1");
     $stmt->bindParam(':idplato', $id_plato);
     $stmt->bindParam(':idmesa', $idmesa);
