@@ -26,8 +26,8 @@ if (isset($_POST["mesa"]) && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST
     }
 
 // 3. Crear URL de login automático
-//$loginURL = "https://tusitio.com/login.php?user=$usuario&pass=$contrasena";
-   // $loginURL = "http://localhost/mesa.php?mesa=$nroMesa&user=$usuario_generado&pass=$contrasena_generada";
+//$loginURL = "httpss://tusitio.com/login.php?user=$usuario&pass=$contrasena";
+   // $loginURL = "https://localhost/mesa.php?mesa=$nroMesa&user=$usuario_generado&pass=$contrasena_generada";
 
     $loginURL = Host::getHOSTNAME()."mesa.php/".cifrado::cifrar_url("$nroMesa/$usuario_generado/$contrasena_generada",cifrado::getClaveSecreta());
 

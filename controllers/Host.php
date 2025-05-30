@@ -2,7 +2,7 @@
 
 class Host
 {
-private static $HOST_NAME="http://salesmanager.infinityfreeapp.com/";
+private static $HOST_NAME="https://salesmanager.infinityfreeapp.com/";
 
     /**
      * @return string

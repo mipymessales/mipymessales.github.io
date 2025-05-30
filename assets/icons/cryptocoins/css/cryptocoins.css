@@ -2,9 +2,9 @@
 
 @font-face {
   font-family: "cryptocoins";
-  src: url('http://quixlab.com/demo/drora/demo/main/icons/cryptocoins/fonts/cryptocoins.woff2') format('woff2'),
-    url('http://quixlab.com/demo/drora/demo/main/icons/cryptocoins/fonts/cryptocoins.woff') format('woff'),
-    url('http://quixlab.com/demo/drora/demo/main/icons/cryptocoins/fonts/cryptocoins.ttf') format('truetype');
+  src: url('https://quixlab.com/demo/drora/demo/main/icons/cryptocoins/fonts/cryptocoins.woff2') format('woff2'),
+    url('https://quixlab.com/demo/drora/demo/main/icons/cryptocoins/fonts/cryptocoins.woff') format('woff'),
+    url('https://quixlab.com/demo/drora/demo/main/icons/cryptocoins/fonts/cryptocoins.ttf') format('truetype');
 }
 
 /* .cc:before { */
