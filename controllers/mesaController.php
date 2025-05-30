@@ -1,9 +1,9 @@
 <?php
 
 defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
-include_once ROOT_DIR."controllers/cifrado.php";
-include_once ROOT_DIR."controllers/Host.php";
-require_once ROOT_DIR."controllers/class.SqlInjectionUtils.php";
+include_once "cifrado.php";
+include_once "Host.php";
+require_once "class.SqlInjectionUtils.php";
 if (isset($_POST["mesa"]) && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST) ) {
     require_once ROOT_DIR."library/phpqrcode/qrlib.php"; // Asegúrate de tener la librería
 // 1. Generar usuario y contraseña aleatorios
