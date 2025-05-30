@@ -76,9 +76,7 @@ if (!empty($resultado) && isset($resultado)) {
                         <div class='d-flex justify-content-between'>
                             <h5 class='vertical-card__menu--title'> ". $nombre .".</h5>";
 
-                            $a.= "<div class='vertical-card__menu--fav'>
-                                <a href='javascript:void()'><i class='fa fa-heart-o'></i></a>
-                            </div>
+                            $a.= "
                         </div> ";
                        $a.= " <p class='mb-2'>". $ingredientes."  </p>";
 
@@ -91,34 +89,29 @@ if (!empty($resultado) && isset($resultado)) {
 
 
 
-                           if(($valoracion)==1){ 
-                             $a.= "    <span class='icon'><i class='fa fa-star'></i></span>";
+                           if(($valoracion)==1){
+                               $a.= "       <span class='icon'>★</span>
+                                        ";
                                 }
 
                                if(($valoracion)==2){
-                                   $a.= "   <span class='icon'><i class='fa fa-star'></i></span>
-                                 <span class='icon'><i class='fa fa-star'></i></span>";
+                                   $a.= "       <span class='icon'>★★</span>
+                                        ";
                               }
 
-                                 if(($valoracion)==3){ 
-                                   $a.= "      <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>";
+                                 if(($valoracion)==3){
+                                     $a.= "       <span class='icon'>★★★</span>
+                                        ";
                                 }
 
                                  if(($valoracion)==4){
-                                     $a.= "       <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>";
+                                     $a.= "       <span class='icon'>★★★★</span>
+                                        ";
                               }
 
                                  if(($valoracion)==5){ 
-                                  $a.= "       <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star-o'></i></span>";
+                                  $a.= "       <span class='icon'>★★★★★</span>
+                                        ";
                                 }
 
                               $a.= "  </div>";
@@ -158,6 +151,6 @@ if (!empty($resultado) && isset($resultado)) {
 $a.= "  </div>";
 echo $a;
 
-//$stmt->close();
-//$base_de_datos->close();
+$stmt->close();
+$base_de_datos->close();
 

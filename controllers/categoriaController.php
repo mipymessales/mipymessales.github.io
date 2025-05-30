@@ -37,12 +37,12 @@ if (isset($_REQUEST["id_categoria"])){
         $errorDelete= "¡Error al eliminar el elemento del menú:".$categoria." ! </br>";
         //  exit();
     }else {
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria);
         // $_SESSION["user"] = $userlogueado;
         # Redireccionar a la lista
 
        /* echo "<script type='text/javascript'>
-window.location=('../index.php?section=ofertas');
+window.location=('../panel.php?section=ofertas');
 
 </script>";*/
     }
@@ -138,7 +138,7 @@ if ($uploadOk == 0) {
 global $base_de_datos;
 if (isset($_REQUEST["insertar"])){
     $categoria=$_REQUEST["categ"];
-    $sentencia = $base_de_datos->prepare("INSERT INTO ".$categoria." (nombre, ingredientes, precio, disponible, tipo, foto) VALUES (:nombrep, :ingredientes, :precio, :disponible,:tipo, :image)");
+    $sentencia = $base_de_datos->prepare("INSERT INTO ".$categoria." (nombre, ingredientes, precio, disponible, tipo, foto,valoracion) VALUES (:nombrep, :ingredientes, :precio, :disponible,:tipo, :image,'5')");
     $errorInsert= $msg;
     $sentencia->bindParam(':tipo',$categoria);
 }else{
@@ -186,30 +186,30 @@ if (!$sentencia) {
     #No existe
    // echo "¡Error al actualizar la categoria! </br>";
     if (!empty($errorDelete))
-    header("Location: ../index.php?section=ofertas&categoria=".$categoria."&errorDelete=".$errorDelete);
+    header("Location: ../panel.php?section=ofertas&categoria=".$categoria."&errorDelete=".$errorDelete);
     if (!empty($errorInsert))
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria."&errorInsert=".$errorInsert);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria."&errorInsert=".$errorInsert);
     if (!empty($errorUpdate))
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria."&errorUpdate=".$errorUpdate);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria."&errorUpdate=".$errorUpdate);
     else
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria);
   //  exit();
 }else{
 
     // $_SESSION["user"] = $userlogueado;
     # Redireccionar a la lista
     if (!empty($errorDelete)){
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria."&errorDelete=".$errorDelete);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria."&errorDelete=".$errorDelete);
     }elseif (!empty($errorInsert)){
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria."&errorInsert=".$errorInsert);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria."&errorInsert=".$errorInsert);
     }elseif (!empty($errorUpdate)){
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria."&errorUpdate=".$errorUpdate);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria."&errorUpdate=".$errorUpdate);
     }else{
-        header("Location: ../index.php?section=ofertas&categoria=".$categoria);
+        header("Location: ../panel.php?section=ofertas&categoria=".$categoria);
     }
 
  /*   echo "<script type='text/javascript'>
-window.location=('../index.php?section=ofertas&categoria='.$categoria);
+window.location=('../panel.php?section=ofertas&categoria='.$categoria);
 
 </script>";*/
 }

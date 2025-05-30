@@ -14,7 +14,7 @@ else die();
 if(isset($_POST['idcliente']))
     $idcliente = $_POST['idcliente'];
 else die();
-$stmt = $base_de_datos->prepare("SELECT id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto FROM ". $categoria ."; WHERE disponible=1");
+$stmt = $base_de_datos->prepare("SELECT id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto FROM ". $categoria ."; ");
 //$stmt->bind_param('s', $categoria);
 $stmt->execute();
 $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);;
@@ -84,9 +84,7 @@ if (!empty($resultado) && isset($resultado)) {
                         <div class='d-flex justify-content-between'>
                             <h5 class='vertical-card__menu--title'> ". $nombre .".</h5>";
 
-                            $a.= "<div class='vertical-card__menu--fav'>
-                                <a href='javascript:void()'><i class='fa fa-heart-o'></i></a>
-                            </div>
+                            $a.= "
                         </div> ";
                        $a.= " <p class='mb-2'>". $ingredientes."  </p>";
 
@@ -99,34 +97,29 @@ if (!empty($resultado) && isset($resultado)) {
 
 
 
-                           if(($valoracion)==1){ 
-                             $a.= "    <span class='icon'><i class='fa fa-star'></i></span>";
+                           if(($valoracion)==1){
+                               $a.= "       <span class='icon'>★</span>
+                                        ";
                                 }
 
                                if(($valoracion)==2){
-                                   $a.= "   <span class='icon'><i class='fa fa-star'></i></span>
-                                 <span class='icon'><i class='fa fa-star'></i></span>";
+                                   $a.= "       <span class='icon'>★★</span>
+                                        ";
                               }
 
-                                 if(($valoracion)==3){ 
-                                   $a.= "      <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>";
+                                 if(($valoracion)==3){
+                                     $a.= "       <span class='icon'>★★★</span>
+                                        ";
                                 }
 
                                  if(($valoracion)==4){
-                                     $a.= "       <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>";
+                                     $a.= "       <span class='icon'>★★★★</span>
+                                        ";
                               }
 
-                                 if(($valoracion)==5){ 
-                                  $a.= "       <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star'></i></span>
-                                        <span class='icon'><i class='fa fa-star-o'></i></span>";
+                                 if(($valoracion)==5){
+                                     $a.= "       <span class='icon'>★★★★★</span>
+                                        ";
                                 }
 
                               $a.= "  </div>";

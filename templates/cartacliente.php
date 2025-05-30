@@ -366,7 +366,7 @@ try {
 <script>
     function llamarCamarero(mesaid){
         $.ajax({
-            url: '/mipymessales/controllers/call_waiter.php',
+            url: '/controllers/call_waiter.php',
             /*  headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
               },*/
@@ -478,28 +478,6 @@ try {
 
     }
 
-    function cancelarPedido(idpedidos,idcliente,idmesa){
-
-        $.ajax({
-            url: '/controllers/edit_pedido_mesa.php',
-            /*  headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-              },*/
-            dataType:'json',
-            method: 'POST',
-            data: { action:'delete',id:idpedidos },
-            success: function(data) {
-                // document.getElementById('contenido').innerHTML =data;
-                if (data['status']=='success'){
-                    // console.log("GOOD");
-                    // location.reload();
-                    cargarPedido(idmesa,idcliente);
-                }
-
-
-            }
-        });
-    }
     var categoriaO = "entrantes";
     var idmesa = null;
     var idcliente = null;
@@ -629,7 +607,7 @@ try {
         //console.log((categoria).getAttribute("id"))
 
         $.ajax({
-            url: '/mipymessales/controllers/obtener_menu_cliente.php',
+            url: '/controllers/obtener_menu_cliente.php',
             /*  headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
               },*/
@@ -774,7 +752,28 @@ try {
         }, 6000);
     }
 
+    function cancelarPedido(idpedidos,idcliente,idmesa){
 
+        $.ajax({
+            url: '/controllers/edit_pedido_mesa.php',
+            /*  headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+              },*/
+            dataType:'json',
+            method: 'POST',
+            data: { action:'delete',id:idpedidos },
+            success: function(data) {
+                // document.getElementById('contenido').innerHTML =data;
+                if (data['status']=='success'){
+                    // console.log("GOOD");
+                    // location.reload();
+                    cargarPedido(idmesa,idcliente);
+                }
+
+
+            }
+        });
+    }
 </script>
 </body>
 </html>

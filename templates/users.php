@@ -243,9 +243,9 @@ global $base_de_datos;
                                                 <div class="card-body">
                                                     <div class="text-center">
                                                         <?php if($foto!=null){?>
-                                                            <img class="mr-3 rounded-circle mr-0 mr-sm-3" src="/mipymessales/images/<?php echo $foto;?>" width="80" height="80" alt="">
+                                                            <img class="mr-3 rounded-circle mr-0 mr-sm-3" src="/images/<?php echo $foto;?>" width="80" height="80" alt="">
                                                         <?php }else{?>
-                                                            <img class="mr-3 rounded-circle mr-0 mr-sm-3" src="/mipymessales/images/blank1.jpg" width="80" height="80" alt="">
+                                                            <img class="mr-3 rounded-circle mr-0 mr-sm-3" src="/images/blank1.jpg" width="80" height="80" alt="">
                                                         <?php }?>
 
                                                         <h4 class="mb-0"><?php echo $nombre?></h4>

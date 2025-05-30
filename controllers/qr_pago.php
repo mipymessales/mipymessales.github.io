@@ -18,7 +18,7 @@ if(isset($_POST['nro_tarjeta']) && isset($_POST['telefono'])){
         $sentencia->bindParam(':usuario', $_SESSION['user']);
     try{
         $sentencia->execute();
-        header('Location: ../index.php?section=configuracion');
+        header('Location: ../panel.php?section=configuracion');
     }catch (Exception $e){
         echo  print_r($e->getTraceAsString());
     }

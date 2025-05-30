@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,1).'/');
 include_once ROOT_DIR."pdo/conexion.php";
 ?>
@@ -77,7 +80,7 @@ include_once ROOT_DIR."pdo/conexion.php";
         }
         iframe{
             width: 100%;
-            height: 396px;
+            height: 600px;
         }
         input, textarea {
             width: 100%;
@@ -100,7 +103,6 @@ include_once ROOT_DIR."pdo/conexion.php";
 
     </style>
 </head>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <body>
 
 <!-- Slider de fondo con caja de autenticación y comentarios -->
@@ -116,7 +118,7 @@ include_once ROOT_DIR."pdo/conexion.php";
             <li>"El ambiente es muy acogedor, volveré pronto"</li>
             <li>"Los postres son una delicia, 10/10"</li>
         </ul>
-        <a href="/mipymessales/mesa.php"  class="btn btn-success">Sentarse en la mesa</a>
+        <a href="/mesa"  class="btn btn-success">Sentarse en la mesa</a>
     </div>
 </div>
 
@@ -196,7 +198,7 @@ include_once ROOT_DIR."pdo/conexion.php";
                                                                             <div class="text-center px-3">
                                                                                 <h4> <?php echo $nombre; ?></h4>
                                                                                 <?php  if(($valoracion)==1){ ?>
-                                                                                    <span class="icon"><i class="fa fa-star"></i></span>
+                                                                                    <span class="icon">★</span>
                                                                                 <?php }?>
 
                                                                                 <?php  if(($valoracion)==2){ ?>
@@ -211,7 +213,7 @@ include_once ROOT_DIR."pdo/conexion.php";
                                                                                     <span class='icon'>★★★★</span>
                                                                                 <?php }?>
 
-                                                                                <?php  if(($valoracion)==5){ ?>
+                                                                                <?php  if(($valoracion)==5 || empty($valoracion)){ ?>
                                                                                     <span class='icon'>★★★★★</span>
                                                                                 <?php }?>
                                                                                 <h4 class="text-primary" style="margin-top: 5px">$<?php echo $precio; ?></h4>
@@ -226,7 +228,7 @@ include_once ROOT_DIR."pdo/conexion.php";
                                                                             <div class="text-center pt-3">
                                                                                 <h4><?php echo $nombre; ?></h4>
                                                                                 <?php  if(($valoracion)==1){ ?>
-                                                                                    <span class="icon"><i class="fa fa-star"></i></span>
+                                                                                    <span class="icon">★</span>
                                                                                 <?php }?>
 
                                                                                 <?php  if(($valoracion)==2){ ?>
@@ -241,7 +243,7 @@ include_once ROOT_DIR."pdo/conexion.php";
                                                                                     <span class='icon'>★★★★</span>
                                                                                 <?php }?>
 
-                                                                                <?php  if(($valoracion)==5){ ?>
+                                                                                <?php  if(($valoracion)==5 || empty($valoracion)){ ?>
                                                                                     <span class='icon'>★★★★★</span>
                                                                                 <?php }?>
                                                                                 <h4 class="text-primary" style="margin-top: 5px">$<?php echo $precio; ?></h4>
@@ -284,25 +286,25 @@ include_once ROOT_DIR."pdo/conexion.php";
                     <div class="col-sm-3 col-6">
                         <div class="card-body text-center">
                             <h4 class="counter">147</h4>
-                            <span>Orders</span>
+                            <span>Ordenes</span>
                         </div>
                     </div>
                     <div class="col-sm-3 col-6">
                         <div class="card-body text-center">
                             <h4 class="counter">83</h4>
-                            <span>Delivered</span>
+                            <span>Platos</span>
                         </div>
                     </div>
                     <div class="col-sm-3 col-6">
                         <div class="card-body text-center">
                             <h4 class="counter">64</h4>
-                            <span>Pending</span>
+                            <span>Clientes</span>
                         </div>
                     </div>
                     <div class="col-sm-3 col-6">
                         <div class="card-body text-center">
                             <h4 class="counter">12345</h4>
-                            <span>Earned</span>
+                            <span>Comentarios</span>
                         </div>
                     </div>
                 </div>
@@ -351,7 +353,9 @@ include_once ROOT_DIR."pdo/conexion.php";
                                     <label>Número de personas:</label><br>
                                     <input type="number" min="1" name="personas" id="personas" required><br>
                                 </div>
-                              <!--  <div class="g-recaptcha" data-sitekey="6LfP80srAAAAAFQk0DfEWWJuDeeq0YzOa2pzQ3zF"></div>-->
+                                <label>Captcha de seguridad</label><br>
+                                <img id="captchaimgr" src="controllers/captcha.php?from=r" alt="CAPTCHA">
+                                <input type="text" name="captchar" placeholder="Ingresa el texto de la imagen" required>
                                 <button type="submit" class="mt-2">Reservar</button>
                             </form>
                             <p id="reservationMessage" class="mt-2"></p>
@@ -362,8 +366,10 @@ include_once ROOT_DIR."pdo/conexion.php";
                             <h2>💬 Ayúdanos a mejorar</h2>
                             <form id="suggestionForm">
                                 <label>¿Qué te gustaría ver en el menú o mejorar?</label><br>
-                                <textarea required rows="4" cols="50"></textarea><br>
-                              <!--  <div class="g-recaptcha" data-sitekey="6LfP80srAAAAAFQk0DfEWWJuDeeq0YzOa2pzQ3zF"></div>-->
+                                <textarea name="mensaje" required rows="4" cols="50"></textarea><br>
+                                <label>Captcha de seguridad</label><br>
+                                <img id="captchaimgs" src="controllers/captcha.php?from=s" alt="CAPTCHA">
+                                <input type="text" name="captchas" placeholder="Ingresa el texto de la imagen" required>
 
                                 <button type="submit" class="mt-2">Enviar sugerencia</button>
                             </form>
@@ -374,10 +380,10 @@ include_once ROOT_DIR."pdo/conexion.php";
 
     </div>
 
-    <footer class="text-center py-4 bg-light">
-        <p class="mb-0">&copy; 2025 Restaurante Delicias. Todos los derechos reservados.</p>
-    </footer>
 
+    <footer class="text-center py-4 bg-light">
+        <p class="mb-0">&copy; 2025 Nombre Restaurante . Todos los derechos reservados.</p>
+    </footer>
 
 
     <script src="assets/js/jquery-3.6.0.min.js"></script>
@@ -495,18 +501,32 @@ include_once ROOT_DIR."pdo/conexion.php";
             })
                 .then(res => res.json())
                 .then(data => {
+
+                    console.log((data));
+
                     if (data["status"] === 'success') {
                         document.getElementById('reservationMessage').textContent = "✅ ¡Reserva recibida!";
+                        document.getElementById('reservationMessage').style.color = 'green';
                         e.target.reset();
+                        recargarCaptcha('r');
                        // grecaptcha.reset();
-                    } else if (data === 'RECAPTCHA_FAILED') {
+                    } else if (data["status"] === 'RECAPTCHA_FAILED') {
                         console.log("Captcha no verificado por el servidor.");
-                    } else if (data === 'RATE_LIMITED') {
+                        document.getElementById('reservationMessage').textContent = "❌ Captcha no verificado por el servidor.";
+                        document.getElementById('reservationMessage').style.color = 'red';
+                        recargarCaptcha('r');
+                    } else if (data["status"] === 'RATE_LIMITED') {
                         console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
+                        document.getElementById('reservationMessage').textContent = "❌ Has enviado demasiadas solicitudes. Intenta en un minuto.";
+                        document.getElementById('reservationMessage').style.color = 'red';
+                        e.target.reset();
+                        recargarCaptcha('r');
                     } else {
-                        document.getElementById('suggestionMessage').textContent = "❌ Error al guardar la reserva.";
-                        document.getElementById('suggestionMessage').style.color = 'red';
+                        document.getElementById('reservationMessage').textContent = "❌ Error al guardar la reserva.";
+                        document.getElementById('reservationMessage').style.color = 'red';
                         console.log("❌ Error al guardar la reserva.");
+                        e.target.reset();
+                        recargarCaptcha('r');
                     }
                 });
         });
@@ -520,10 +540,10 @@ include_once ROOT_DIR."pdo/conexion.php";
                 return;
             }
 */
-            const mensaje = e.target.querySelector('textarea').value;
-            const formData = new FormData();
-            formData.append('mensaje', mensaje);
-            //formData.append('g-recaptcha-response', grecaptcha.getResponse());
+            //const mensaje = e.target.querySelector('textarea').value;
+           // const formData = new FormData();
+            // formData.append('mensaje', mensaje);
+            const formData = new FormData(e.target);
 
             fetch('controllers/guardar_sugerencia.php', {
                 dataType:'json',
@@ -534,24 +554,44 @@ include_once ROOT_DIR."pdo/conexion.php";
                 .then(data => {
                     if (data["status"] === "success") {
                         document.getElementById('suggestionMessage').textContent = "🙌 ¡Gracias por tu sugerencia!";
+                        document.getElementById('suggestionMessage').style.color = 'green';
                         e.target.reset();
+                        recargarCaptcha('s');
                        // grecaptcha.reset();
-                    } else if (data === 'RECAPTCHA_FAILED') {
+                    } else if (data["status"] === 'RECAPTCHA_FAILED') {
                         console.log("Captcha no verificado por el servidor.");
-                    } else if (data === 'RATE_LIMITED') {
+                        document.getElementById('suggestionMessage').textContent = "❌ Captcha no verificado por el servidor.";
+                        document.getElementById('suggestionMessage').style.color = 'red';
+                        recargarCaptcha('s');
+                    } else if (data["status"] === 'RATE_LIMITED') {
                         console.log("Has enviado demasiadas sugerencias. Intenta luego.");
+                        document.getElementById('suggestionMessage').textContent = "❌ Has enviado demasiadas sugerencias. Intenta luego.";
+                        document.getElementById('suggestionMessage').style.color = 'red';
+                        e.target.reset();
+                        recargarCaptcha('s');
                     } else {
                         console.log("Error al enviar la sugerencia.");
                         document.getElementById('suggestionMessage').textContent = "❌ Error al enviar la sugerencia.";
                         document.getElementById('suggestionMessage').style.color = 'red';
                         e.target.reset();
+                        recargarCaptcha('s');
                     }
                 });
         });
 
 
     });
+    function recargarCaptcha(place) {
+        const vieja = document.getElementById('captchaimg'+place);
+        const nueva = document.createElement('img');
+        nueva.id = 'captchaimg'+place;
+        nueva.alt = 'CAPTCHAZ';
+        nueva.src = 'controllers/captcha.php?t=' + Date.now()+"&from="+place;
+        nueva.width = 120;
+        nueva.height = 40;
 
+        vieja.parentNode.replaceChild(nueva, vieja);
+    }
 </script>
 </body>
 </html>

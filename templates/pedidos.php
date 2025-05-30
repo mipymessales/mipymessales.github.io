@@ -519,7 +519,7 @@
     }
     function saludar(mesaid) {
         $.ajax({
-            url: '/mipymessales/controllers/call_waiter.php',
+            url: '/controllers/call_waiter.php',
             /*  headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
               },*/

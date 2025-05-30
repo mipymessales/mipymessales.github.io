@@ -104,7 +104,7 @@ $activo=1;
     $sentencia->bindParam(':foto', $imagess);
     try {
         $sentencia->execute();
-        header('Location: ' . Host::getHOSTNAME()."/index.php?section=users");
+        header('Location: ' . Host::getHOSTNAME()."/panel.php?section=users");
     } catch (Exception $e) {
         echo print_r($e->getTraceAsString());
     }

@@ -73,7 +73,7 @@
             <div class="tab" id="postres" onclick="cargarCategoria('postres')">Postres</div>
             <div class="tab" id="bebidas" onclick="cargarCategoria('bebidas')">Bebidas</div>
         </div>
-        <div class="content-body" style="margin-left: auto!important;">
+        <div class="content-body">
 
             <div class="container-fluid">
 

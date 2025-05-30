@@ -31,7 +31,9 @@ if (isset($_POST['usuario']) && isset($_POST['contra'])){
             ini_set('session.gc_maxlifetime', $tiempo_vida);
             session_set_cookie_params($tiempo_vida);
             $_SESSION['user'] = $user;
-            header('Location: index.php?section=salon');
+            header("Location: /panel");
+            exit;
+            //header('Location: panel');
         } else {
             $incorrecta="¡Contraseña incorrecta!";
         }

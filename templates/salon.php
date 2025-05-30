@@ -14,7 +14,7 @@ echo $_SERVER['REQUEST_URI']*/
 
 <!--<link href="assets/css/switchery.min.css" rel="stylesheet"/>-->
 
-<div class="content-body" style="margin-left: auto!important;">
+<div class="content-body">
 
     <div class="container-fluid">
         <div class="row justify-content-between mb-3">
@@ -286,7 +286,7 @@ echo $_SERVER['REQUEST_URI']*/
                                 <!-- Modal  INSERT-->
 
                                 <div class="form-validation">
-                                    <form enctype="multipart/form-data" class="form-valide" action="/mipymessales/controllers/salonController.php" method="POST" id="main-contact-form">
+                                    <form enctype="multipart/form-data" class="form-valide" action="/controllers/salonController.php" method="POST" id="main-contact-form">
                                         <div class="modal fade" id="exampleModalCenter">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">

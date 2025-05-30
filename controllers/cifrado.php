@@ -3,7 +3,7 @@
 class cifrado
 {
 private static $clave_secreta = 'mi_clave_super_segura_2025';
-    public static function cifrar_url($url, $key) {
+function cifrar_url($url, $key) {
     $method = 'AES-256-CBC';
     $iv = openssl_random_pseudo_bytes(16); // 16 bytes para AES
     $encrypted = openssl_encrypt($url, $method, $key, 0, $iv);
@@ -26,7 +26,7 @@ private static $clave_secreta = 'mi_clave_super_segura_2025';
 
 
 
-    public static function descifrar_token($token, $key) {
+function descifrar_token($token, $key) {
     $method = 'AES-256-CBC';
     $datos = base64_decode($token);
     if ($datos === false || strlen($datos) <= 16) return false;

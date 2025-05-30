@@ -72,9 +72,7 @@
                                                     <div class="d-flex justify-content-between">
                                                         <h5 class="vertical-card__menu--title"><?php echo $nombre;  ?></h5>
 
-                                                        <div class="vertical-card__menu--fav">
-                                                            <a href="javascript:void()"><i class="fa fa-heart-o"></i></a>
-                                                        </div>
+
                                                     </div>
                                                     <p><?php echo $ingredientes;  ?></p>
 
@@ -95,29 +93,19 @@
                                                                 <?php }?>
 
                                                                 <?php  if(($valoracion)==2){ ?>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
+                                                                    <span class='icon'>★★</span>
                                                                 <?php }?>
 
                                                                 <?php  if(($valoracion)==3){ ?>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
+                                                                    <span class='icon'>★★★</span>
                                                                 <?php }?>
 
                                                                 <?php  if(($valoracion)==4){ ?>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
+                                                                    <span class='icon'>★★★★</span>
                                                                 <?php }?>
 
                                                                 <?php  if(($valoracion)==5){ ?>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                    <span class="icon"><i class="fa fa-star-o"></i></span>
+                                                                    <span class='icon'>★★★★★</span>
                                                                 <?php }?>
 
 

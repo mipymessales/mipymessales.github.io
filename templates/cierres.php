@@ -165,7 +165,7 @@
         const fecha = document.getElementById('fecha').value;
         if (!fecha) return;
 
-        fetch('/mipymessales/controllers/ventas_por_fecha.php?fecha=' + fecha)
+        fetch('/controllers/ventas_por_fecha.php?fecha=' + fecha)
             .then(response => response.json())
             .then(data => {
                 const contenedor = document.getElementById('resultado');

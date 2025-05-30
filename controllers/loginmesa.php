@@ -31,7 +31,7 @@ if (isset($_POST['usuario']) && isset($_POST['contra']) && !SqlInjectionUtils::c
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         if (password_verify($pass, $resultado[0]->contrasena)) {
 
-            header('Location: index.php?section=salon');
+            header('Location: panel.php?section=salon');
         } else {
             $incorrecta="¡Contraseña incorrecta!";
         }

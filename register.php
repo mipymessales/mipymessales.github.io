@@ -20,7 +20,7 @@ if (hash_equals($_POST["adminpassword"], "123ok")){
         ini_set('session.gc_maxlifetime', $tiempo_vida);
         session_set_cookie_params($tiempo_vida);
         $_SESSION['user'] = $_POST["username"];
-        header('Location: index.php?section=salon');
+        header('Location: panel.php?section=salon');
     }catch (Exception $e){
         echo  print_r($e->getTraceAsString());
     }

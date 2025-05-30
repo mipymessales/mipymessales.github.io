@@ -31,9 +31,9 @@
 
                                     <!-- <img class="mr-0 mr-lg-3 rounded-circle" src="../images/blank1.jpg" width="50" height="50" alt="Generic placeholder image">-->
                                     <?php if($foto!=null){?>
-                                        <input type="file" class="dropify mr-0 mr-lg-3 rounded-circle" name="image"  height="50" id="image" data-default-file="/mipymessales/images/<?php echo $foto;?>" />
+                                        <input type="file" class="dropify mr-0 mr-lg-3 rounded-circle" name="image"  height="50" id="image" data-default-file="/images/<?php echo $foto;?>" />
                                     <?php }else{?>
-                                        <input type="file" class="dropify mr-0 mr-lg-3 rounded-circle" name="image"  height="50" id="image" data-default-file="/mipymessales/images/blank1.jpg" />
+                                        <input type="file" class="dropify mr-0 mr-lg-3 rounded-circle" name="image"  height="50" id="image" data-default-file="/images/blank1.jpg" />
                                     <?php }?>
 
 
