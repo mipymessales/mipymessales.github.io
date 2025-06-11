@@ -13,6 +13,9 @@ include_once ROOT_DIR."pdo/conexion.php";
     <title>Restaurante - Inicio</title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/restaurant.css" rel="stylesheet">
+    <link href="assets/css/swiper-bundle.min.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-icons.scss" rel="stylesheet">
+    <link href="assets/css/bootstrap-grid.css" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
@@ -23,17 +26,19 @@ include_once ROOT_DIR."pdo/conexion.php";
         .hero-section {
             position: relative;
             width: 100%;
-            height: 70vh;
+            height: 250px;
             overflow: hidden;
         }
         .hero-section img {
             width: 100%;
-            height: 100%;
+            height: 40vh;
             object-fit: cover;
             position: absolute;
             top: 0;
             left: 0;
             opacity: 0;
+            padding: 0;
+            margin: 0;
             transition: opacity 1s ease-in-out;
         }
         .hero-section img.active {
@@ -75,7 +80,7 @@ include_once ROOT_DIR."pdo/conexion.php";
             este id #tabstyle menor de 360px cambiar a custom-tab-2 sino dejarlo en custom-tab-4
         }
         section {
-            margin: 2rem auto;
+            /*margin: 2rem auto;*/
             width: 100%;
         }
         iframe{
@@ -100,27 +105,399 @@ include_once ROOT_DIR."pdo/conexion.php";
         button:hover {
             background-color: #e64a19;
         }
+        /*--------------------------------------------------------------
+        # Testimonials Section
+        --------------------------------------------------------------*/
+        .testimonials {
+            padding: 20px 0;
+            position: relative;
+        }
 
+        .testimonials:before {
+            content: "";
+           background: color-mix(in srgb,#444444, transparent 60%);
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+        }
+
+        .testimonials .testimonials-bg {
+            position: absolute;
+            inset: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .testimonials .container {
+            position: relative;
+            z-index: 3;
+        }
+
+        .testimonials .testimonials-carousel,
+        .testimonials .testimonials-slider {
+            overflow: hidden;
+        }
+
+        .testimonials .testimonial-item {
+            text-align: center;
+        }
+
+        .testimonials .testimonial-item .testimonial-img {
+            width: 100px;
+            border-radius: 50%;
+            border: 6px solid color-mix(in srgb,#ccc, transparent 85%);
+            margin: 0 auto;
+        }
+
+        .testimonials .testimonial-item h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+        }
+
+        .testimonials .testimonial-item h4 {
+            font-size: 14px;
+            margin: 0 0 15px 0;
+            color: color-mix(in srgb,#332b2b, transparent 20%);
+        }
+
+        .testimonials .testimonial-item .stars {
+            margin-bottom: 15px;
+        }
+
+        .testimonials .testimonial-item .stars i {
+            color: #ffc107;
+            margin: 0 1px;
+        }
+
+        .testimonials .testimonial-item .quote-icon-left,
+        .testimonials .testimonial-item .quote-icon-right {
+            color: color-mix(in srgb, #ccc, transparent 40%);
+            font-size: 26px;
+            line-height: 0;
+        }
+
+        .testimonials .testimonial-item .quote-icon-left {
+            display: inline-block;
+            left: -5px;
+            position: relative;
+        }
+
+        .testimonials .testimonial-item .quote-icon-right {
+            display: inline-block;
+            right: -5px;
+            position: relative;
+            top: 10px;
+            transform: scale(-1, -1);
+        }
+
+        .testimonials .testimonial-item p {
+            font-style: italic;
+            margin: 0 auto 15px auto;
+        }
+
+        .testimonials .swiper-wrapper {
+            height: auto;
+        }
+
+        .testimonials .swiper-pagination {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .testimonials .swiper-pagination .swiper-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            background-color: color-mix(in srgb, #727c59, transparent 50%);
+            opacity: 0.5;
+        }
+
+        .testimonials .swiper-pagination .swiper-pagination-bullet-active {
+            background-color: #fafbfe;
+            opacity: 1;
+        }
+
+        @media (min-width: 992px) {
+            .testimonials .testimonial-item p {
+                width: 80%;
+            }
+        }
+        /*--------------------------------------------------------------
+# Hero Section
+--------------------------------------------------------------*/
+        .hero {
+            width: 100%;
+            min-height: 75vh;
+            position: relative;
+            padding: 60px 0;
+            display: flex;
+            align-items: center;
+           background: url("images/granny-menu11.jpg") top left;
+            background-size: cover;
+        }
+
+        .hero:before {
+            content: "";
+           background: color-mix(in srgb, #fafbfe, transparent 30%);
+            position: absolute;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .hero .container {
+            position: relative;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 56px;
+        }
+
+        .hero h1 span {
+            color: #0acf97;
+        }
+
+        .hero p {
+            color: color-mix(in srgb, #fafbfe, transparent 30%);
+            margin: 5px 0 30px 0;
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .hero .btn-get-started {
+            color: #000000;
+            background: #fafbfe;
+            font-family:'Figtree', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            letter-spacing: 1px;
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 4px;
+            transition: 0.5s;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero .btn-get-started:hover {
+            color: #fafbfe;
+            background: #0acf97;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero .btn-watch-video {
+            font-size: 16px;
+            transition: 0.5s;
+            margin-left: 25px;
+            color: #fafbfe;
+            font-weight: 600;
+        }
+
+        .hero .btn-watch-video i {
+            color: #0acf97;
+            font-size: 32px;
+            transition: 0.3s;
+            line-height: 0;
+            margin-right: 8px;
+        }
+
+        .hero .btn-watch-video:hover {
+            color: #0acf97;
+        }
+
+        .hero .btn-watch-video:hover i {
+            color: color-mix(in srgb, #0acf97, transparent 15%);
+        }
+
+        .hero .animated {
+            animation: up-down 2s ease-in-out infinite alternate-reverse both;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 28px;
+                line-height: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+                line-height: 24px;
+                margin-bottom: 30px;
+            }
+
+            .hero .btn-get-started,
+            .hero .btn-watch-video {
+                font-size: 13px;
+            }
+        }
+
+        @keyframes up-down {
+            0% {
+                transform: translateY(10px);
+            }
+
+            100% {
+                transform: translateY(-10px);
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- Slider de fondo con caja de autenticación y comentarios -->
-<div class="hero-section">
-    <img src="images/granny-menu6.jpg" class="active" alt="Slide 1">
-    <img src="images/granny-menu11.jpg" alt="Slide 2">
-    <img src="images/granny-menu6.jpg" alt="Slide 3">
 
-    <div class="overlay-box">
-        <h2>Comentarios recientes</h2>
-        <ul>
-            <li>"Excelente atención y sabor inigualable"</li>
-            <li>"El ambiente es muy acogedor, volveré pronto"</li>
-            <li>"Los postres son una delicia, 10/10"</li>
-        </ul>
-        <a href="/mesa"  class="btn btn-success">Sentarse en la mesa</a>
+<!-- Hero Section -->
+<section id="hero " class="hero section light-background ">
+
+    <div class="container">
+        <div class="row gy-4">
+
+            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
+                <h1>Bienvenido a <span>RestaurantX</span></h1>
+                <p style="color: #332b2b">"Sabores que cuentan historias. Ven y descubre la experiencia gastronómica que mereces."</p>
+
+                <div class="d-flex">
+                    <a href="/mipymessales/mesa" class="btn-get-started">Sentarse a la mesa</a>
+<!--                    <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>-->
+                </div>
+            </div>
+            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out" >
+
+                <div class="hero-section">
+
+                    <img  src="images/granny-menu6.jpg" class="active" alt="Slide 1">
+                    <img src="images/granny-menu11.jpg" alt="Slide 2">
+                    <img src="images/granny-menu6.jpg" alt="Slide 3">
+
+                </div>
+                <section id="testimonials" class="testimonials section dark-background" style=" border: 1px solid #6c757d;">
+
+                    <!-- <img src="#" class="testimonials-bg" alt="">-->
+
+                    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+                        <div class="swiper init-swiper">
+                            <script type="application/json" class="swiper-config">
+                                {
+                                    "loop": true,
+                                    "speed": 600,
+                                    "autoplay": {
+                                        "delay": 5000
+                                    },
+                                    "slidesPerView": "auto",
+                                    "pagination": {
+                                        "el": ".swiper-pagination",
+                                        "type": "bullets",
+                                        "clickable": true
+                                    }
+                                }
+                            </script>
+
+                            <div class="swiper-wrapper">
+
+                                <div class="swiper-slide">
+                                    <div class="testimonial-item">
+                                        <img src="images/blank1.jpg" class="testimonial-img" alt="">
+                                        <h3>Saul Goodman</h3>
+                                        <h4>Ceo &amp; Founder</h4>
+                                        <div class="stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p>
+                                            <i class="bi bi-quote quote-icon-left"></i>
+                                            <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.</span>
+                                            <i class="bi bi-quote quote-icon-right"></i>
+                                        </p>
+                                    </div>
+                                </div><!-- End testimonial item -->
+
+                                <div class="swiper-slide">
+                                    <div class="testimonial-item">
+                                        <img src="images/blank1.jpg" class="testimonial-img" alt="">
+                                        <h3>Sara Wilsson</h3>
+                                        <h4>Designer</h4>
+                                        <div class="stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p>
+                                            <i class="bi bi-quote quote-icon-left"></i>
+                                            <span>Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.</span>
+                                            <i class="bi bi-quote quote-icon-right"></i>
+                                        </p>
+                                    </div>
+                                </div><!-- End testimonial item -->
+
+                                <div class="swiper-slide">
+                                    <div class="testimonial-item">
+                                        <img src="images/blank1.jpg" class="testimonial-img" alt="">
+                                        <h3>Jena Karlis</h3>
+                                        <h4>Store Owner</h4>
+                                        <div class="stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p>
+                                            <i class="bi bi-quote quote-icon-left"></i>
+                                            <span>Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.</span>
+                                            <i class="bi bi-quote quote-icon-right"></i>
+                                        </p>
+                                    </div>
+                                </div><!-- End testimonial item -->
+
+                                <div class="swiper-slide">
+                                    <div class="testimonial-item">
+                                        <img src="images/blank1.jpg" class="testimonial-img" alt="">
+                                        <h3>Matt Brandon</h3>
+                                        <h4>Freelancer</h4>
+                                        <div class="stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p>
+                                            <i class="bi bi-quote quote-icon-left"></i>
+                                            <span>Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.</span>
+                                            <i class="bi bi-quote quote-icon-right"></i>
+                                        </p>
+                                    </div>
+                                </div><!-- End testimonial item -->
+
+                                <div class="swiper-slide">
+                                    <div class="testimonial-item">
+                                        <img src="images/blank1.jpg" class="testimonial-img" alt="">
+                                        <h3>John Larson</h3>
+                                        <h4>Entrepreneur</h4>
+                                        <div class="stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p>
+                                            <i class="bi bi-quote quote-icon-left"></i>
+                                            <span>Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.</span>
+                                            <i class="bi bi-quote quote-icon-right"></i>
+                                        </p>
+                                    </div>
+                                </div><!-- End testimonial item -->
+
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+
+                    </div>
+
+                </section>
+            </div>
+        </div>
+
     </div>
-</div>
+
+</section><!-- /Hero Section -->
+<!-- Slider de fondo con caja de autenticación y comentarios -->
+
+
+
+<!-- /Testimonials Section -->
 
 <!-- Ofertas del restaurante -->
 <div class="container-fluid menu py-5 px-0">
@@ -129,13 +506,13 @@ include_once ROOT_DIR."pdo/conexion.php";
         <h5 class="section-title">¡Ideal para el disfrute de la familia!</h5>
     </div>
     <div class="tab-class text-center tabs">
-        <div class="card">
-            <div class="card-body">
+<!--        <div class="card">-->
+<!--            <div class="card-body">-->
                 <h3 class="card-title">Ofertas del día</h3>
 
                 <div class="custom-tab-4" id="tabstyle">
                     <div class="row">
-                        <div class="col-md-3 col-12">
+                        <div class="col-md-2 col-12">
                             <ul class="nav nav-tabs">
                                 <?php $array=["entrantes","platos","postres","bebidas"]; global $base_de_datos;$i=0;?>
                                 <?php foreach($array as $arraypedidos) {
@@ -150,7 +527,7 @@ include_once ROOT_DIR."pdo/conexion.php";
                                     <?php $i+=1; } ?>
                             </ul>
                         </div>
-                        <div class="col-md-9 col-12">
+                        <div class="col-md-10 col-12">
                             <div class="tab-content tab-content-default">
 
 
@@ -276,8 +653,8 @@ include_once ROOT_DIR."pdo/conexion.php";
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+<!--        </div>-->
+<!--    </div>-->
 </div>
     <div class="col-12">
         <div class="card">
@@ -388,6 +765,8 @@ include_once ROOT_DIR."pdo/conexion.php";
 
     <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/swiper-bundle.min.js"></script>
+    <script src="assets/js/bootstrap-icons.json"></script>
 
 <script>
     // Slider automático de imágenes
@@ -592,6 +971,24 @@ include_once ROOT_DIR."pdo/conexion.php";
 
         vieja.parentNode.replaceChild(nueva, vieja);
     }
+    /**
+     * Init swiper sliders
+     */
+    function initSwiper() {
+        document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
+            let config = JSON.parse(
+                swiperElement.querySelector(".swiper-config").innerHTML.trim()
+            );
+
+            if (swiperElement.classList.contains("swiper-slide")) {
+                initSwiperWithCustomPagination(swiperElement, config);
+            } else {
+                new Swiper(swiperElement, config);
+            }
+        });
+    }
+
+    window.addEventListener("load", initSwiper);
 </script>
 </body>
 </html>

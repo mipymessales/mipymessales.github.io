@@ -533,7 +533,9 @@ try {
                 document.getElementById('btnaddpedido'+id+idcliente).disabled = true;
                 document.getElementById('btnrestpedido'+id+idcliente).disabled = true;
                 document.getElementById('btn-'+id+idcliente).disabled = true;
+
                 document.getElementById(id+idcliente).removeChild(tiempo);
+
                 clearInterval(interval);
                 //confirmarPlato(id);
             }

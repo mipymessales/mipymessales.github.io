@@ -13,8 +13,8 @@
 
 @font-face {
     font-family: "Ionicons";
-    src: url("https://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.eot?v=2.0.0");
-    src: url("https://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.eot?v=2.0.0#iefix") format("embedded-opentype"), url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.ttf?v=2.0.0") format("truetype"), url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.woff?v=2.0.0") format("woff"), url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.svg?v=2.0.0#Ionicons") format("svg");
+    src: url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.eot?v=2.0.0");
+    src: url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.eot?v=2.0.0#iefix") format("embedded-opentype"), url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.ttf?v=2.0.0") format("truetype"), url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.woff?v=2.0.0") format("woff"), url("http://quixlab.com/demo/drora/demo/main/icons/ionicons/fonts/ionicons.svg?v=2.0.0#Ionicons") format("svg");
     font-weight: normal;
     font-style: normal;
 }

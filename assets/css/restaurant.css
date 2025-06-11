@@ -16746,8 +16746,8 @@ button:focus {
 .custom-tab-2 .nav-link.active {
     border-top: 2px solid #0acf97; }
 
-.custom-tab-2 .tab-pane {
-    padding: 25px; }
+/*.custom-tab-2 .tab-pane {
+    padding: 25px; }*/
 .custom-tab-2 .tab-pane p {
     margin-bottom: 0; }
 
