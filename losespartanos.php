@@ -842,6 +842,7 @@ if (!empty($gastos)) {
                 console.log(nuevosDatosM);
                 if (nuevosDatosM === datosAnterioresListadoMesa) {
                  console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                    document.getElementById('section-title').innerText='En estos momentos no tenemos '+categoria+' disponibles!';
                 }else{
                     datosAnterioresListadoMesa = nuevosDatosM;
                     // console.log("✅ Datos recibidos:", data);

@@ -139,7 +139,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                 </div>
                             </div>";
                         }else{
-                            $html.=" <h5 class='section-title' style='font-size: 10px;'>En estos momentos no tenemos  {$categoria}  disponibles!</h5>";
+                            $html.=" <h5 id='section-title' class='section-title' style='font-size: 10px;'>En estos momentos no tenemos  {$categoria}  disponibles!</h5>";
                         }
 
     $html.="  </div>";
