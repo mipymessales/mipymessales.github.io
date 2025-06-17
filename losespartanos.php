@@ -16,15 +16,13 @@ if (!empty($resultado)) {
     $direccionRestaurant = $resultado[0]->direccion;
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
-   // $ubicacionRestaurant = str_replace("°", "\u{00B0}", $ubicacionRestaurant);
-    $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
     $ubicacionRestaurant = mb_convert_encoding($ubicacionRestaurant, 'UTF-8', 'auto');
-    $ubicacionRestaurant = str_replace(
-        ['°', '"'],
-        ['?', '"'],
-        [' ', ''],
-        $ubicacionRestaurant
-    );
+    $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
+    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant);
+    echo '<pre>';
+    var_dump($ubicacionRestaurant);
+    echo '</pre>';
+
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
 
