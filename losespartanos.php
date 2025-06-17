@@ -279,7 +279,7 @@ if (!empty($gastos)) {
             padding: 60px 0;
             display: flex;
             align-items: center;
-            background: url("https/images/<?php echo $foto_portadaRestaurant;?>") top left;
+            background: url("images/<?php echo $foto_portadaRestaurant;?>") top left;
             background-size: cover;
         }
 
