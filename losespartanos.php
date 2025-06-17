@@ -1,6 +1,6 @@
 <?php $id = 1; ?>
 <?php
-
+header('Content-Type: text/html; charset=utf-8');
 session_start();
 
 defined('ROOT_DIR') || define('ROOT_DIR', dirname(__FILE__, 1) . '/');
@@ -16,6 +16,42 @@ if (!empty($resultado)) {
     $direccionRestaurant = $resultado[0]->direccion;
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
+    $ubicacionRestaurant = mb_convert_encoding($ubicacionRestaurant, 'UTF-8', 'auto');
+    $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
+    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant);
+
+    function dms_a_decimal($dms) {
+        // Ejemplo de entrada: 22°24'59.0"N o 79°58'17.7"W
+        preg_match('/(\d+)°(\d+)\'([\d\.]+)"([NSEW])/', $dms, $matches);
+        if (!$matches) return false;
+
+        $grados = (float)$matches[1];
+        $minutos = (float)$matches[2];
+        $segundos = (float)$matches[3];
+        $direccion = $matches[4];
+
+        $decimal = $grados + ($minutos / 60) + ($segundos / 3600);
+
+        // Si es Sur o Oeste, se vuelve negativo
+        if ($direccion == 'S' || $direccion == 'W') {
+            $decimal *= -1;
+        }
+
+        return $decimal;
+    }
+
+// Supongamos que $ubicacionRestaurant = "22°24'59.0\"N 79°58'17.7\"W";
+    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant); // si aún hay ?
+
+// Separar lat y lon
+    list($latDMS, $lonDMS) = explode(' ', $ubicacionRestaurant);
+
+    $latDecimal = dms_a_decimal($latDMS);
+    $lonDecimal = dms_a_decimal($lonDMS);
+
+// Para usar en JS
+    $latDecimalJs = json_encode($latDecimal);
+    $lonDecimalJs = json_encode($lonDecimal);
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
 
@@ -32,7 +68,7 @@ if (!empty($gastos)) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title> <?php echo $nombreRestaurant; ?> </title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
