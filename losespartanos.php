@@ -16,6 +16,7 @@ if (!empty($resultado)) {
     $direccionRestaurant = $resultado[0]->direccion;
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
+    $ubicacionRestaurant = str_replace("°", "\u{00B0}", $ubicacionRestaurant);
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
 
@@ -32,7 +33,7 @@ if (!empty($gastos)) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title> <?php echo $nombreRestaurant; ?> </title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
