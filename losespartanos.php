@@ -1,6 +1,6 @@
 <?php $id = 1; ?>
 <?php
-
+header('Content-Type: text/html; charset=utf-8');
 session_start();
 
 defined('ROOT_DIR') || define('ROOT_DIR', dirname(__FILE__, 1) . '/');
