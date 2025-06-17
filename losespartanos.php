@@ -1431,10 +1431,10 @@ if (!empty($gastos)) {
         }
         return decimal;
     }
-
+    console.log(`<?php echo $ubicacionRestaurant; ?>`);
     // Coordenadas en formato DMS desde PHP
     const ubicacion = `<?php echo $ubicacionRestaurant; ?>`.trim();
-    console.log(ubicacion);
+
 
     // Divide en latitud y longitud, buscando las letras N/S/E/W
     const partes = ubicacion.split(/(?<=["NnSs])\s*/); // divide justo después de la N o S
