@@ -19,7 +19,7 @@ if (!empty($resultado)) {
    // $ubicacionRestaurant = str_replace("°", "\u{00B0}", $ubicacionRestaurant);
     $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
     $ubicacionRestaurant = mb_convert_encoding($ubicacionRestaurant, 'UTF-8', 'auto');
-    $coordenadasCompatibles = str_replace(
+    $ubicacionRestaurant = str_replace(
         ['°', '"'],
         ['?', '"'],
         [' ', ''],
