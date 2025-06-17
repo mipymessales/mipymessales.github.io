@@ -16,7 +16,7 @@ if (!empty($resultado)) {
     $direccionRestaurant = $resultado[0]->direccion;
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
-    $ubicacionRestaurant = str_replace("°", "\u{00B0}", $ubicacionRestaurant);
+   // $ubicacionRestaurant = str_replace("°", "\u{00B0}", $ubicacionRestaurant);
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
 
@@ -726,9 +726,33 @@ if (!empty($gastos)) {
                     <iframe id="mapa" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 
                     <script>
-                        const direccion = `<?php echo $ubicacionRestaurant;?>`;
-                        const mapaUrl = "https://www.google.com/maps?q=" + encodeURIComponent(direccion) + "&output=embed";
-                        document.getElementById("mapa").src = mapaUrl;
+                        function dmsToDecimal(dms) {
+                          const regex = /(\d+)[°º]\s*(\d+)[']\s*(\d+(?:\.\d+)?)[\"]?\s*([NSEW])/i;
+                          const match = dms.match(regex);
+                          if (!match) return null;
+
+                          let [, deg, min, sec, dir] = match;
+                          let decimal = parseFloat(deg) + parseFloat(min) / 60 + parseFloat(sec) / 3600;
+                          if (dir.toUpperCase() === 'S' || dir.toUpperCase() === 'W') decimal *= -1;
+                          return decimal;
+                      }
+
+                      const ubicacion = `<?php echo $ubicacionRestaurant; ?>`; // Ej: '22°24\'59.0"N 79°58\'17.7"W'
+                      const partes = ubicacion.split(/(?=[NS])|(?=[EW])/); // Divide por N/S y E/W conservando la letra
+
+                      if (partes.length === 2) {
+                          const lat = dmsToDecimal(partes[0].trim());
+                          const lng = dmsToDecimal(partes[1].trim());
+
+                          if (lat !== null && lng !== null) {
+                              const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
+                              document.getElementById("mapa").src = mapaUrl;
+                          } else {
+                              console.error("Error al convertir las coordenadas.");
+                          }
+                      } else {
+                          console.error("Formato de coordenadas no válido:", ubicacion);
+                      }
                     </script>
 
                 </div>
