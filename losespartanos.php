@@ -19,8 +19,45 @@ if (!empty($resultado)) {
     $ubicacionRestaurant = mb_convert_encoding($ubicacionRestaurant, 'UTF-8', 'auto');
     $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
     $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant);
+
+    function dms_a_decimal($dms) {
+        // Ejemplo de entrada: 22°24'59.0"N o 79°58'17.7"W
+        preg_match('/(\d+)°(\d+)\'([\d\.]+)"([NSEW])/', $dms, $matches);
+        if (!$matches) return false;
+
+        $grados = (float)$matches[1];
+        $minutos = (float)$matches[2];
+        $segundos = (float)$matches[3];
+        $direccion = $matches[4];
+
+        $decimal = $grados + ($minutos / 60) + ($segundos / 3600);
+
+        // Si es Sur o Oeste, se vuelve negativo
+        if ($direccion == 'S' || $direccion == 'W') {
+            $decimal *= -1;
+        }
+
+        return $decimal;
+    }
+
+// Supongamos que $ubicacionRestaurant = "22°24'59.0\"N 79°58'17.7\"W";
+    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant); // si aún hay ?
+
+// Separar lat y lon
+    list($latDMS, $lonDMS) = explode(' ', $ubicacionRestaurant);
+
+    $latDecimal = dms_a_decimal($latDMS);
+    $lonDecimal = dms_a_decimal($lonDMS);
+
+// Para usar en JS
+    $latDecimalJs = json_encode($latDecimal);
+    $lonDecimalJs = json_encode($lonDecimal);
+
+
+
     echo '<pre>';
-    var_dump($ubicacionRestaurant);
+    var_dump($latDecimalJs);
+    var_dump($lonDecimalJs);
     echo '</pre>';
 
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
@@ -1423,42 +1460,10 @@ if (!empty($gastos)) {
     };
 
     //Mapa
-    function dmsToDecimal(dms) {
-        const regex = /(\d+)[°º]\s*(\d+)[']\s*(\d+(?:\.\d+)?)[\"]?\s*([NSEW])/i;
-        const match = dms.match(regex);
-        if (!match) return null;
-
-        let [, grados, minutos, segundos, direccion] = match;
-        let decimal = parseFloat(grados) + parseFloat(minutos) / 60 + parseFloat(segundos) / 3600;
-        if (direccion.toUpperCase() === 'S' || direccion.toUpperCase() === 'W') {
-            decimal *= -1;
-        }
-        return decimal;
-    }
-    console.log(`<?php echo $ubicacionRestaurant; ?>`);
-    // Coordenadas en formato DMS desde PHP
-    const ubicacion = `<?php echo $ubicacionRestaurant; ?>`.trim();
-
-
-    // Divide en latitud y longitud, buscando las letras N/S/E/W
-    const partes = ubicacion.split(/(?<=["NnSs])\s*/); // divide justo después de la N o S
-
-    if (partes.length === 2) {
-        const latDMS = partes[0].trim();
-        const lngDMS = partes[1].trim();
-
-        const lat = dmsToDecimal(latDMS);
-        const lng = dmsToDecimal(lngDMS);
-
-        if (lat !== null && lng !== null) {
-            const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
-            document.getElementById("mapa").src = mapaUrl;
-        } else {
-            console.error("Error al convertir coordenadas.");
-        }
-    } else {
-        console.error("Formato de coordenadas no válido:", ubicacion);
-    }
+    const lat = <?php echo $latDecimalJs; ?>;
+    const lon = <?php echo $lonDecimalJs; ?>;
+    const mapaUrl = `https://www.google.com/maps?q=${lat},${lon}&output=embed`;
+    document.getElementById("mapa").src = mapaUrl;
 </script>
 </body>
 </html>
