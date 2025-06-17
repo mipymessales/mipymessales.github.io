@@ -109,7 +109,30 @@
 
 <script>
     function esNuloOVacio(v) {
-        return (v === null || v == null || v === undefined || v == undefined || v === "" || v == ""|| v == "undefined");
+        if (v === null || v === undefined) return true;
+
+        // Strings
+        if (typeof v === "string") {
+            const trimmed = v.trim().toLowerCase();
+            return trimmed === "" || trimmed === "undefined" || trimmed === "null";
+        }
+
+        // Arrays
+        if (Array.isArray(v)) return v.length === 0;
+
+        // HTML Elements
+        if (v instanceof HTMLElement) {
+            // Revisa contenido visible y atributos clave
+            const contenido = v.textContent?.trim() || v.value?.trim() || v.innerHTML?.trim();
+            const href = v.getAttribute?.("href");
+            const src = v.getAttribute?.("src");
+            return (!contenido && !href && !src);
+        }
+
+        // Objetos planos
+        if (typeof v === "object") return Object.keys(v).length === 0;
+
+        return false; // Para tipos como número, booleano, etc.
     }
     var table;
     var intervaloActualPedidoMesa=null;
@@ -190,10 +213,10 @@
                             })
                                 .then(response => response.json())
                                 .then(data => {
-                                    console.log("Actualizado correctamente:", data);
+                                  //  console.log("Actualizado correctamente:", data);
                                 })
                                 .catch(error => {
-                                    console.error("Error al actualizar:", error);
+                                  //  console.error("Error al actualizar:", error);
                                 });
                         }
                     },
@@ -343,10 +366,10 @@
                     })
                         .then(response => response.text())
                         .then(res => {
-                            console.log("✅ Actualización exitosa:", res);
+                          //  console.log("✅ Actualización exitosa:", res);
                         })
                         .catch(error => {
-                            console.error("❌ Error al actualizar:", error);
+                         //   console.error("❌ Error al actualizar:", error);
                         });
                 }
             });
@@ -394,7 +417,7 @@
         }
         cargarPedidoMesa(idmesa);
         intervaloActualPedidoMesa =setInterval(function () {
-            console.log("intervaloActualPedidoMesa");
+           // console.log("intervaloActualPedidoMesa");
             cargarPedidoMesa(idmesa);
         }, 2000);
     }
@@ -405,7 +428,7 @@
         }
         cargarListadoMesa();
         intervaloActualListado =setInterval(function () {
-            console.log("intervaloActualListado");
+          //  console.log("intervaloActualListado");
             cargarListadoMesa();
         }, 2000);
     }
@@ -418,10 +441,10 @@
             success: function (data) {
                 const nuevosDatosM = JSON.stringify(data);
                 if (nuevosDatosM === datosAnterioresListadoMesa) {
-                    console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                  //  console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
                 }else{
                     datosAnterioresListadoMesa = nuevosDatosM;
-                    console.log("✅ Datos recibidos:", data);
+                   // console.log("✅ Datos recibidos:", data);
                     $('#contenidomesa').html(data);
                 }
             },
@@ -444,17 +467,17 @@
             success: function (data) {
                 const nuevosDatosP = JSON.stringify(data);
                 if (nuevosDatosP === datosAnterioresPedidoMesa) {
-                    console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                  //  console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
                 }else{
                     datosAnterioresPedidoMesa = nuevosDatosP;
-                    console.log("✅ Datos recibidos:", data);
+                   // console.log("✅ Datos recibidos:", data);
                     table.setData(data);  // Carga datos en la tabla ya creada
                     table.redraw(true);
                 }
                 var button= document.getElementById("btn-change-llamada");
                 button.replaceChildren();
                 if (!esNuloOVacio(callwaiter[mesa])){
-                    console.log("No es nulo");
+                   // console.log("No es nulo");
 
                     const boton = document.createElement('button');
                     boton.textContent = '🛎️ El cliente de la mesa #'+mesa+' necesita su atención';
@@ -528,7 +551,7 @@
             data: { table_id: mesaid,estado:'visto' },
             success: function(data) {
                 // document.getElementById('contenido').innerHTML =data;
-                console.log(data);
+                //console.log(data);
                 if (data["status"]==="success"){
                     document.getElementById("span"+mesaid).style.display = 'none';
                     document.getElementById("btn-change-llamada").replaceChildren();

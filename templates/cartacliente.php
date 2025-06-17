@@ -92,7 +92,6 @@ try {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<base href="/mipymessales/">-->
     <base href="/">
     <title>Sales Manager</title>
     <style>
@@ -143,7 +142,31 @@ try {
     </style>
     <script>
         function esNuloOVacio(v) {
-            return v === null || v === undefined || v === "" || JSON.stringify(categoriaO)==="{}";
+            if (v === null || v === undefined) return true;
+
+            // Strings
+            if (typeof v === "string") {
+                const trimmed = v.trim().toLowerCase();
+                return trimmed === "" || trimmed === "undefined" || trimmed === "null";
+            }
+
+            // Arrays
+            if (Array.isArray(v)) return v.length === 0;
+
+            // HTML Elements
+            if (v instanceof HTMLElement) {
+                // Revisa contenido visible y atributos clave
+                const contenido = v.textContent?.trim() || v.value?.trim() || v.innerHTML?.trim();
+                const href = v.getAttribute?.("href");
+                const src = v.getAttribute?.("src");
+                return (!contenido && !href && !src);
+            }
+
+            // Objetos planos
+            if (typeof v === "object") return Object.keys(v).length === 0;
+
+            return false; // Para tipos como número, booleano, etc.
+
         }
 
         // Check local storage
@@ -289,7 +312,7 @@ try {
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Comprobante ...</h5>
+                                <h5 class="modal-title" style="color: black">Comprobante ...</h5>
                                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                 </button>
                             </div>
@@ -375,7 +398,7 @@ try {
             data: { table_id: mesaid,estado:'pendiente' },
             success: function(data) {
                 // document.getElementById('contenido').innerHTML =data;
-                console.log(data);
+               // console.log(data);
                if (data["status"]==="success"){
                     //location.reload();
                    const mensaje=  document.getElementById("call-status");
@@ -396,7 +419,7 @@ try {
 
 
     function addPedido(id){
-        console.log(id);
+      //  console.log(id);
        var value= parseInt(document.getElementById("cantidad_pedido"+id).value);
         value+=1;
         document.getElementById("cantidad_pedido"+id).value=value;
@@ -430,7 +453,7 @@ try {
                 data: { action:'deletePedido',idplato: idplato,idmesa: idmesa,idcliente: idcliente,estadopedido:estadopedido,idpedidos:idpedidos },
                 success: function(data) {
                     // document.getElementById('contenido').innerHTML =data;
-                   console.log(data);
+                 //  console.log(data);
                     if (data["status"]==="success"){
                         //location.reload();
                         cargarPedido(idmesa,idcliente);
@@ -486,19 +509,19 @@ try {
     var pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
 
     function agregarPlato(nombrePlato) {
-        console.log("nombrePlato "+JSON.stringify(nombrePlato));
+      //  console.log("nombrePlato "+JSON.stringify(nombrePlato));
         const id = nombrePlato; // ID único por timestamp
         const tiempoExpira = Date.now() + 2 * 60 * 1000; // 2 minutos desde ahora
 
         pedidos.push({ id,idcliente, nombrePlato, tiempoExpira });
-        console.log("agregarPlato "+JSON.stringify(pedidos));
+       // console.log("agregarPlato "+JSON.stringify(pedidos));
         guardarPedidos();
-        console.log("guardarPalto "+JSON.stringify(pedidos));
+       // console.log("guardarPalto "+JSON.stringify(pedidos));
         mostrarPlato({ id,idcliente, nombrePlato, tiempoExpira });
     }
     function mostrarPlato(pedido) {
-        console.log("mostrarPlato");
-        console.log(JSON.stringify(pedido));
+       // console.log("mostrarPlato");
+       // console.log(JSON.stringify(pedido));
         const { id,idcliente, nombrePlato, tiempoExpira } = pedido;
             if (id==null || idcliente==null || document.getElementById(id+idcliente)==null) return;
 
@@ -516,7 +539,7 @@ try {
         tiempo.innerHTML = 'Tiempo restante para cancelar: ';
         tiempo.appendChild(spanContador);
         //contenedor.appendChild(tiempo);
-        console.log("mostrarPlato id "+id+idcliente);
+       // console.log("mostrarPlato id "+id+idcliente);
 
         document.getElementById(id+idcliente).appendChild(tiempo);
 
@@ -529,13 +552,11 @@ try {
                 const segundos = tiempoRestante % 60;
                 spanContador.textContent = `${minutos}:${segundos < 10 ? '0' + segundos : segundos}`;
             } else {
-                console.log('btnaddpedido***'+id+idcliente);
+              //  console.log('btnaddpedido***'+id+idcliente);
                 document.getElementById('btnaddpedido'+id+idcliente).disabled = true;
                 document.getElementById('btnrestpedido'+id+idcliente).disabled = true;
                 document.getElementById('btn-'+id+idcliente).disabled = true;
-
                 document.getElementById(id+idcliente).removeChild(tiempo);
-
                 clearInterval(interval);
                 //confirmarPlato(id);
             }
@@ -549,11 +570,11 @@ try {
        //localStorage.clear();
         // $('.dropify').dropify();
          categoriaO = <?php echo ($_REQUEST["categoria"])??"entrantes"; ?>;
-        console.log("categoriaO init:"+JSON.stringify(categoriaO));
+       // console.log("categoriaO init:"+JSON.stringify(categoriaO));
           idmesa = <?php echo ($nro_mesa)??"undefined"; ?>;
           idcliente= <?php echo ($idcliente) ?? "undefined"; ?>;
-        console.log("id_mesa:"+idmesa);
-        console.log("idcliente:"+idcliente);
+       // console.log("id_mesa:"+idmesa);
+       // console.log("idcliente:"+idcliente);
 
         if (categoriaO === "entrantes" || esNuloOVacio(categoriaO)) {
 
@@ -591,20 +612,20 @@ try {
 
         if (esNuloOVacio(categoriaO) && !esNuloOVacio(categoria)){
             categoriaO=categoria;
-            console.log("(esNuloOVacio(categoriaO) && !esNuloOVacio(categoria)):");
+          //  console.log("(esNuloOVacio(categoriaO) && !esNuloOVacio(categoria)):");
         }
         if(esNuloOVacio(categoria) && !esNuloOVacio(categoriaO)){
             categoria=categoriaO;
-            console.log("esNuloOVacio(categoria) && !esNuloOVacio(categoriaO):");
+           // console.log("esNuloOVacio(categoria) && !esNuloOVacio(categoriaO):");
         }
         if(!esNuloOVacio(categoria) && !esNuloOVacio(categoriaO) && categoria!=categoriaO){
-            console.log("!esNuloOVacio(categoria) && !esNuloOVacio(categoriaO) && categoria!==categoriaO");
+           // console.log("!esNuloOVacio(categoria) && !esNuloOVacio(categoriaO) && categoria!==categoriaO");
             categoriaO=categoria;
         }
-        console.log("id_mesa:"+mesa);
-        console.log("idcliente:"+idcliente);
-        console.log("categoriaO:"+JSON.stringify(categoriaO));
-        console.log("categoria:"+JSON.stringify(categoria));
+        //console.log("id_mesa:"+mesa);
+        //console.log("idcliente:"+idcliente);
+        //console.log("categoriaO:"+JSON.stringify(categoriaO));
+        //console.log("categoria:"+JSON.stringify(categoria));
       //  $('#contenido').html("");
         //console.log((categoria).getAttribute("id"))
 
@@ -621,7 +642,7 @@ try {
                 const nuevosDatosStr = JSON.stringify(data);
 
                 if (nuevosDatosStr === datosAnteriores) {
-                    console.log('Datos sin cambios, no se actualiza la vista.');
+                   // console.log('Datos sin cambios, no se actualiza la vista.');
                 }else{
                     datosAnteriores = nuevosDatosStr;
                     $('#contenido').html(data);
@@ -702,7 +723,7 @@ try {
                 const nuevosDatosP = JSON.stringify(data);
 
                 if (nuevosDatosP === datosAnterioresPedido) {
-                    console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                    //console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
                 }else{
                     datosAnterioresPedido = nuevosDatosP;
                     //console.log(data);
@@ -734,7 +755,7 @@ try {
                 const nuevosDatosPM = JSON.stringify(data);
 
                 if (nuevosDatosPM === datosAnterioresPedidoM) {
-                    console.log('Datos sin cambios en factura, no se actualiza la vista.');
+                  //  console.log('Datos sin cambios en factura, no se actualiza la vista.');
                 }else{
                     datosAnterioresPedidoM = nuevosDatosPM;
                     //console.log(data);

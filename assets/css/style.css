@@ -172,11 +172,15 @@ hr {
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
-  margin-bottom: 0.5rem; }
+  margin-bottom: 0.5rem;
+  color: var(--sidebar-link-active-color);
+}
 
 p {
   margin-top: 0;
-  margin-bottom: 1rem; }
+  margin-bottom: 1rem;
+  color: var(--sidebar-link-active-color);
+}
 
 abbr[title],
 abbr[data-original-title] {
@@ -397,7 +401,8 @@ h1, h2, h3, h4, h5, h6,
   font-family: inherit;
   font-weight: 500;
   line-height: 1.2;
-  color: #1b1d1f; }
+  color: var(--sidebar-link-active-color);
+}
 
 h1, .h1 {
   font-size: 2.25rem; }
@@ -7664,7 +7669,9 @@ blockquote {
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0px;
   margin-bottom: 5px;
-  font-weight: 600; }
+  font-weight: 600;
+  color: var(--sidebar-link-active-color);
+}
 
 sub {
   font-size: 12px;

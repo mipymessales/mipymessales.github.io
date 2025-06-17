@@ -1,21 +1,38 @@
+<?php $id = 3; ?>
 <?php
 
 session_start();
 
-defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,1).'/');
-include_once ROOT_DIR."pdo/conexion.php";
+defined('ROOT_DIR') || define('ROOT_DIR', dirname(__FILE__, 1) . '/');
+include_once ROOT_DIR . "pdo/conexion.php";
+global $base_de_datos;
+$stmt = $base_de_datos->prepare("SELECT * FROM restaurant_info WHERE id=:id limit 1");
+$stmt->bindParam(':id', $id);
+$stmt->execute();
+$resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
+if (!empty($resultado)) {
+    $nombreRestaurant = $resultado[0]->nombre;
+    $telefonoRestaurant = $resultado[0]->telefono;
+    $direccionRestaurant = $resultado[0]->direccion;
+    $horarioRestaurant = $resultado[0]->horario;
+    $ubicacionRestaurant = $resultado[0]->ubicacion;
+    $foto_portadaRestaurant = $resultado[0]->foto_portada;
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Restaurante - Inicio</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title> <?php echo $nombreRestaurant; ?> </title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/restaurant.css" rel="stylesheet">
     <link href="assets/css/swiper-bundle.min.css" rel="stylesheet">
     <link href="assets/css/bootstrap-icons.scss" rel="stylesheet">
     <link href="assets/css/bootstrap-grid.css" rel="stylesheet">
+    <link href="assets/css/dropify.min.css" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
@@ -23,12 +40,14 @@ include_once ROOT_DIR."pdo/conexion.php";
             height: 100%;
             font-family: 'Segoe UI', sans-serif;
         }
+
         .hero-section {
             position: relative;
             width: 100%;
             height: 250px;
             overflow: hidden;
         }
+
         .hero-section img {
             width: 100%;
             height: 40vh;
@@ -41,9 +60,11 @@ include_once ROOT_DIR."pdo/conexion.php";
             margin: 0;
             transition: opacity 1s ease-in-out;
         }
+
         .hero-section img.active {
             opacity: 1;
         }
+
         .overlay-box {
             position: relative;
             top: 60%;
@@ -55,38 +76,49 @@ include_once ROOT_DIR."pdo/conexion.php";
             width: 100%;
             text-align: center;
         }
+
         .overlay-box h2 {
             margin-bottom: 1rem;
         }
+
         .overlay-box ul {
             list-style: none;
             padding-left: 0;
             margin-bottom: 1.5rem;
         }
+
         .overlay-box ul li {
             margin-bottom: 0.5rem;
             font-style: italic;
             color: #333;
         }
+
         .carousel-inner img {
             height: 300px;
             object-fit: cover;
         }
+
         @media (max-width: 768px) {
             .overlay-box {
                 width: 90%;
                 padding: 1rem;
             }
-            este id #tabstyle menor de 360px cambiar a custom-tab-2 sino dejarlo en custom-tab-4
+
+            este id #tabstyle menor de
+
+        360px cambiar a custom-tab-2 sino dejarlo en custom-tab-4
         }
+
         section {
             /*margin: 2rem auto;*/
             width: 100%;
         }
-        iframe{
+
+        iframe {
             width: 100%;
             height: 600px;
         }
+
         input, textarea {
             width: 100%;
             padding: 6px;
@@ -94,6 +126,7 @@ include_once ROOT_DIR."pdo/conexion.php";
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
         button {
             background-color: #ff5722;
             color: white;
@@ -102,9 +135,11 @@ include_once ROOT_DIR."pdo/conexion.php";
             border-radius: 6px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #e64a19;
         }
+
         /*--------------------------------------------------------------
         # Testimonials Section
         --------------------------------------------------------------*/
@@ -115,7 +150,7 @@ include_once ROOT_DIR."pdo/conexion.php";
 
         .testimonials:before {
             content: "";
-           background: color-mix(in srgb,#444444, transparent 60%);
+            background: color-mix(in srgb, #444444, transparent 60%);
             position: absolute;
             inset: 0;
             z-index: 2;
@@ -148,7 +183,7 @@ include_once ROOT_DIR."pdo/conexion.php";
         .testimonials .testimonial-item .testimonial-img {
             width: 100px;
             border-radius: 50%;
-            border: 6px solid color-mix(in srgb,#ccc, transparent 85%);
+            border: 6px solid color-mix(in srgb, #ccc, transparent 85%);
             margin: 0 auto;
         }
 
@@ -161,7 +196,7 @@ include_once ROOT_DIR."pdo/conexion.php";
         .testimonials .testimonial-item h4 {
             font-size: 14px;
             margin: 0 0 15px 0;
-            color: color-mix(in srgb,#332b2b, transparent 20%);
+            color: color-mix(in srgb, #332b2b, transparent 20%);
         }
 
         .testimonials .testimonial-item .stars {
@@ -225,6 +260,7 @@ include_once ROOT_DIR."pdo/conexion.php";
                 width: 80%;
             }
         }
+
         /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
@@ -235,13 +271,13 @@ include_once ROOT_DIR."pdo/conexion.php";
             padding: 60px 0;
             display: flex;
             align-items: center;
-           background: url("images/granny-menu11.jpg") top left;
+            background: url("images/<?php echo $foto_portadaRestaurant;?>") top left;
             background-size: cover;
         }
 
         .hero:before {
             content: "";
-           background: color-mix(in srgb, #fafbfe, transparent 30%);
+            background: color-mix(in srgb, #fafbfe, transparent 30%);
             position: absolute;
             bottom: 0;
             top: 0;
@@ -274,7 +310,7 @@ include_once ROOT_DIR."pdo/conexion.php";
         .hero .btn-get-started {
             color: #000000;
             background: #fafbfe;
-            font-family:'Figtree', sans-serif;
+            font-family: 'Figtree', sans-serif;
             font-weight: 400;
             font-size: 16px;
             letter-spacing: 1px;
@@ -358,24 +394,26 @@ include_once ROOT_DIR."pdo/conexion.php";
         <div class="row gy-4">
 
             <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-                <h1>Bienvenido a <span>RestaurantX</span></h1>
-                <p style="color: #332b2b">"Sabores que cuentan historias. Ven y descubre la experiencia gastronómica que mereces."</p>
+                <h1>Bienvenido a: <span><?php echo $nombreRestaurant; ?></span></h1>
+                <p style="color: #332b2b">"Sabores que cuentan historias. Ven y descubre la experiencia gastronómica que
+                    mereces."</p>
 
                 <div class="d-flex">
-                    <a href="/mipymessales/mesa" class="btn-get-started">Sentarse a la mesa</a>
-<!--                    <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>-->
+                    <a href="/mesa" class="btn-get-started">Sentarse a la mesa</a>
+                    <!--                    <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>-->
                 </div>
             </div>
-            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out" >
+            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
 
                 <div class="hero-section">
 
-                    <img  src="images/granny-menu6.jpg" class="active" alt="Slide 1">
+                    <img src="images/granny-menu6.jpg" class="active" alt="Slide 1">
                     <img src="images/granny-menu11.jpg" alt="Slide 2">
                     <img src="images/granny-menu6.jpg" alt="Slide 3">
 
                 </div>
-                <section id="testimonials" class="testimonials section dark-background" style=" border: 1px solid #6c757d;">
+                <section id="testimonials" class="testimonials section dark-background"
+                         style=" border: 1px solid #6c757d;">
 
                     <!-- <img src="#" class="testimonials-bg" alt="">-->
 
@@ -406,7 +444,9 @@ include_once ROOT_DIR."pdo/conexion.php";
                                         <h3>Saul Goodman</h3>
                                         <h4>Ceo &amp; Founder</h4>
                                         <div class="stars">
-                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i>
                                         </div>
                                         <p>
                                             <i class="bi bi-quote quote-icon-left"></i>
@@ -422,7 +462,9 @@ include_once ROOT_DIR."pdo/conexion.php";
                                         <h3>Sara Wilsson</h3>
                                         <h4>Designer</h4>
                                         <div class="stars">
-                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i>
                                         </div>
                                         <p>
                                             <i class="bi bi-quote quote-icon-left"></i>
@@ -438,7 +480,9 @@ include_once ROOT_DIR."pdo/conexion.php";
                                         <h3>Jena Karlis</h3>
                                         <h4>Store Owner</h4>
                                         <div class="stars">
-                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i>
                                         </div>
                                         <p>
                                             <i class="bi bi-quote quote-icon-left"></i>
@@ -454,7 +498,9 @@ include_once ROOT_DIR."pdo/conexion.php";
                                         <h3>Matt Brandon</h3>
                                         <h4>Freelancer</h4>
                                         <div class="stars">
-                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i>
                                         </div>
                                         <p>
                                             <i class="bi bi-quote quote-icon-left"></i>
@@ -470,7 +516,9 @@ include_once ROOT_DIR."pdo/conexion.php";
                                         <h3>John Larson</h3>
                                         <h4>Entrepreneur</h4>
                                         <div class="stars">
-                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                                    class="bi bi-star-fill"></i>
                                         </div>
                                         <p>
                                             <i class="bi bi-quote quote-icon-left"></i>
@@ -496,7 +544,6 @@ include_once ROOT_DIR."pdo/conexion.php";
 <!-- Slider de fondo con caja de autenticación y comentarios -->
 
 
-
 <!-- /Testimonials Section -->
 
 <!-- Ofertas del restaurante -->
@@ -506,277 +553,294 @@ include_once ROOT_DIR."pdo/conexion.php";
         <h5 class="section-title">¡Ideal para el disfrute de la familia!</h5>
     </div>
     <div class="tab-class text-center tabs">
-<!--        <div class="card">-->
-<!--            <div class="card-body">-->
-                <h3 class="card-title">Ofertas del día</h3>
+        <!--        <div class="card">-->
+        <!--            <div class="card-body">-->
+        <h3 class="card-title">Ofertas del día</h3>
 
-                <div class="custom-tab-4" id="tabstyle">
-                    <div class="row">
-                        <div class="col-md-2 col-12">
-                            <ul class="nav nav-tabs">
-                                <?php $array=["entrantes","platos","postres","bebidas"]; global $base_de_datos;$i=0;?>
-                                <?php foreach($array as $arraypedidos) {
-                                    ?>
-                                <?php    if($i==0){ ?>
-                                        <li class="nav-item"><a class="nav-link active" style="text-align: end;" data-toggle="tab" href="#<?php echo $arraypedidos; ?>"><?php echo $arraypedidos; ?></a>
-                                    <?php }else{ ?>
-                                        <li class="nav-item"><a class="nav-link " style="text-align: end;" data-toggle="tab" href="#<?php echo $arraypedidos; ?>"><?php echo $arraypedidos; ?></a>
-                                        <?php } ?>
+        <div class="custom-tab-4" id="tabstyle">
+            <div class="row">
+                <div class="col-md-2 col-12">
+                    <ul class="nav nav-tabs">
+                        <?php $array=["entrantes","platos","postres","bebidas"]; global $base_de_datos;$i=0;?>
+                        <?php foreach($array as $arraypedidos) {
+                            ?>
+                            <?php    if($i==0){ ?>
+                                <li class="nav-item"><a class="nav-link active" style="text-align: end;" data-toggle="tab" href="#<?php echo $arraypedidos; ?>"><?php echo $arraypedidos; ?></a>
+                            <?php }else{ ?>
+                                <li class="nav-item"><a class="nav-link " style="text-align: end;" data-toggle="tab" href="#<?php echo $arraypedidos; ?>"><?php echo $arraypedidos; ?></a>
+                            <?php } ?>
 
-                                </li>
-                                    <?php $i+=1; } ?>
-                            </ul>
-                        </div>
-                        <div class="col-md-10 col-12">
-                            <div class="tab-content tab-content-default">
-
-
+                            </li>
+                            <?php $i+=1; } ?>
+                    </ul>
+                </div>
+                <div class="col-md-10 col-12">
+                    <div class="tab-content tab-content-default">
 
 
-                                    <?php $i=0; foreach($array as $arraypedidos){
-
-                                        $sentencia = $base_de_datos->query("select * from ".$arraypedidos." where disponible=1;");
-                                        $pedidosList = $sentencia->fetchAll(PDO::FETCH_OBJ);
-
-                                        if($pedidosList!=null){
-                                            ?>
 
 
-                                    <?php    if($i==0){ ?>
-                                    <div class="tab-pane fade show active" id="<?php echo $arraypedidos; ?>" role="tabpanel">
-                                        <?php }else{ ?>
-                                        <div class="tab-pane fade show " id="<?php echo $arraypedidos; ?>" role="tabpanel">
-                                            <?php } ?>
-                                        <div class="row">
-                                        <div class="col-xl-12">
-                                                <div class="card top_menu_widget">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                        <?php $j=0; foreach($pedidosList as $listaItem){
+                        <?php $i=0; foreach($array as $arraypedidos){
 
-                                                            $foto=$listaItem->foto;
-                                                            $nombre=$listaItem->nombre;
-                                                            $precio=$listaItem->precio;
-                                                            $valoracion=$listaItem->valoracion;
-                                                            ?>
+                        $sentencia = $base_de_datos->query("select * from ".$arraypedidos." where restaurantid = ".$id." and disponible=1;");
+                        //$sentencia->bindParam(':restid', $id);
+                        $pedidosList = $sentencia->fetchAll(PDO::FETCH_OBJ);
+
+                        if($pedidosList!=null){
+                        ?>
+
+
+                        <?php    if($i==0){ ?>
+                        <div class="tab-pane fade show active" id="<?php echo $arraypedidos; ?>" role="tabpanel">
+                            <?php }else{ ?>
+                            <div class="tab-pane fade show " id="<?php echo $arraypedidos; ?>" role="tabpanel">
+                                <?php } ?>
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="top_menu_widget">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <?php $j=0; foreach($pedidosList as $listaItem){
+
+                                                        $foto=$listaItem->foto;
+                                                        $nombre=$listaItem->nombre;
+                                                        $precio=$listaItem->precio;
+                                                        $valoracion=$listaItem->valoracion;
+                                                        ?>
 
                                                         <?php    if($j<4){ ?>
-                                                                <div class="col-lg-3 col-sm-6">
-                                                                    <div class="card border-0">
-                                                                        <div class="image-wrapper text-center mb-2">
+                                                            <div class="col-lg-3 col-sm-6">
+                                                                <div class="card border-0">
+                                                                    <div class="image-wrapper text-center mb-2">
 
-                                                                            <?php if($foto!=null){?>
-                                                                                <img class="img-fluid rounded-circle" src="images/<?php echo $foto;?>" style="height: 120px;width: 120px" alt="food menu">
-                                                                            <?php }else{?>
-                                                                                <img class="img-fluid rounded-circle" src="images/blank1.jpg" alt="food menu" style="height: 120px;width: 120px">
+                                                                        <?php if($foto!=null){?>
+                                                                            <img class="img-fluid rounded-circle" src="images/<?php echo $foto;?>" style="height: 120px;width: 120px" alt="food menu">
+                                                                        <?php }else{?>
+                                                                            <img class="img-fluid rounded-circle" src="images/blank1.jpg" alt="food menu" style="height: 120px;width: 120px">
+                                                                        <?php }?>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div class="text-center px-3">
+                                                                            <h4> <?php echo $nombre; ?></h4>
+                                                                            <?php  if(($valoracion)==1){ ?>
+                                                                                <span class="icon">★</span>
                                                                             <?php }?>
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <div class="text-center px-3">
-                                                                                <h4> <?php echo $nombre; ?></h4>
-                                                                                <?php  if(($valoracion)==1){ ?>
-                                                                                    <span class="icon">★</span>
-                                                                                <?php }?>
 
-                                                                                <?php  if(($valoracion)==2){ ?>
-                                                                                    <span class='icon'>★★</span>
-                                                                                <?php }?>
+                                                                            <?php  if(($valoracion)==2){ ?>
+                                                                                <span class='icon'>★★</span>
+                                                                            <?php }?>
 
-                                                                                <?php  if(($valoracion)==3){ ?>
-                                                                                    <span class='icon'>★★★</span>
-                                                                                <?php }?>
+                                                                            <?php  if(($valoracion)==3){ ?>
+                                                                                <span class='icon'>★★★</span>
+                                                                            <?php }?>
 
-                                                                                <?php  if(($valoracion)==4){ ?>
-                                                                                    <span class='icon'>★★★★</span>
-                                                                                <?php }?>
+                                                                            <?php  if(($valoracion)==4){ ?>
+                                                                                <span class='icon'>★★★★</span>
+                                                                            <?php }?>
 
-                                                                                <?php  if(($valoracion)==5 || empty($valoracion)){ ?>
-                                                                                    <span class='icon'>★★★★★</span>
-                                                                                <?php }?>
-                                                                                <h4 class="text-primary" style="margin-top: 5px">$<?php echo $precio; ?></h4>
-                                                                            </div>
+                                                                            <?php  if(($valoracion)==5 || empty($valoracion)){ ?>
+                                                                                <span class='icon'>★★★★★</span>
+                                                                            <?php }?>
+                                                                            <h4 class="text-primary" style="margin-top: 5px">$<?php echo $precio; ?></h4>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            <?php }else{ ?>
-                                                                <div class="col-lg-3 col-sm-6">
-                                                                    <div class="card border-0">
-                                                                        <div class="card-body">
-                                                                            <div class="text-center pt-3">
-                                                                                <h4><?php echo $nombre; ?></h4>
-                                                                                <?php  if(($valoracion)==1){ ?>
-                                                                                    <span class="icon">★</span>
-                                                                                <?php }?>
-
-                                                                                <?php  if(($valoracion)==2){ ?>
-                                                                                    <span class='icon'>★★</span>
-                                                                                <?php }?>
-
-                                                                                <?php  if(($valoracion)==3){ ?>
-                                                                                    <span class='icon'>★★★</span>
-                                                                                <?php }?>
-
-                                                                                <?php  if(($valoracion)==4){ ?>
-                                                                                    <span class='icon'>★★★★</span>
-                                                                                <?php }?>
-
-                                                                                <?php  if(($valoracion)==5 || empty($valoracion)){ ?>
-                                                                                    <span class='icon'>★★★★★</span>
-                                                                                <?php }?>
-                                                                                <h4 class="text-primary" style="margin-top: 5px">$<?php echo $precio; ?></h4>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="image-wrapper text-center">
-                                                                            <?php if($foto!=null){?>
-                                                                                <img class="img-fluid rounded-circle" src="images/<?php echo $foto;?>" style="height: 120px;width: 120px" alt="food menu">
-                                                                            <?php }else{?>
-                                                                                <img class="img-fluid rounded-circle" src="images/blank1.jpg" alt="food menu" style="height: 120px;width: 120px">
+                                                            </div>
+                                                        <?php }else{ ?>
+                                                            <div class="col-lg-3 col-sm-6">
+                                                                <div class="card border-0">
+                                                                    <div class="card-body">
+                                                                        <div class="text-center pt-3">
+                                                                            <h4><?php echo $nombre; ?></h4>
+                                                                            <?php  if(($valoracion)==1){ ?>
+                                                                                <span class="icon">★</span>
                                                                             <?php }?>
+
+                                                                            <?php  if(($valoracion)==2){ ?>
+                                                                                <span class='icon'>★★</span>
+                                                                            <?php }?>
+
+                                                                            <?php  if(($valoracion)==3){ ?>
+                                                                                <span class='icon'>★★★</span>
+                                                                            <?php }?>
+
+                                                                            <?php  if(($valoracion)==4){ ?>
+                                                                                <span class='icon'>★★★★</span>
+                                                                            <?php }?>
+
+                                                                            <?php  if(($valoracion)==5 || empty($valoracion)){ ?>
+                                                                                <span class='icon'>★★★★★</span>
+                                                                            <?php }?>
+                                                                            <h4 class="text-primary" style="margin-top: 5px">$<?php echo $precio; ?></h4>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="image-wrapper text-center">
+                                                                        <?php if($foto!=null){?>
+                                                                            <img class="img-fluid rounded-circle" src="images/<?php echo $foto;?>" style="height: 120px;width: 120px" alt="food menu">
+                                                                        <?php }else{?>
+                                                                            <img class="img-fluid rounded-circle" src="images/blank1.jpg" alt="food menu" style="height: 120px;width: 120px">
+                                                                        <?php }?>
+                                                                    </div>
                                                                 </div>
-                                                                <?php } ?>
+                                                            </div>
+                                                        <?php } ?>
                                                         <?php $j++;
                                                         if($j==8) $j=0;
 
-                                                        } ?>
-                                                    </div>
-                                                    </div>
+                                                    } ?>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                        <?php $i+=1; } }?>
-
+                                </div>
                             </div>
+                            <?php $i+=1; } ?>
+                            <?php    if($i==0){ ?>
+                                 <div class="tab-pane fade show active" id="<?php echo $arraypedidos; ?>" role="tabpanel">
+                                <?php }else{ ?>
+                                <div class="tab-pane fade show " id="<?php echo $arraypedidos; ?>" role="tabpanel">
+                                    <?php } ?>
+                                    <h5 class="section-title" style="font-size: 10px;">En estos momentos no tenemos <?php echo $arraypedidos; ?> disponibles!</h5>
+                                </div>
+                            <?php $i+=1;  }?>
+
                         </div>
                     </div>
                 </div>
             </div>
-<!--        </div>-->
-<!--    </div>-->
+        </div>
+        <!--        </div>-->
+        </div>
+    </div>
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row counter-wrapper">
+                <div class="col-sm-3 col-6">
+                    <div class="card-body text-center">
+                        <h4 class="counter">147</h4>
+                        <span>Ordenes</span>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-6">
+                    <div class="card-body text-center">
+                        <h4 class="counter">83</h4>
+                        <span>Platos</span>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-6">
+                    <div class="card-body text-center">
+                        <h4 class="counter">64</h4>
+                        <span>Clientes</span>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-6">
+                    <div class="card-body text-center">
+                        <h4 class="counter">12345</h4>
+                        <span>Comentarios</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row counter-wrapper">
-                    <div class="col-sm-3 col-6">
-                        <div class="card-body text-center">
-                            <h4 class="counter">147</h4>
-                            <span>Ordenes</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-6">
-                        <div class="card-body text-center">
-                            <h4 class="counter">83</h4>
-                            <span>Platos</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-6">
-                        <div class="card-body text-center">
-                            <h4 class="counter">64</h4>
-                            <span>Clientes</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-6">
-                        <div class="card-body text-center">
-                            <h4 class="counter">12345</h4>
-                            <span>Comentarios</span>
-                        </div>
-                    </div>
+<div class="col-12">
+    <div class="row">
+        <div class="col-sm-6">
+            <!-- 2. Horarios y Ubicación Dinámica -->
+            <section id="location-hours" class="p-4 bg-light rounded shadow mb-4">
+                <h2>📍 Dónde Estamos</h2>
+                <p><strong>Dirección:</strong> Calle Falsa 123, Ciudad Gastronómica</p>
+                <div class="container-fluid">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1948.2618895643138!2d-80.07383536066456!3d22.808811210970273!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d51dc751dff889%3A0x67af0f662f166f6e!2sSagua%20la%20Grande%2C%20Cuba!5e0!3m2!1ses!2smx!4v1748379013035!5m2!1ses!2smx"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-            </div>
+                <div class="mt-3">
+                    <h4>🕒 Horarios</h4>
+                    <ul id="schedule" class="list-unstyled"></ul>
+                    <p id="status" class="fw-bold mt-2"></p>
+                </div>
+            </section>
+        </div>
+        <div class="col-sm-6">
+            <!-- 3. Sistema de Reservas Online -->
+            <section id="reservations" class="p-4 bg-white rounded shadow mb-4">
+                <h2>📅 Reserva tu Mesa</h2>
+                <form id="reservationForm">
+                    <div>
+                        <label>Nombre:</label><br>
+                        <input type="text" name="nombre" id="nombre" required><br>
+                    </div>
+                    <div>
+                        <label>Teléfono:</label><br>
+                        <input type="tel" name="telefono" id="telefono" required><br>
+                    </div>
+                    <div>
+                        <label>Fecha:</label><br>
+                        <input type="date" name="fecha" id="fecha" required><br>
+                    </div>
+                    <div>
+                        <label>Hora:</label><br>
+                        <input type="time" name="hora" id="hora" required><br>
+                    </div>
+                    <div>
+                        <label>Número de personas:</label><br>
+                        <input type="number" min="1" name="personas" id="personas" required><br>
+                    </div>
+                    <label>Captcha de seguridad</label><br>
+                    <img id="captchaimgr" src="controllers/captcha.php?from=r" alt="CAPTCHA">
+                    <input type="text" name="captchar" placeholder="Ingresa el texto de la imagen" required>
+                    <button type="submit" class="mt-2">Reservar</button>
+                </form>
+                <p id="reservationMessage" class="mt-2"></p>
+            </section>
+
+            <!-- 10. Encuesta / Sugerencias -->
+            <section id="suggestions" class="p-4 bg-light rounded shadow">
+                <h2>💬 Ayúdanos a mejorar</h2>
+                <form id="suggestionForm" enctype="multipart/form-data">
+                    <label>Una foto, un recuerdo de tu visita</label><br>
+                    <input type="file" class="dropify img-fluid rounded-circle" name="userimage" id="userimage" data-default-file="images/blank1.jpg" />
+                    <label>¿Qué te gustaría ver en el menú o mejorar?</label><br>
+                    <textarea name="mensaje" required rows="4" cols="50"></textarea><br>
+                    <label>Captcha de seguridad</label><br>
+                    <img id="captchaimgs" src="controllers/captcha.php?from=s" alt="CAPTCHA">
+                    <input type="text" name="captchas" placeholder="Ingresa el texto de la imagen" required>
+                    <input type="hidden" name="restaurantId" value="<?php echo  $id;?>">
+                    <button type="submit" class="mt-2">Enviar sugerencia</button>
+                </form>
+                <p id="suggestionMessage" class="mt-2"></p>
+            </section>
         </div>
     </div>
-    <div class="col-12">
-        <div class="row">
-                    <div class="col-sm-6">
-                        <!-- 2. Horarios y Ubicación Dinámica -->
-                        <section id="location-hours" class="p-4 bg-light rounded shadow mb-4">
-                            <h2>📍 Dónde Estamos</h2>
-                            <p><strong>Dirección:</strong> Calle Falsa 123, Ciudad Gastronómica</p>
-                            <div class="container-fluid">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1948.2618895643138!2d-80.07383536066456!3d22.808811210970273!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d51dc751dff889%3A0x67af0f662f166f6e!2sSagua%20la%20Grande%2C%20Cuba!5e0!3m2!1ses!2smx!4v1748379013035!5m2!1ses!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
-                            <div class="mt-3">
-                                <h4>🕒 Horarios</h4>
-                                <ul id="schedule" class="list-unstyled"></ul>
-                                <p id="status" class="fw-bold mt-2"></p>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-6">
-                        <!-- 3. Sistema de Reservas Online -->
-                        <section id="reservations" class="p-4 bg-white rounded shadow mb-4">
-                            <h2>📅 Reserva tu Mesa</h2>
-                            <form id="reservationForm">
-                                <div>
-                                    <label>Nombre:</label><br>
-                                    <input type="text" name="nombre" id="nombre" required><br>
-                                </div>
-                                <div>
-                                    <label>Teléfono:</label><br>
-                                    <input type="tel" name="telefono" id="telefono" required><br>
-                                </div>
-                                <div>
-                                    <label>Fecha:</label><br>
-                                    <input type="date" name="fecha" id="fecha"  required><br>
-                                </div>
-                                <div>
-                                    <label>Hora:</label><br>
-                                    <input type="time" name="hora" id="hora" required><br>
-                                </div>
-                                <div>
-                                    <label>Número de personas:</label><br>
-                                    <input type="number" min="1" name="personas" id="personas" required><br>
-                                </div>
-                                <label>Captcha de seguridad</label><br>
-                                <img id="captchaimgr" src="controllers/captcha.php?from=r" alt="CAPTCHA">
-                                <input type="text" name="captchar" placeholder="Ingresa el texto de la imagen" required>
-                                <button type="submit" class="mt-2">Reservar</button>
-                            </form>
-                            <p id="reservationMessage" class="mt-2"></p>
-                        </section>
 
-                        <!-- 10. Encuesta / Sugerencias -->
-                        <section id="suggestions" class="p-4 bg-light rounded shadow">
-                            <h2>💬 Ayúdanos a mejorar</h2>
-                            <form id="suggestionForm">
-                                <label>¿Qué te gustaría ver en el menú o mejorar?</label><br>
-                                <textarea name="mensaje" required rows="4" cols="50"></textarea><br>
-                                <label>Captcha de seguridad</label><br>
-                                <img id="captchaimgs" src="controllers/captcha.php?from=s" alt="CAPTCHA">
-                                <input type="text" name="captchas" placeholder="Ingresa el texto de la imagen" required>
-
-                                <button type="submit" class="mt-2">Enviar sugerencia</button>
-                            </form>
-                            <p id="suggestionMessage" class="mt-2"></p>
-                        </section>
-                    </div>
-        </div>
-
-    </div>
+</div>
 
 
-    <footer class="text-center py-4 bg-light">
-        <p class="mb-0">&copy; 2025 Nombre Restaurante . Todos los derechos reservados.</p>
-    </footer>
+
+<footer class="text-center py-4 bg-light">
+    <p class="mb-0">&copy; 2025 Nombre Restaurante . Todos los derechos reservados.</p>
+</footer>
 
 
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/swiper-bundle.min.js"></script>
-    <script src="assets/js/bootstrap-icons.json"></script>
-
+<script src="assets/js/swiper-bundle.min.js"></script>
+<script src="assets/js/bootstrap-icons.json"></script>
+    <script src="assets/js/dropify.min.js"></script>
+    <script src="assets/js/dropify-init.js"></script>
 <script>
     // Slider automático de imágenes
     const slides = document.querySelectorAll('.hero-section img');
     let index = 0;
+    var restaurantId = <?php echo $id;?>;
     setInterval(() => {
         slides[index].classList.remove('active');
         index = (index + 1) % slides.length;
         slides[index].classList.add('active');
-    }, 4000);
+    }, 5000);
+
     function updateTabClass() {
         const tabElement = document.getElementById('tabstyle');
         if (!tabElement) return; // Previene errores si el elemento no existe
@@ -823,7 +887,6 @@ include_once ROOT_DIR."pdo/conexion.php";
         });
 
 
-
         // 2. Mostrar horarios y estado
         const schedule = {
             'Lunes': [12, 22],
@@ -838,7 +901,7 @@ include_once ROOT_DIR."pdo/conexion.php";
         const scheduleList = document.getElementById('schedule');
         const status = document.getElementById('status');
         const now = new Date();
-        const dayName = now.toLocaleDateString('es-ES', { weekday: 'long' });
+        const dayName = now.toLocaleDateString('es-ES', {weekday: 'long'});
         const hour = now.getHours();
 
         for (let [day, hours] of Object.entries(schedule)) {
@@ -866,16 +929,16 @@ include_once ROOT_DIR."pdo/conexion.php";
         document.getElementById('reservationForm').addEventListener('submit', (e) => {
             e.preventDefault();
 
-           /* if (!captchaResuelto()) {
-                alert("Por favor, resuelve el CAPTCHA antes de enviar.");
-                return;
-            }*/
+            /* if (!captchaResuelto()) {
+                 alert("Por favor, resuelve el CAPTCHA antes de enviar.");
+                 return;
+             }*/
 
             const formData = new FormData(e.target);
-
+            formData.append('restaurantId', restaurantId);
             fetch('controllers/guardar_reserva.php', {
                 method: 'POST',
-                dataType:'json',
+                dataType: 'json',
                 body: formData
             })
                 .then(res => res.json())
@@ -888,14 +951,14 @@ include_once ROOT_DIR."pdo/conexion.php";
                         document.getElementById('reservationMessage').style.color = 'green';
                         e.target.reset();
                         recargarCaptcha('r');
-                       // grecaptcha.reset();
+                        // grecaptcha.reset();
                     } else if (data["status"] === 'RECAPTCHA_FAILED') {
-                        console.log("Captcha no verificado por el servidor.");
+                       // console.log("Captcha no verificado por el servidor.");
                         document.getElementById('reservationMessage').textContent = "❌ Captcha no verificado por el servidor.";
                         document.getElementById('reservationMessage').style.color = 'red';
                         recargarCaptcha('r');
                     } else if (data["status"] === 'RATE_LIMITED') {
-                        console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
+                      //  console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
                         document.getElementById('reservationMessage').textContent = "❌ Has enviado demasiadas solicitudes. Intenta en un minuto.";
                         document.getElementById('reservationMessage').style.color = 'red';
                         e.target.reset();
@@ -903,7 +966,7 @@ include_once ROOT_DIR."pdo/conexion.php";
                     } else {
                         document.getElementById('reservationMessage').textContent = "❌ Error al guardar la reserva.";
                         document.getElementById('reservationMessage').style.color = 'red';
-                        console.log("❌ Error al guardar la reserva.");
+                      //  console.log("❌ Error al guardar la reserva.");
                         e.target.reset();
                         recargarCaptcha('r');
                     }
@@ -911,23 +974,27 @@ include_once ROOT_DIR."pdo/conexion.php";
         });
 
         // SUGERENCIAS
-        document.getElementById('suggestionForm').addEventListener('submit', (e) => {
+        const form = document.getElementById('suggestionForm');
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-        /*   if (!captchaResuelto()) {
-                alert("Por favor, resuelve el CAPTCHA antes de enviar.");
-                return;
-            }
-*/
-            //const mensaje = e.target.querySelector('textarea').value;
-           // const formData = new FormData();
-            // formData.append('mensaje', mensaje);
-            const formData = new FormData(e.target);
+            const mensaje = form.elements['mensaje'].value;
+            const captchas = form.elements['captchas'].value;
+            const restaurantId = form.elements['restaurantId'].value;
+
+            const fileInput = form.elements['userimage'];
+            const file = fileInput.files.length > 0 ? fileInput.files[0] : null;
+
+            const formData = new FormData();
+            if (file) formData.append('userimage', file);
+            formData.append('mensaje', mensaje);
+            formData.append('captchas', captchas);
+            formData.append('restaurantId', restaurantId);
 
             fetch('controllers/guardar_sugerencia.php', {
-                dataType:'json',
+                dataType: 'json',
                 method: 'POST',
-                body: formData
+                body: formData,
             })
                 .then(res => res.json()) //response.json()
                 .then(data => {
@@ -936,20 +1003,20 @@ include_once ROOT_DIR."pdo/conexion.php";
                         document.getElementById('suggestionMessage').style.color = 'green';
                         e.target.reset();
                         recargarCaptcha('s');
-                       // grecaptcha.reset();
+                        // grecaptcha.reset();
                     } else if (data["status"] === 'RECAPTCHA_FAILED') {
-                        console.log("Captcha no verificado por el servidor.");
+                       // console.log("Captcha no verificado por el servidor.");
                         document.getElementById('suggestionMessage').textContent = "❌ Captcha no verificado por el servidor.";
                         document.getElementById('suggestionMessage').style.color = 'red';
                         recargarCaptcha('s');
                     } else if (data["status"] === 'RATE_LIMITED') {
-                        console.log("Has enviado demasiadas sugerencias. Intenta luego.");
+                       // console.log("Has enviado demasiadas sugerencias. Intenta luego.");
                         document.getElementById('suggestionMessage').textContent = "❌ Has enviado demasiadas sugerencias. Intenta luego.";
                         document.getElementById('suggestionMessage').style.color = 'red';
                         e.target.reset();
                         recargarCaptcha('s');
                     } else {
-                        console.log("Error al enviar la sugerencia.");
+                      //  console.log("Error al enviar la sugerencia.");
                         document.getElementById('suggestionMessage').textContent = "❌ Error al enviar la sugerencia.";
                         document.getElementById('suggestionMessage').style.color = 'red';
                         e.target.reset();
@@ -957,25 +1024,25 @@ include_once ROOT_DIR."pdo/conexion.php";
                     }
                 });
         });
-
-
     });
+
     function recargarCaptcha(place) {
-        const vieja = document.getElementById('captchaimg'+place);
+        const vieja = document.getElementById('captchaimg' + place);
         const nueva = document.createElement('img');
-        nueva.id = 'captchaimg'+place;
+        nueva.id = 'captchaimg' + place;
         nueva.alt = 'CAPTCHAZ';
-        nueva.src = 'controllers/captcha.php?t=' + Date.now()+"&from="+place;
+        nueva.src = 'controllers/captcha.php?t=' + Date.now() + "&from=" + place;
         nueva.width = 120;
         nueva.height = 40;
 
         vieja.parentNode.replaceChild(nueva, vieja);
     }
+
     /**
      * Init swiper sliders
      */
     function initSwiper() {
-        document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
+        document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
             let config = JSON.parse(
                 swiperElement.querySelector(".swiper-config").innerHTML.trim()
             );
@@ -989,6 +1056,9 @@ include_once ROOT_DIR."pdo/conexion.php";
     }
 
     window.addEventListener("load", initSwiper);
+    window.onload = function () {
+        $('.dropify').dropify();
+    };
 </script>
 </body>
 </html>

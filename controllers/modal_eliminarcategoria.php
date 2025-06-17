@@ -14,7 +14,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Eliminando <?php echo $categoria;?> ...</h5>
+                        <h5 class="modal-title" style="color: black">Eliminando <?php echo $categoria;?> ...</h5>
                         <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                         </button>
                     </div>
@@ -29,7 +29,7 @@
 
                             <div class="card">
                                 <div class="card-header pb-0">
-                                    <h4 class="card-title">¿ Seguro que desea eliminar este elemento del menú: <?php echo $categoria;?> ? </h4>
+                                    <h4 class="card-title" style="color: black">¿ Seguro que desea eliminar este elemento del menú: <?php echo $categoria;?> ? </h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="col-12">
@@ -74,53 +74,18 @@
 
 
                                                     </div>
+                                                    <?php   if($idrestaurant!=1){ ?>
                                                     <p><?php echo $ingredientes;  ?></p>
-
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <h2 class="vertical-card__menu--price">$<span><?php echo $precio;  ?> cup</span></h2>
-
-
-                                                        <?php
-
-
-                                                        if(($valoracion)>0){ ?>
-                                                            <div class="vertical-card__menu--rating c-pointer">
-
-
-
-                                                                <?php  if(($valoracion)==1){ ?>
-                                                                    <span class="icon"><i class="fa fa-star"></i></span>
-                                                                <?php }?>
-
-                                                                <?php  if(($valoracion)==2){ ?>
-                                                                    <span class='icon'>★★</span>
-                                                                <?php }?>
-
-                                                                <?php  if(($valoracion)==3){ ?>
-                                                                    <span class='icon'>★★★</span>
-                                                                <?php }?>
-
-                                                                <?php  if(($valoracion)==4){ ?>
-                                                                    <span class='icon'>★★★★</span>
-                                                                <?php }?>
-
-                                                                <?php  if(($valoracion)==5){ ?>
-                                                                    <span class='icon'>★★★★★</span>
-                                                                <?php }?>
-
-
-
-
-
-
-                                                                <!--   <span class="icon"><i class="fa fa-star"></i></span>
-                                                                   <span class="icon"><i class="fa fa-star"></i></span>
-                                                                   <span class="icon"><i class="fa fa-star"></i></span>
-                                                                   <span class="icon"><i class="fa fa-star-o"></i></span>-->
-
-
-                                                            </div>
-                                                        <?php } ?>
+                                                    <?php  } ?>
+                                                    <div class="mb-2">
+                                                        <?php   if($idrestaurant==1){ ?>
+                                                        <p class="">Cantidad: <span><?php echo $cantidad;  ?></span></p>
+                                                        <p class="">Precio compra: $<span><?php echo $preciocompra;  ?> cup</span></p>
+                                                        <p class="">Precio venta: $<span><?php echo $precioventa;  ?> cup</span></p>
+                                                        <p class="">Precio transferencia: $<span><?php echo $preciotransferencia;  ?> cup</span></p>
+                                                        <?php  }else{ ?>
+                                                        <p class="">$<span><?php echo $precio;  ?> cup</span></p>
+                                                        <?php  } ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -137,6 +102,7 @@
 
                     </div>
                     <div class="modal-footer">
+                        <input type="hidden" name="idrestaurant" id="idrestaurant" value="<?php echo $idrestaurant;?>">
                         <input type="hidden" name="id_categoria" id="id_categoria" value="<?php echo $id_bebida;?>">
                         <input type="hidden" name="categoria" id="categoria" value="<?php echo $categoria;?>">
                         <button type="button" class="btn btn-dark text-white" data-dismiss="modal" >Cancelar</button>

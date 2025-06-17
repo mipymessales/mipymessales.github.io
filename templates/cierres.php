@@ -57,7 +57,7 @@
         }
         body {
             font-family: 'Segoe UI', sans-serif;
-            padding: 20px;
+           /* padding: 20px;*/
             background-color: #f7f9fc;
         }
 
@@ -174,7 +174,7 @@
                     document.getElementById("totalGeneral").innerText ='$0';
                     return;
                 }
-                console.log(JSON.stringify(data));
+              //  console.log(JSON.stringify(data));
 
                 let html = "";
 

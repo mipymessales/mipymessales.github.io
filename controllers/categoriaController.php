@@ -10,12 +10,14 @@ $errorUpdate="";
 $errorInsert="";
 $errorDelete="";
 $msg="";
-if (isset($_REQUEST["id_categoria"])){
+require_once ROOT_DIR . "controllers/class.SqlInjectionUtils.php";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST["id_categoria"])){
 
 
-    $id_bebida=$_REQUEST["id_categoria"];
-    $imagess=$_REQUEST["foto"];
-    $categoria=$_REQUEST["categoria"];
+    $id_bebida=$_POST["id_categoria"];
+    $imagess=$_POST["foto"];
+    $categoria=$_POST["categoria"];
+    $idrestaurant=$_POST["idrestaurant"];
 
     if (!hash_equals($imagess,"blank1.jpg")){
         $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$imagess;
@@ -48,17 +50,17 @@ window.location=('../panel.php?section=ofertas');
     }
 
 }else{
-    if (!isset($_REQUEST["nombrep"]) || !isset($_REQUEST["ingredientes"]) || !isset($_REQUEST["precio"]) || !isset($_REQUEST["radio"])) {
+   /* if (!isset($_POST["nombrep"]) || !isset($_POST["ingredientes"]) || !isset($_POST["precio"]) || !isset($_POST["radio"])) {
         exit();
-    }
+    }*/
 
-$categoria=$_REQUEST["categoria"]??"";
+$categoria=$_POST["categoria"]??"";
+    $idrestaurant=$_POST["idrestaurant"];
+$nombrep = $_POST["nombrep"];
+$ingredientes = isset($_POST["ingredientes"])?$_POST["ingredientes"]:"";
 
-$nombrep = $_REQUEST["nombrep"];
-$ingredientes = $_REQUEST["ingredientes"];
-$precio = $_REQUEST["precio"];
-$radio = $_REQUEST["radio"];
-$imagess=$_REQUEST["foto"]??"blank1.jpg";
+$radio = $_POST["radio"];
+$imagess=$_POST["foto"]??"blank1.jpg";
 
 $target_dir = "../images/"; //directorio en el que se subira
 $target_file = $target_dir .  basename($_FILES["image"]["name"]);//se añade el directorio y el nombre del archivo
@@ -136,14 +138,56 @@ if ($uploadOk == 0) {
     defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
     include_once ROOT_DIR."pdo/conexion.php";
 global $base_de_datos;
-if (isset($_REQUEST["insertar"])){
-    $categoria=$_REQUEST["categ"];
-    $sentencia = $base_de_datos->prepare("INSERT INTO ".$categoria." (nombre, ingredientes, precio, disponible, tipo, foto,valoracion) VALUES (:nombrep, :ingredientes, :precio, :disponible,:tipo, :image,'5')");
+if (isset($_POST["insertar"])){
+    $categoria=$_POST["categ"];
+    if ($idrestaurant==1){
+        $sentencia = $base_de_datos->prepare("INSERT INTO ".$categoria." (nombre, ingredientes, cantidad, preciocompra, precioventa, preciotransferencia, expira, disponible, restaurantid, tipo, foto, valoracion) VALUES (:nombrep, :ingredientes, :cantidad,:preciocompra,:precioventa,:preciotranferencia,:expira, :disponible, :idrestaurant, :tipo, :image,'5')");
+        $cantidad = $_POST["cantidad"];
+        $preciocompra = $_POST["preciocompra"];
+        $precioventa = $_POST["precioventa"];
+        $preciotranferencia = $_POST["preciotranferencia"];
+        $expira= $_POST["expira"];
+        $sentencia->bindParam(':cantidad',$cantidad);
+        $sentencia->bindParam(':preciocompra',$preciocompra);
+        $sentencia->bindParam(':precioventa',$precioventa);
+        $sentencia->bindParam(':preciotranferencia',$preciotranferencia);
+        $sentencia->bindParam(':expira',$expira);
+        $sentencia->bindParam(':idrestaurant',$idrestaurant);
+
+
+
+    }else{
+        $sentencia = $base_de_datos->prepare("INSERT INTO ".$categoria." (nombre, ingredientes, precio, disponible, restaurantid, tipo, foto,valoracion) VALUES (:nombrep, :ingredientes, :precio, :disponible, :idrestaurant, :tipo, :image,'5')");
+        $precio = $_POST["precio"];
+        $sentencia->bindParam(':precio',$precio);
+        $sentencia->bindParam(':idrestaurant',$idrestaurant);
+    }
+
     $errorInsert= $msg;
     $sentencia->bindParam(':tipo',$categoria);
 }else{
-    $sentencia = $base_de_datos->prepare("UPDATE ".$categoria." SET  nombre=:nombrep, ingredientes=:ingredientes, precio=:precio, disponible=:disponible, foto=:image WHERE id=:id_bedida");
-    $id_bebida=$_REQUEST["id"];
+
+    if ($idrestaurant==1){
+        $sentencia = $base_de_datos->prepare("UPDATE ".$categoria." SET  nombre=:nombrep, ingredientes=:ingredientes, expira=:expira,preciotransferencia=:preciotranferencia, cantidad=:cantidad, preciocompra=:preciocompra, precioventa=:precioventa, disponible=:disponible, foto=:image WHERE id=:id_bedida");
+        $cantidad = $_POST["cantidad"];
+        $preciocompra = $_POST["preciocompra"];
+        $precioventa = $_POST["precioventa"];
+        $preciotranferencia = $_POST["preciotranferencia"];
+        $expira= $_POST["expira"];
+        $sentencia->bindParam(':cantidad',$cantidad);
+        $sentencia->bindParam(':preciocompra',$preciocompra);
+        $sentencia->bindParam(':precioventa',$precioventa);
+        $sentencia->bindParam(':preciotranferencia',$preciotranferencia);
+        $sentencia->bindParam(':expira',$expira);
+    }else{
+        $sentencia = $base_de_datos->prepare("UPDATE ".$categoria." SET  nombre=:nombrep, ingredientes=:ingredientes, precio=:precio, disponible=:disponible, foto=:image WHERE id=:id_bedida");
+        $precio = $_POST["precio"];
+        $sentencia->bindParam(':precio',$precio);
+    }
+
+
+
+    $id_bebida=$_POST["id"];
     $sentencia->bindParam(':id_bedida',$id_bebida);
     $errorUpdate=$msg;
 }
@@ -151,7 +195,7 @@ if (isset($_REQUEST["insertar"])){
 //$sentencia = $base_de_datos->prepare("UPDATE bebidas SET (nombre, ingredientes, precio, disponible, tiempo_elavoracion, foto) VALUES (:nombrep, :ingredientes, :precio, :disponible, :elav, 5, :image)");
 $sentencia->bindParam(':nombrep',$nombrep);
 $sentencia->bindParam(':ingredientes',$ingredientes);
-$sentencia->bindParam(':precio',$precio);
+
 
 
 $d=null;
@@ -174,7 +218,7 @@ try{
     $sentencia->execute();
 }catch (Exception $e){
     echo  print_r($e->getTraceAsString());
-    if (isset($_REQUEST["insertar"])){
+    if (isset($_POST["insertar"])){
         $errorInsert.= print_r($e->getTraceAsString());
     }else{
         $errorUpdate.=print_r($e->getTraceAsString());;

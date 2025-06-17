@@ -4,13 +4,76 @@ session_start();
 defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,1).'/');
 include ROOT_DIR . 'controllers/auth_check.php';
 include_once ROOT_DIR . "pdo/conexion.php";
+require_once ROOT_DIR ."controllers/class.SqlInjectionUtils.php";
+include_once ROOT_DIR."controllers/Host.php";
+if (SqlInjectionUtils::checkSqlInjectionAttempt($_POST)){
+    header("Location:" .   Host::getHOSTNAME(). "templates/404.php");
+    exit();
+}
+
 // Obtén la sección actual (por ejemplo, desde la URL)
-$section = $_GET['section'] ?? 'salon';
+
+
+
+$restaurantId=$_SESSION['idrestaurant'];
+$username=$_SESSION['user'];
+$userrolid=$_SESSION['userrolid'];
+if ($restaurantId==1){
+    $section = $_GET['section'] ?? 'ofertas';
+}else{
+    $section = $_GET['section'] ?? 'salon';
+}
+global $base_de_datos;
+$stmt = $base_de_datos->prepare("SELECT * FROM restaurant_info WHERE id=:id limit 1");
+$stmt->bindParam(':id', $restaurantId);
+$stmt->execute();
+$resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
+if (!empty($resultado)) {
+    $nombreRestaurant = $resultado[0]->nombre;
+    $telefonoRestaurant = $resultado[0]->telefono;
+    $direccionRestaurant = $resultado[0]->direccion;
+    $horarioRestaurant = json_decode($resultado[0]->horario,true);
+    $ubicacionRestaurant = $resultado[0]->ubicacion;
+    $foto_portadaRestaurant = $resultado[0]->foto_portada;
+    $sitioRestaurant = $resultado[0]->sitioweb;
+}
+
+
+function obtenerRoles($userrolid, $conn) {
+    $stmt = $conn->prepare("SELECT tipo FROM rol_usuarios WHERE id = ?");
+    $stmt->execute([$userrolid]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row ? json_decode($row['tipo'], true) : [];
+}
+function obtenerRolIdByUserId($userid, $conn) {
+    $stmt = $conn->prepare("SELECT id_rol_usuario as rolid FROM trabajador WHERE id = ?");
+    $stmt->execute([$userid]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row ? $row['rolid'] : null;
+}
+if ($userrolid==33333){
+    $roles = ["ofertas", "pedidoscliente", "ventasproducto", "cierresventa", "configuracion"];
+}else{
+    $roles = obtenerRoles($userrolid, $base_de_datos); // Ej: ["ofertas", "ventas"]
+}
+if ($restaurantId==1){
+    if (empty($roles)){
+        $section ="nopermisos";
+    }
+   /* else{
+        $section =$roles[0];
+    }*/
+}
+
+
+
+
 // Asegúrate de que el archivo existe para cargarlo
 $templateFile = "templates/{$section}.php";
 if (!file_exists($templateFile)) {
     $templateFile = "templates/404.php"; // Página de error si no existe
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +81,7 @@ if (!file_exists($templateFile)) {
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Sales Manager</title>
+	<title>Panel <?php echo $nombreRestaurant;?></title>
 
 	<script>
 
@@ -99,6 +162,12 @@ if (!file_exists($templateFile)) {
             padding: 10px;
             font-size: 16px;
         }
+     /*   #main-header svg {
+            width: auto;
+            height: auto;
+            fill: none;
+            transition: fill .4s ease-in-out;
+        }*/
 
     </style>
 </head>
@@ -207,14 +276,14 @@ if (!file_exists($templateFile)) {
 					</a>
 				</li>
 				<li>
-					<a href="#">
+					<a href="<?php echo $sitioRestaurant; ?>">
 						<svg>
 							<use xlink:href="#icon-house"></use>
 						</svg>
 						<span>Sitio web</span>
 					</a>
 				</li>
-				<li>
+			<!--	<li>
 					<a href="#">
 						<svg>
 							<use xlink:href="#icon-top-comments"></use>
@@ -230,11 +299,11 @@ if (!file_exists($templateFile)) {
 						</svg>
 						<span>New</span>
 					</a>
-				</li>
+				</li>-->
 			</ul>
 
 			<a href="#">
-				<span>Bienvenido, <?php echo $_SESSION['user'];?></span>
+				<span>Bienvenido, <?php echo $username;?></span>
 				<svg>
 					<use xlink:href="#icon-user"></use>
 				</svg>
@@ -255,73 +324,151 @@ if (!file_exists($templateFile)) {
 
 			<nav id="sidebar__nav">
 				<ul>
-					<li class="menu-heading"><span>Nombre Restaurant</span></li>
-					<li>
-						<a href="?section=salon"  class="nav-menu active">
-							<svg>
-								<use xlink:href="#icon-dashboard"></use>
-							</svg>
-							<span>Sal&oacute;n</span>
-						</a>
-					</li>
-					<li>
-						<a href="?section=ofertas" class="nav-menu">
-							<svg>
-                                <use xlink:href="#icon-posts"></use>
-							</svg>
-							<span>Ofertas</span>
-						</a>
-					</li>
-					<li>
-						<a href="?section=pedidos" class="nav-menu">
-							<svg>
-								<use xlink:href="#icon-plugins"></use>
-							</svg>
-							<span>Pedidos</span>
-						</a>
-					</li>
+					<li class="menu-heading"><span><?php echo $nombreRestaurant;?></span></li>
+                    <?php $active=0; if ($restaurantId==1){ ?>
+                        <?php if (in_array('ofertas', $roles)){  ?>
+                        <li>
+                            <a href="?section=ofertas" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
+                                <svg>
+                                    <use xlink:href="#icon-posts"></use>
+                                </svg>
+                                <span>Ofertas</span>
+                            </a>
+                        </li>
+                        <?php
+                            if ($active==0){
+                                $active=1;//$section="ofertas";
+                            }
+                            } ?>
 
-					<li class="menu-heading"><span>Configuraci&oacute;n</span></li>
-				<!--	<li>
-						<a href="#">
-							<svg>
-								<use xlink:href="#icon-posts"></use>
-							</svg>
-							<span>Posts</span>
-						</a>
-					</li>-->
-                    <li>
-                        <a href="?section=reservaciones" class="nav-menu">
-                            <svg>
-                                <use xlink:href="#icon-comments"></use>
-                            </svg>
-                            <span>Reservaciones</span>
-                        </a>
-                    </li>
-					<li>
-						<a href="?section=cierres" class="nav-menu">
-							<svg>
-								<use xlink:href="#icon-pages"></use>
-							</svg>
-							<span>Cierres</span>
-						</a>
-					</li>
-                    <li>
-                        <a href="?section=users" class="nav-menu">
-                            <svg>
-                                <use xlink:href="#icon-users"></use>
-                            </svg>
-                            <span>Trabajadores</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="?section=configuracion" class="nav-menu">
-                            <svg>
-                                <use xlink:href="#icon-settings"></use>
-                            </svg>
-                            <span>Configuraci&oacute;n</span>
-                        </a>
-                    </li>
+                        <?php if (in_array('pedidoscliente', $roles)){ ?>
+                        <li>
+                            <a href="?section=pedidoscliente" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
+                                $
+                                <span>Pedidos</span>
+                            </a>
+                        </li>
+                        <?php
+                            if ($active==0){
+                                $active=1;
+                               // $section="pedidoscliente";
+                            }
+                        } ?>
+                        <?php if (in_array('ventasproducto', $roles)){ ?>
+                        <li>
+                            <a href="?section=ventasproducto" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
+                                $
+                                <span>Ventas</span>
+                            </a>
+                        </li>
+                        <?php
+                            if ($active==0){
+                                $active=1;//$section="ventasproducto";
+                            }
+                            } ?>
+                        <?php if (in_array('cierresventa', $roles)){ ?>
+                            <li>
+                                <a href="?section=cierresventa" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
+                                    <svg>
+                                        <use xlink:href="#icon-pages"></use>
+                                    </svg>
+                                    <span>Cierres</span>
+                                </a>
+                            </li>
+                        <?php
+                            if ($active==0){
+                                $active=1;//$section="cierresventa";
+                            }
+                        } ?>
+
+
+
+
+                      <!--  <li>
+                            <a href="?section=users" class="nav-menu">
+                                <svg>
+                                    <use xlink:href="#icon-users"></use>
+                                </svg>
+                                <span>Trabajadores</span>
+                            </a>
+                        </li>-->
+
+                        <?php if (in_array('configuracion', $roles)){ ?>
+                            <li class="menu-heading"><span>Configuraci&oacute;n del sitio</span></li>
+                        <li>
+                            <a href="?section=configuracion" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
+                                <svg>
+                                    <use xlink:href="#icon-settings"></use>
+                                </svg>
+                                <span>Sobre nosotros</span>
+                            </a>
+                        </li>
+                        <?php
+                            if ($active==0){
+                                $active=1;//$section="configuracion";
+                            }
+                        } ?>
+
+                    <?php }else{ ?>
+                        <li>
+                            <a href="?section=salon"  class="nav-menu active">
+                                <svg>
+                                    <use xlink:href="#icon-dashboard"></use>
+                                </svg>
+                                <span>Sal&oacute;n</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?section=ofertas" class="nav-menu">
+                                <svg>
+                                    <use xlink:href="#icon-posts"></use>
+                                </svg>
+                                <span>Ofertas</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?section=pedidos" class="nav-menu">
+                                <svg>
+                                    <use xlink:href="#icon-plugins"></use>
+                                </svg>
+                                <span>Pedidos</span>
+                            </a>
+                        </li>
+                        <li class="menu-heading"><span>Configuraci&oacute;n</span></li>
+                        <li>
+                            <a href="?section=reservaciones" class="nav-menu">
+                                <svg>
+                                    <use xlink:href="#icon-comments"></use>
+                                </svg>
+                                <span>Reservaciones</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?section=cierres" class="nav-menu">
+                                <svg>
+                                    <use xlink:href="#icon-pages"></use>
+                                </svg>
+                                <span>Cierres</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?section=users" class="nav-menu">
+                                <svg>
+                                    <use xlink:href="#icon-users"></use>
+                                </svg>
+                                <span>Trabajadores</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?section=configuracion" class="nav-menu">
+                                <svg>
+                                    <use xlink:href="#icon-settings"></use>
+                                </svg>
+                                <span>Configuraci&oacute;n</span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
 				</ul>
 			</nav>
 
@@ -342,6 +489,16 @@ if (!file_exists($templateFile)) {
 		<div id="main-header">
 			<div id="main-content__container" style="display: contents!important;">
 				 <?php
+                 if ((in_array($section, $roles))){
+                     $templateFile = "templates/{$section}.php";
+                 }else{
+                     $section=$roles[0];
+                     $templateFile = "templates/{$section}.php";
+                 }
+
+                 if (!file_exists($templateFile)) {
+                     $templateFile = "templates/404.php"; // Página de error si no existe
+                 }
                         // Carga la sección dinámica
                         include $templateFile;
                  ?>
@@ -383,38 +540,78 @@ if (!file_exists($templateFile)) {
                 });
             });
         }
+
         function setActiveLink(link) {
+           // console.log("setActiveLink: "+link);
+            //console.log("Tipo:", typeof link);
+           // console.log("Valor:", link);
+            //console.log("esNuloOVacio:", esNuloOVacio(link));
             if (esNuloOVacio(link)){
-                const defaultLink = "?section=salon";
+                //console.log("entre vacio setActiveLink: "+link);
+                var username="<?php echo $username;?>";
+                var defaultLink = "?section=salon";
+                if (username === "losespartanos"){
+                    defaultLink = "?section=ofertas";
+                }
+             //   console.log("defaultLink defaultLink "+defaultLink);
+
                 link= document.querySelector(`.nav-menu[href="${defaultLink}"]`);
             }
-            navLinks.forEach(nav => nav.classList.remove('active'));
-            link.classList.add('active');
-            localStorage.setItem('activeLink', link.getAttribute('href')); // Guarda el href como identificador
+            if (!esNuloOVacio(link)) {
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                link.classList.add('active');
+                localStorage.setItem('activeLink', link.getAttribute('href')); // Guarda el href como identificador
+            }
         }
 
 
         // Al cargar la página, revisa si hay un enlace guardado
         window.addEventListener('DOMContentLoaded', () => {
             const savedHref = localStorage.getItem('activeLink');
-            console.log(savedHref);
+           // console.log(savedHref);
             const params = new URLSearchParams(window.location.search);
             const nombre = "?section="+params.get('section');
             if (savedHref) {
                 const savedLink = document.querySelector(`.nav-menu[href="${savedHref}"]`);
+                //console.log("DOMContentLoaded savedLink check "+savedLink);
                 if (savedLink===nombre) {
-                    console.log(savedHref);
+                   // console.log("DOMContentLoaded savedHref"+savedHref);
                     setActiveLink(savedLink);
-                    console.log(savedLink);
+                    //console.log("DOMContentLoaded savedLink"+savedLink);
                   //  savedLink.click();
                 }else{
                     const savedLink = document.querySelector(`.nav-menu[href="${nombre}"]`);
+                   // console.log("DOMContentLoaded savedLink else "+savedLink);
                     setActiveLink(savedLink);
                 }
             }
         });
         function esNuloOVacio(v) {
-            return v === null || v === undefined || v === "";
+            if (v === null || v === undefined) return true;
+
+            // Strings
+            if (typeof v === "string") {
+                const trimmed = v.trim().toLowerCase();
+                return trimmed === "" || trimmed === "undefined" || trimmed === "null";
+            }
+
+            // Arrays
+            if (Array.isArray(v)) return v.length === 0;
+
+            // HTML Elements
+            if (v instanceof HTMLElement) {
+                // Revisa contenido visible y atributos clave
+                const contenido = v.textContent?.trim() || v.value?.trim() || v.innerHTML?.trim();
+                const href = v.getAttribute?.("href");
+                const src = v.getAttribute?.("src");
+                return (!contenido && !href && !src);
+            }
+
+            // Objetos planos
+            if (typeof v === "object") return Object.keys(v).length === 0;
+
+            return false; // Para tipos como número, booleano, etc.
+
         }
         function editarCuenta(){
             var updateConfig=  document.getElementById("actualizar");
@@ -424,6 +621,7 @@ if (!file_exists($templateFile)) {
                 mostrarConfig.style.display = "none";
             }
         }
+
         $(document).ready(function () {
 
           var updateConfig=  document.getElementById("actualizar");
@@ -493,9 +691,9 @@ if (!file_exists($templateFile)) {
 
                     // crea una copia para no modificar el original
                     var copiedEventObject = $.extend({}, originalEventObject);
-                    console.log(JSON.stringify(originalEventObject));
-                    console.log(JSON.stringify(copiedEventObject));
-                    console.log(JSON.stringify(date));
+                   // console.log(JSON.stringify(originalEventObject));
+                  //  console.log(JSON.stringify(copiedEventObject));
+                  //  console.log(JSON.stringify(date));
                    // console.log(JSON.stringify(jsEvent.end));
                     // asignar la fecha soltada
                     copiedEventObject.start = date;
@@ -528,7 +726,7 @@ if (!file_exists($templateFile)) {
 
 
                     $.post('controllers/calendar/insert.php', { title: title, start: date, end: date }, function (response) {
-                        console.log(JSON.stringify(response));
+                      //  console.log(JSON.stringify(response));
                         Swal.fire('Evento agregado', '', 'success');
                         $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
                     });
@@ -588,7 +786,7 @@ if (!file_exists($templateFile)) {
                     });
                 },
                 eventDrop: function (event) {
-                    console.log(JSON.stringify(event));
+                  //  console.log(JSON.stringify(event));
                     $.post('controllers/calendar/update.php', {
                         id: event.id,
                         title: event.title,
@@ -639,14 +837,14 @@ if (!file_exists($templateFile)) {
         }
         function agregarCliente(nro_mesa){
             $.ajax({
-                // url: '/controllers/salonController.php',
+                // url: '/mipymessales/controllers/salonController.php',
                 url: '/controllers/mesaController.php',
                 method: 'POST',
                 data: {
                     mesa: nro_mesa
                 },
                 success: function(data) {
-                    console.log(JSON.stringify(data));
+                 //   console.log(JSON.stringify(data));
                     $('#contenido').html(data);
                     // $('#qrModalCenter').modal('show');
                     $('#qrModalCenter').modal('show');

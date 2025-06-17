@@ -35,7 +35,7 @@ echo $_SERVER['REQUEST_URI']*/
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Escan&eacute;ame !</h5>
+                        <h5 class="modal-title" style="color: black">Escan&eacute;ame !</h5>
                         <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                         </button>
                     </div>
@@ -291,7 +291,7 @@ echo $_SERVER['REQUEST_URI']*/
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title">Agregando nueva mesa ...</h5>
+                                                        <h5 class="modal-title" style="color: black">Agregando nueva mesa ...</h5>
                                                         <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                                         </button>
                                                     </div>

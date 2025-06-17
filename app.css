@@ -201,6 +201,7 @@ body.sidebar-open #toggle-icon-close {
 	font-weight: 700;
 	letter-spacing: 1px;
 	padding: .75rem 0;
+	text-align: left;
 }
 
 #sidebar__theme-switcher {
@@ -313,6 +314,7 @@ body.sidebar-open #sidebar {
 
 	#main-header a {
 		gap: .5rem;
+		color: var(--sidebar-link-color);
 	}
 
 	#sidebar {
