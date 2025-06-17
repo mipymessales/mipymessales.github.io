@@ -17,6 +17,7 @@ if (!empty($resultado)) {
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
    // $ubicacionRestaurant = str_replace("°", "\u{00B0}", $ubicacionRestaurant);
+    $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
     $ubicacionRestaurant = mb_convert_encoding($ubicacionRestaurant, 'UTF-8', 'auto');
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
@@ -1433,6 +1434,7 @@ if (!empty($gastos)) {
 
     // Coordenadas en formato DMS desde PHP
     const ubicacion = `<?php echo $ubicacionRestaurant; ?>`.trim();
+    console.log(ubicacion);
 
     // Divide en latitud y longitud, buscando las letras N/S/E/W
     const partes = ubicacion.split(/(?<=["NnSs])\s*/); // divide justo después de la N o S
