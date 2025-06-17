@@ -724,37 +724,6 @@ if (!empty($gastos)) {
                 </div>
                 <div class="mt-3">
                     <iframe id="mapa" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-
-                    <script>
-                        function dmsToDecimal(dms) {
-                          const regex = /(\d+)[°º]\s*(\d+)[']\s*(\d+(?:\.\d+)?)[\"]?\s*([NSEW])/i;
-                          const match = dms.match(regex);
-                          if (!match) return null;
-
-                          let [, deg, min, sec, dir] = match;
-                          let decimal = parseFloat(deg) + parseFloat(min) / 60 + parseFloat(sec) / 3600;
-                          if (dir.toUpperCase() === 'S' || dir.toUpperCase() === 'W') decimal *= -1;
-                          return decimal;
-                      }
-
-                      const ubicacion = `<?php echo $ubicacionRestaurant; ?>`; // Ej: '22°24\'59.0"N 79°58\'17.7"W'
-                      const partes = ubicacion.split(/(?=[NS])|(?=[EW])/); // Divide por N/S y E/W conservando la letra
-
-                      if (partes.length === 2) {
-                          const lat = dmsToDecimal(partes[0].trim());
-                          const lng = dmsToDecimal(partes[1].trim());
-
-                          if (lat !== null && lng !== null) {
-                              const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
-                              document.getElementById("mapa").src = mapaUrl;
-                          } else {
-                              console.error("Error al convertir las coordenadas.");
-                          }
-                      } else {
-                          console.error("Formato de coordenadas no válido:", ubicacion);
-                      }
-                    </script>
-
                 </div>
 
             </section>
@@ -1447,8 +1416,42 @@ if (!empty($gastos)) {
 
     };
 
-    //Pedidos
+    //Mapa
+    function dmsToDecimal(dms) {
+        const regex = /(\d+)[°º]\s*(\d+)[']\s*(\d+(?:\.\d+)?)[\"]?\s*([NSEW])/i;
+        const match = dms.match(regex);
+        if (!match) return null;
 
+        let [, grados, minutos, segundos, direccion] = match;
+        let decimal = parseFloat(grados) + parseFloat(minutos) / 60 + parseFloat(segundos) / 3600;
+        if (direccion.toUpperCase() === 'S' || direccion.toUpperCase() === 'W') {
+            decimal *= -1;
+        }
+        return decimal;
+    }
+
+    // Coordenadas en formato DMS desde PHP
+    const ubicacion = `<?php echo $ubicacionRestaurant; ?>`.trim();
+
+    // Divide en latitud y longitud, buscando las letras N/S/E/W
+    const partes = ubicacion.split(/(?<=["NnSs])\s*/); // divide justo después de la N o S
+
+    if (partes.length === 2) {
+        const latDMS = partes[0].trim();
+        const lngDMS = partes[1].trim();
+
+        const lat = dmsToDecimal(latDMS);
+        const lng = dmsToDecimal(lngDMS);
+
+        if (lat !== null && lng !== null) {
+            const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
+            document.getElementById("mapa").src = mapaUrl;
+        } else {
+            console.error("Error al convertir coordenadas.");
+        }
+    } else {
+        console.error("Formato de coordenadas no válido:", ubicacion);
+    }
 </script>
 </body>
 </html>
