@@ -1,6 +1,6 @@
 <?php $id = 1; ?>
 <?php
-header('Content-Type: text/html; charset=utf-8');
+
 session_start();
 
 defined('ROOT_DIR') || define('ROOT_DIR', dirname(__FILE__, 1) . '/');
@@ -16,42 +16,6 @@ if (!empty($resultado)) {
     $direccionRestaurant = $resultado[0]->direccion;
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
-    $ubicacionRestaurant = mb_convert_encoding($ubicacionRestaurant, 'UTF-8', 'auto');
-    $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
-    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant);
-
-    function dms_a_decimal($dms) {
-        // Ejemplo de entrada: 22°24'59.0"N o 79°58'17.7"W
-        preg_match('/(\d+)°(\d+)\'([\d\.]+)"([NSEW])/', $dms, $matches);
-        if (!$matches) return false;
-
-        $grados = (float)$matches[1];
-        $minutos = (float)$matches[2];
-        $segundos = (float)$matches[3];
-        $direccion = $matches[4];
-
-        $decimal = $grados + ($minutos / 60) + ($segundos / 3600);
-
-        // Si es Sur o Oeste, se vuelve negativo
-        if ($direccion == 'S' || $direccion == 'W') {
-            $decimal *= -1;
-        }
-
-        return $decimal;
-    }
-
-// Supongamos que $ubicacionRestaurant = "22°24'59.0\"N 79°58'17.7\"W";
-    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant); // si aún hay ?
-
-// Separar lat y lon
-    list($latDMS, $lonDMS) = explode(' ', $ubicacionRestaurant);
-
-    $latDecimal = dms_a_decimal($latDMS);
-    $lonDecimal = dms_a_decimal($lonDMS);
-
-// Para usar en JS
-    $latDecimalJs = json_encode($latDecimal);
-    $lonDecimalJs = json_encode($lonDecimal);
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
 
@@ -68,7 +32,7 @@ if (!empty($gastos)) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title> <?php echo $nombreRestaurant; ?> </title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -308,17 +272,20 @@ if (!empty($gastos)) {
         /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
-        .hero {
+     .hero {
             width: 100%;
             min-height: 75vh;
             position: relative;
             padding: 60px 0;
             display: flex;
             align-items: center;
-            background: url("images/<?php echo $foto_portadaRestaurant;?>") top left;
-            background-size: cover;
+            background:
+                    url("images/<?php echo $foto_portadaRestaurant;?>"),
+                    #f4f4f4;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: top center;
         }
-
         .hero:before {
             content: "";
             background: color-mix(in srgb, #fafbfe, transparent 30%);
@@ -416,7 +383,11 @@ if (!empty($gastos)) {
                 font-size: 13px;
             }
         }
-
+        @media (min-width: 992px) {
+            .hero {
+                background-size: cover;
+            }
+        }
         @keyframes up-down {
             0% {
                 transform: translateY(10px);
@@ -524,6 +495,47 @@ if (!empty($gastos)) {
             background-color: #f0f0f0;
         }
 
+/*Hero*/
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 75vh;
+            width: 100%;
+        }
+
+        /* Contenido de texto */
+        .hero-content {
+            flex: 1;
+            /*padding: 40px;*/
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Imagen de fondo como bloque */
+
+        /* En pantallas grandes: imagen a la derecha */
+        @media (min-width: 768px) {
+            .hero {
+                flex-direction: row;
+                background-size: contain;
+                min-height: auto;
+            }
+        }
+
+        /* En móviles: imagen arriba */
+        @media (max-width: 767px) {
+            .hero {
+                flex-direction: column;
+            }
+
+            .hero-img {
+                width: 100%;
+                height: 200px;
+                background-position: top center;
+                background-size: contain;
+            }
+        }
 
 
     </style>
@@ -683,8 +695,7 @@ if (!empty($gastos)) {
         </div>
 
     </div>
-
-</section><!-- /Hero Section -->
+</section>
 <!-- Slider de fondo con caja de autenticación y comentarios -->
 
 
@@ -871,7 +882,11 @@ if (!empty($gastos)) {
                 console.log(nuevosDatosM);
                 if (nuevosDatosM === datosAnterioresListadoMesa) {
                  console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
-                    document.getElementById('section-title').innerText='En estos momentos no tenemos '+categoria+' disponibles!';
+                 if (!esNuloOVacio(document.getElementById('section-title'))){
+                     document.getElementById('section-title').innerText='En estos momentos no tenemos '+categoria+' disponibles!';
+                 }
+
+                    //$('#contenido').html(data["html"]);
                 }else{
                     datosAnterioresListadoMesa = nuevosDatosM;
                     // console.log("✅ Datos recibidos:", data);
