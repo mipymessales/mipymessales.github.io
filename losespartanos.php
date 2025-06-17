@@ -52,14 +52,6 @@ if (!empty($resultado)) {
 // Para usar en JS
     $latDecimalJs = json_encode($latDecimal);
     $lonDecimalJs = json_encode($lonDecimal);
-
-
-
-    echo '<pre>';
-    var_dump($latDecimalJs);
-    var_dump($lonDecimalJs);
-    echo '</pre>';
-
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
 
