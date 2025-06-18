@@ -74,7 +74,8 @@ if (!$mesas) {
 
      }
 
-     $i++;  }
+     $i++;
+ }
     $html.=  "</div> ";
 }
 $html.=   "<script type='text/javascript'>

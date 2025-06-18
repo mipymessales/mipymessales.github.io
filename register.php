@@ -173,7 +173,7 @@ PHP;
                     $_SESSION['user'] = $_POST["username"];
                     $_SESSION['userrolid'] = 33333;
                     $_SESSION['idrestaurant'] = $idrestaurant;
-                    header("Location: https/panel");
+                    header("Location: /panel");
                 }
 
 
@@ -384,7 +384,7 @@ PHP;
                                 <div class="form-group mb-4">
                                     <p>Foto de portada</p>
                                     <input type="file" class="dropify" name="foto" id="foto"
-                                           data-default-file="https/images/blank1.jpg"/>
+                                           data-default-file="/images/blank1.jpg"/>
                                 </div>
                                 <div class="form-group mb-4">
                                     <input type="text" class="form-control rounded-0 bg-transparent"

@@ -110,14 +110,14 @@ function renderTabla(data, contID, tipo, gastos = []) {
     if (gastos.length > 0 && !esNuloOVacio(data)) {
         if (tipo === "dia"){
                 html += `<h5 class="mt-4">Gastos</h5>
- 
+ <div class="table-responsive">
         <table class="table table-bordered table-sm">
             <thead><tr><th>Seleccionar</th><th>Fecha</th><th>Concepto</th><th>Monto</th></tr></thead><tbody style="background: white;">`;
             }else{
                 html += `<h5 class="mt-4">Gastos</h5>
 <div class="table-responsive">
         <table class="table table-bordered table-sm facturatable">
-            <thead><tr><th>Seleccionar</th><th>Cantidad del gasto en el mes</th><th>Concepto</th><th>Monto</th></tr></thead><tbody style="background: white;">`;
+            <thead><tr><th>Cantidad del gasto en el mes</th><th>Concepto</th><th>Monto</th></tr></thead><tbody style="background: white;">`;
             }
             let totalGastos = 0;
             const hoy = tipo === "dia" ? document.getElementById("fecha-dia").value : null;
@@ -140,7 +140,6 @@ function renderTabla(data, contID, tipo, gastos = []) {
             </tr>`;
                 }else{
                     html += `<tr>
-                <td><input type="checkbox" class="gasto-check" data-monto="${g.monto}" ${checked} /></td>
                 <td> ${g.cantmes}</td>
                 <td>${g.concepto}</td>
                 <td>$${parseFloat(g.monto).toFixed(2)}</td>

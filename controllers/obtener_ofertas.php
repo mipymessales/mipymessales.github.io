@@ -70,12 +70,12 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                         <div class='vertical-card__menu--image'>";
 
 
-                $target_file = str_replace("'\'", "/", $_SERVER['DOCUMENT_ROOT']) . "https/images/" . $foto;
+                $target_file = str_replace("'\'", "/", $_SERVER['DOCUMENT_ROOT']) . "/images/" . $foto;
                 if (file_exists($target_file)) {
-                    $a .= " <img src='https/images/" . $foto . " ' style='height: 250px;' alt='No hay fotos' > ";//width: 259px;padding: 10px;
+                    $a .= " <img src='/images/" . $foto . " ' style='height: 250px;' alt='No hay fotos' > ";//width: 259px;padding: 10px;
 
                 } else {
-                    $a .= " <img src='//mipymessalesimages/blank1.jpg'  style='height: 250px;'  alt=''>";
+                    $a .= " <img src='/images/blank1.jpg'  style='height: 250px;'  alt=''>";
                 }
 
 

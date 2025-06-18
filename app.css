@@ -71,7 +71,7 @@ body {
 /* Main header */
 /* ================================================= */
 #main-header {
-	background-color: var(--main-header-bg);
+	/*background-color: var(--main-header-bg);*/
 	padding: 1rem 1.5rem;
 	transition: background-color .4s ease-in-out;
 }

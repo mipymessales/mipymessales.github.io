@@ -74,6 +74,9 @@ if (!file_exists($templateFile)) {
     $templateFile = "templates/404.php"; // Página de error si no existe
 }
 
+/*$date = date('Y-m-d H:i:s');
+$ano=split('-',$date,1);*/
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -472,7 +475,7 @@ if (!file_exists($templateFile)) {
 				</ul>
 			</nav>
 
-			<div id="sidebar__theme-switcher">
+		<!--	<div id="sidebar__theme-switcher">
 				<svg id="sidebar__theme-switcher__sun">
 					<use xlink:href="#icon-sun"></use>
 				</svg>
@@ -480,7 +483,7 @@ if (!file_exists($templateFile)) {
 				<svg id="sidebar__theme-switcher__moon">
 					<use xlink:href="#icon-moon"></use>
 				</svg>
-			</div> <!-- sidebar__theme-switcher -->
+			</div>-->
             <div class="copyright">
                 <p><a href="#">L'DevGroup 2025 </a></p>
             </div>

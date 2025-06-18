@@ -110,7 +110,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                               if(($valoracion)==5 || empty($valoracion)){
                                                                                   $html.="  <span class='icon'>★★★★★</span>";
                                                                              }
-                                                                            $html.="<h4 class='text-primary' style='margin-top: 5px'>$ {$precio} </h4>
+                                                                            $html.="<h4 class='text-primary' style='margin-top: 5px'>$ {$precio} pesos </h4>
                                                                             <button class='agregar btn btn-success'>+</button>
                                                                             <span class='cantidad'>0</span>
                                                                             <button class='quitar btn btn-danger'>−</button>

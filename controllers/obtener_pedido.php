@@ -12,7 +12,7 @@ if (isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($
     $idrestaurant=empty($_POST['idrestaurant'])?$_SESSION['idrestaurant']:$_POST['idrestaurant'];
     //Poner con 3 minutos de atraso para mostrar los pedidos de los clientes en el panel de administracion
     $sentencia1 = $base_de_datos->prepare("SELECT * FROM pedidoscliente WHERE restaurantid= ? and id_cliente= ? ");
-
+    $html='';
     try {
         $sentencia1->execute([$idrestaurant,$idcliente]);
         //$cliente = $sentencia1->fetch(PDO::FETCH_ASSOC);
@@ -51,12 +51,22 @@ if (isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($
 
 
             }
-
+                if (empty($html)){
+                    $html.="<div class='card-body'  style='background: white;
+  padding: 5px;'>
+                   Telefono: <span style='
+  padding: 5px;'>".$cliente['telefono']."</span>
+                  Correo: <span style='
+  padding: 5px;'>".$cliente['correo']." </span>
+                </div>";
+                }
 
 
         }
         header("Content-Type: application/json");
-        echo json_encode($pedidos);
+
+        echo json_encode(["status" => "success","html" =>$html,"data" =>($pedidos)]);
+        //echo json_encode($pedidos);
 
 
 

@@ -1,6 +1,6 @@
 <?php $id = 1; ?>
 <?php
-header('Content-Type: text/html; charset=utf-8');
+
 session_start();
 
 defined('ROOT_DIR') || define('ROOT_DIR', dirname(__FILE__, 1) . '/');
@@ -16,42 +16,6 @@ if (!empty($resultado)) {
     $direccionRestaurant = $resultado[0]->direccion;
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
-    $ubicacionRestaurant = mb_convert_encoding($ubicacionRestaurant, 'UTF-8', 'auto');
-    $ubicacionRestaurant = str_replace('�', '°', $ubicacionRestaurant);
-    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant);
-
-    function dms_a_decimal($dms) {
-        // Ejemplo de entrada: 22°24'59.0"N o 79°58'17.7"W
-        preg_match('/(\d+)°(\d+)\'([\d\.]+)"([NSEW])/', $dms, $matches);
-        if (!$matches) return false;
-
-        $grados = (float)$matches[1];
-        $minutos = (float)$matches[2];
-        $segundos = (float)$matches[3];
-        $direccion = $matches[4];
-
-        $decimal = $grados + ($minutos / 60) + ($segundos / 3600);
-
-        // Si es Sur o Oeste, se vuelve negativo
-        if ($direccion == 'S' || $direccion == 'W') {
-            $decimal *= -1;
-        }
-
-        return $decimal;
-    }
-
-// Supongamos que $ubicacionRestaurant = "22°24'59.0\"N 79°58'17.7\"W";
-    $ubicacionRestaurant = str_replace('?', '°', $ubicacionRestaurant); // si aún hay ?
-
-// Separar lat y lon
-    list($latDMS, $lonDMS) = explode(' ', $ubicacionRestaurant);
-
-    $latDecimal = dms_a_decimal($latDMS);
-    $lonDecimal = dms_a_decimal($lonDMS);
-
-// Para usar en JS
-    $latDecimalJs = json_encode($latDecimal);
-    $lonDecimalJs = json_encode($lonDecimal);
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
 }
 
@@ -68,7 +32,7 @@ if (!empty($gastos)) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title> <?php echo $nombreRestaurant; ?> </title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -88,8 +52,34 @@ if (!empty($gastos)) {
         .hero-section {
             position: relative;
             width: 100%;
-            height: 250px;
+            height: 300px;
             overflow: hidden;
+        }
+        @media (max-width: 600px) {
+            .hero-section {
+                height: 200px;
+            }
+            .py-5 {
+                padding-top: 0 !important;
+            }
+            .hero{
+                min-height: auto!important;
+            }
+            .hero h1 {
+                margin-top: 12vh !important;
+            }
+            /*    este id #tabstyle menor de*/
+
+            /*360px cambiar a custom-tab-2 sino dejarlo en custom-tab-4*/
+        }
+        @media (max-width: 400px) {
+
+            .hero h1 {
+                margin-top: 6vh !important;
+            }
+            /*    este id #tabstyle menor de*/
+
+            /*360px cambiar a custom-tab-2 sino dejarlo en custom-tab-4*/
         }
 
         .hero-section img {
@@ -563,6 +553,7 @@ if (!empty($gastos)) {
         @media (max-width: 767px) {
             .hero {
                 flex-direction: column;
+                min-height: auto;
             }
 
             .hero-img {
@@ -581,8 +572,7 @@ if (!empty($gastos)) {
 
 <!-- Hero Section -->
 <section id="hero " class="hero section light-background ">
-
-    <div class="container">
+    <div class="container hero-content">
         <div class="row gy-4">
 
             <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
@@ -596,19 +586,11 @@ if (!empty($gastos)) {
                 </div>
             </div>
             <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-
                 <div class="hero-section" id="hero-section">
-
-                 <!--   <img src="images/granny-menu6.jpg" class="active" alt="Slide 1">
-                    <img src="images/granny-menu11.jpg" alt="Slide 2">
-                    <img src="images/granny-menu6.jpg" alt="Slide 3">-->
-
                 </div>
+
                 <section id="testimonials" class="testimonials section dark-background"
                          style=" border: 1px solid #6c757d;">
-
-                    <!-- <img src="#" class="testimonials-bg" alt="">-->
-
                     <div class="container" data-aos="fade-up" data-aos-delay="100">
 
                         <div class="swiper init-swiper">
@@ -756,9 +738,9 @@ if (!empty($gastos)) {
                         <?php foreach($array as $arraypedidos) {
                             ?>
                             <?php    if($i==0){ ?>
-                                <li class="nav-item"><a class="nav-link active" style="text-align: end;" data-toggle="tab" onclick="iniciarAutoCarga('<?php echo $id; ?>','<?php echo $arraypedidos; ?>')"><?php echo ucfirst(strtolower($arraypedidos)); ?></a>
+                                <li class="nav-item"><a class="nav-link active" style="text-align: end;" data-toggle="tab" onclick="iniciarAutoCarga('<?php echo $id; ?>','<?php echo $arraypedidos; ?>',true)"><?php echo ucfirst(strtolower($arraypedidos)); ?></a>
                             <?php }else{ ?>
-                                <li class="nav-item"><a class="nav-link " style="text-align: end;" data-toggle="tab" onclick="iniciarAutoCarga('<?php echo $id; ?>','<?php echo $arraypedidos; ?>')"><?php echo ucfirst(strtolower($arraypedidos)); ?></a>
+                                <li class="nav-item"><a class="nav-link " style="text-align: end;" data-toggle="tab" onclick="iniciarAutoCarga('<?php echo $id; ?>','<?php echo $arraypedidos; ?>',true)"><?php echo ucfirst(strtolower($arraypedidos)); ?></a>
                             <?php } ?>
 
                             </li>
@@ -806,6 +788,13 @@ if (!empty($gastos)) {
                 </div>
                 <div class="mt-3">
                     <iframe id="mapa" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+                    <script>
+                        const direccion = `<?php echo $ubicacionRestaurant;?>`;
+                        const mapaUrl = "https://www.google.com/maps?q=" + encodeURIComponent(direccion) + "&output=embed";
+                        document.getElementById("mapa").src = mapaUrl;
+                    </script>
+
                 </div>
 
             </section>
@@ -825,7 +814,7 @@ if (!empty($gastos)) {
                     </div>
                     <div>
                         <strong>Correo:</strong><br>
-                        <input type="text" name="correo" id="correo" required><br>
+                        <input type="email" name="correo" id="correo" required><br>
                     </div>
                     <div>
                         <strong>Direccion:</strong><br>
@@ -839,7 +828,8 @@ if (!empty($gastos)) {
                     <img id="captchaimgr" src="controllers/captcha.php?from=r" alt="CAPTCHA">
                     <input type="text" name="captchar" placeholder="Ingresa el texto de la imagen" required>
                     <input type="hidden" id="restaurantid" name="restaurantid" value="<?php echo $id;?>">
-                    <button type="submit" class="mt-2">Realizar pedido</button>
+                    <button type="submit" class="mt-2">Realizar pedido</button><br><br>
+                    <div class="alert-warning" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><p>Tras confirmar su pedido, las cantidades están sujetas a cambios según el stock disponible y la demanda en línea de otros clientes. </p></div>
                 </form>
                 <p id="reservationMessage" class="mt-2"></p>
             </section>
@@ -869,7 +859,8 @@ if (!empty($gastos)) {
     var dataProduct={};
     var intervaloActual =null;
     var intervaloSlide=null;
-    var datosAnterioresListadoMesa = {};
+    var intervaloHero=null;
+    var allProductData = {};
     var domicilio =  <?php echo $monto;?>;
     function esNuloOVacio(v) {
         if (v === null || v === undefined) return true;
@@ -899,90 +890,109 @@ if (!empty($gastos)) {
 
     }
 
-    function cargarCategoria(idrestaurant,categoria) {
-        //$('#contenido').html("");
-        //console.log((categoria).getAttribute("id"))
-
-        $.ajax({
-            url: '/controllers/mostrar_ofertas.php',
-            /*  headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-              },*/
-            dataType:'json',
-            method: 'POST',
-            data: { idrestaurant:idrestaurant, categoria:categoria },
-            success: function(data) {
-
-                if (data["status"] === "success") {
-                const nuevosDatosM = JSON.stringify(data["data"]);
-                console.log(nuevosDatosM);
-                if (nuevosDatosM === datosAnterioresListadoMesa) {
-                 console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
-                 if (!esNuloOVacio(document.getElementById('section-title'))){
-                     document.getElementById('section-title').innerText='En estos momentos no tenemos '+categoria+' disponibles!';
-                 }
-
-                    //$('#contenido').html(data["html"]);
-                }else{
-                    datosAnterioresListadoMesa = nuevosDatosM;
-                    // console.log("✅ Datos recibidos:", data);
-                    $('#contenido').html(data["html"]);
-                    inicializarEventosCarrito();
-                    actualizarCarrito();
-                    let product = JSON.parse(nuevosDatosM);
-                    if (esNuloOVacio(product)){
-                        const contenedor = document.getElementById("hero-section");
-
-                        // 🔄 Limpiar imágenes anteriores
-                        contenedor.innerHTML = "";
-                        if (intervaloSlide !== null) {
-                            clearInterval(intervaloSlide);
-                        }
-                        document.querySelector(".swiper-wrapper").classList.add("oculto"); // Ocultar
-                        document.getElementById("testimonials").classList.add("oculto");
-                    }else{
-                        actualizarHero(product);
-                        initSwiper(categoria);
-                        document.querySelector(".swiper-wrapper").classList.remove("oculto"); // Mostrar
-                        document.getElementById("testimonials").classList.remove("oculto");
-                    }
 
 
-                }
 
-                }
-            }
-        });
+
+    function cargarCategoria(idrestaurant,categoria,flag) {
+        CacheCategoriaProductos.cargarCategoria(idrestaurant, categoria,flag);
+
+        /*  $.ajax({
+              url: '/mipymessales/controllers/mostrar_ofertas.php',
+              dataType:'json',
+              method: 'POST',
+              data: { idrestaurant:idrestaurant, categoria:categoria },
+              success: function(data) {
+
+                  if (data["status"] === "success") {
+                  const nuevosDatosM = JSON.stringify(data["data"]);
+                  console.log(nuevosDatosM);
+                  if (nuevosDatosM === allProductData) {
+                   console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                   if (!esNuloOVacio(document.getElementById('section-title'))){
+                       document.getElementById('section-title').innerText='En estos momentos no tenemos '+categoria+' disponibles!';
+                   }
+                  }else{
+                      allProductData = nuevosDatosM;
+                      $('#contenido').html(data["html"]);
+                      inicializarEventosCarrito();
+                      actualizarCarrito();
+                      let product = JSON.parse(nuevosDatosM);
+                      if (esNuloOVacio(product)){
+                          const contenedor = document.getElementById("hero-section");
+                          contenedor.innerHTML = "";
+                          if (intervaloSlide !== null) {
+                              clearInterval(intervaloSlide);
+                          }
+                          document.querySelector(".swiper-wrapper").classList.add("oculto"); // Ocultar
+                      }else{
+                          actualizarHero(product);
+                          initSwiper(categoria);
+                          document.querySelector(".swiper-wrapper").classList.remove("oculto"); // Mostrar
+                          document.getElementById("testimonials").classList.remove("oculto");
+                      }
+                  }
+                  }
+              }
+          });*/
     }
+
+
+
+
+
+
+
     function actualizarHero(product) {
 
         const contenedor = document.getElementById("hero-section");
+        //console.log("actualizarHero . "+JSON.stringify(product));
 
         // 🔄 Limpiar imágenes anteriores
                 contenedor.innerHTML = "";
         product.forEach((producto, index) => {
             const img = document.createElement("img");
             img.src = "images/" + producto.foto;
-            img.alt = "Slide " + (index + 1);
-            if (index === 0) img.classList.add("active"); // solo el primero con clase active
+            img.alt = "Slide " + (index+1);
+            if (index === 1) img.classList.add("active"); // solo el primero con clase active
             contenedor.appendChild(img);
         });
+        if (esNuloOVacio(product)){
+            for (var i=1;i<6;i++){
+                //console.log("Product es nulo");
+                const img = document.createElement("img");
+                img.src = "images/abarrotes.png";
+                img.alt = "Slide " + (i);
+                if (i === 1) img.classList.add("active"); // solo el primero con clase active
+                contenedor.appendChild(img);
+            }
 
-        const slides = document.querySelectorAll('.hero-section img');
-        intervaloSlide =setInterval(() => {
-            slides[index].classList.remove('active');
-            index = (index + 1) % slides.length;
-            slides[index].classList.add('active');
-        }, 5000);
+        }
+            const slides = document.querySelectorAll('.hero-section img');
+            // //console.log(slides);
+            // console.log("InDEX: "+index);
+            //if (typeof intervaloSlide !== 'undefined' && intervaloSlide !== null) clearInterval(intervaloSlide);
+            index=1;
+            intervaloSlide =setInterval(() => {
+                if (slides.hasOwnProperty(index)){
+                    //slides[index].classList.remove('active');
+                    slides.forEach(nav => nav.classList.remove('active'));
+                    index = (index+1) % slides.length;
+                    slides[index].classList.add('active');
+                }
+            }, 5000);
+
+
+
     }
-    function iniciarAutoCarga(idrestaurant,categoria) {
+    function iniciarAutoCarga(idrestaurant,categoria,flag) {
 
         if (intervaloActual !== null) {
             clearInterval(intervaloActual);
         }
-        cargarCategoria(idrestaurant,categoria);
+        cargarCategoria(idrestaurant,categoria,flag);
         intervaloActual =setInterval(function () {
-            cargarCategoria(idrestaurant,categoria);
+            cargarCategoria(idrestaurant,categoria,false);
         }, 5000); // Cada 2 segundos
     }
 
@@ -1032,8 +1042,8 @@ if (!empty($gastos)) {
     <?php if ($horarioRestaurant): ?>
      schedule = JSON.parse('<?php echo json_encode($horarioRestaurant, JSON_UNESCAPED_UNICODE); ?>');
     <?php endif; ?>
-    console.log("Schedule real:", schedule);
-    console.log("Tipo de schedule:", typeof schedule);
+    //console.log("Schedule real:", schedule);
+    //console.log("Tipo de schedule:", typeof schedule);
     // Función para normalizar claves (quita tildes y espacios)
     function normalizar(str) {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
@@ -1044,7 +1054,7 @@ if (!empty($gastos)) {
     for (let key in schedule) {
         horarioNormalizado[normalizar(key)] = schedule[key];
     }
-    console.log("horarioNormalizado "+JSON.stringify(horarioNormalizado));
+    //console.log("horarioNormalizado "+JSON.stringify(horarioNormalizado));
     const tbody = document.getElementById('horario-table');
 
     for (const dia of dias) {
@@ -1168,52 +1178,72 @@ if (!empty($gastos)) {
         document.getElementById('pedidosForm').addEventListener('submit', (e) => {
             e.preventDefault();
 
-            /* if (!captchaResuelto()) {
-                 alert("Por favor, resuelve el CAPTCHA antes de enviar.");
-                 return;
-             }*/
 
-            const formData = new FormData(e.target);
-            formData.append('restaurantId', restaurantId);
-            fetch('controllers/guardar_pedido.php', {
-                method: 'POST',
-                dataType: 'json',
-                body: formData
-            })
-                .then(res => res.json())
-                .then(data => {
+            const inputCarrito = document.getElementById("carrito");
 
-                    console.log((data));
+            let carritoData = {};
 
-                    if (data["status"] === 'success') {
-                        document.getElementById('reservationMessage').textContent = "✅ ¡Pedido recibido!";
-                        document.getElementById('reservationMessage').style.color = 'green';
-                        const inputCarrito = document.getElementById('carrito');
-                        const carritoVisual = document.getElementById('carritoVisual');
-                        carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
-                        inputCarrito.value='';
-                        e.target.reset();
-                        recargarCaptcha('r');
-                        // grecaptcha.reset();
-                    } else if (data["status"] === 'RECAPTCHA_FAILED') {
-                       // console.log("Captcha no verificado por el servidor.");
-                        document.getElementById('reservationMessage').textContent = "❌ Captcha no verificado por el servidor.";
-                        document.getElementById('reservationMessage').style.color = 'red';
-                        recargarCaptcha('r');
-                    } else if (data["status"] === 'RATE_LIMITED') {
-                       // console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
-                        document.getElementById('reservationMessage').textContent = "❌ Has enviado demasiadas solicitudes. Intenta en un minuto.";
-                        document.getElementById('reservationMessage').style.color = 'red';
-                        e.target.reset();
-                        recargarCaptcha('r');
-                    } else {
-                        document.getElementById('reservationMessage').textContent = "❌ Error al guardar el pedido.";
-                        document.getElementById('reservationMessage').style.color = 'red';
-                       // console.log("❌ Error al guardar el pedido.");
-                        e.target.reset();
-                        recargarCaptcha('r');
-                    }
-                });
+            try {
+                carritoData = JSON.parse(inputCarrito.value);
+            } catch (e) {
+                console.error("El valor del input no es JSON válido:", e);
+            }
+
+// Verificar si está vacío
+            const estaVacio = Object.keys(carritoData).length === 0;
+
+            if (estaVacio) {
+                document.getElementById('reservationMessage').textContent = "❌ Carrito vacío, agrega al menos un producto.";
+                document.getElementById('reservationMessage').style.color = 'red';
+            } else {
+                const formData = new FormData(e.target);
+                formData.append('restaurantId', restaurantId);
+                fetch('controllers/guardar_pedido.php', {
+                    method: 'POST',
+                    dataType: 'json',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(data => {
+
+                        //console.log((data));
+
+                        if (data["status"] === 'success') {
+                            document.getElementById('reservationMessage').textContent = "✅ ¡Pedido recibido!";
+                            document.getElementById('reservationMessage').style.color = 'green';
+                            const inputCarrito = document.getElementById('carrito');
+                            const carritoVisual = document.getElementById('carritoVisual');
+                            carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
+                            inputCarrito.value='';
+                            e.target.reset();
+                            recargarCaptcha('r');
+                            carrito = {};
+                            inicializarEventosCarrito();
+                            actualizarCarrito();
+                            // grecaptcha.reset();
+                        } else if (data["status"] === 'RECAPTCHA_FAILED') {
+                            // console.log("Captcha no verificado por el servidor.");
+                            document.getElementById('reservationMessage').textContent = "❌ Captcha no verificado por el servidor.";
+                            document.getElementById('reservationMessage').style.color = 'red';
+                            recargarCaptcha('r');
+                        } else if (data["status"] === 'RATE_LIMITED') {
+                            // console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
+                            document.getElementById('reservationMessage').textContent = "❌ Has enviado demasiadas solicitudes. Intenta en un minuto.";
+                            document.getElementById('reservationMessage').style.color = 'red';
+                            e.target.reset();
+                            recargarCaptcha('r');
+                        } else {
+                            document.getElementById('reservationMessage').textContent = "❌ Error al guardar el pedido.";
+                            document.getElementById('reservationMessage').style.color = 'red';
+                            // console.log("❌ Error al guardar el pedido.");
+                            e.target.reset();
+                            recargarCaptcha('r');
+                        }
+                    });
+
+            }
+
+
         });
     });
 
@@ -1435,15 +1465,30 @@ if (!empty($gastos)) {
 
         for (const [producto, datos] of Object.entries(carrito)) {
             const subtotal = datos.cantidad * datos.precio;
-
+            //console.log("allProductData cargado:"+JSON.stringify(allProductData) );
+           // console.log("producto cargado:"+JSON.stringify(producto) );
+           // console.log("datos cargado:"+JSON.stringify(datos) );
             // Buscar producto en el inventario
-            let inventario = JSON.parse(datosAnterioresListadoMesa);
-           // console.log("Inventario cargado:", inventario);
+          /*  let inventario =[];
+            if (!esNuloOVacio(allProductData[datos.categoria])) {
+                console.log("datos.categoria "+datos.categoria);
+                inventario = allProductData[datos.categoria] || [];
+            }*/
+            const categoria = datos?.categoria || "";
+            //console.log("categoria cargado:"+categoria);
+            const inventario = Array.isArray(allProductData[categoria])
+                ? allProductData[categoria]
+                : [];
+
+            //console.log("inventario cargado:"+JSON.stringify(inventario) );
 
 
-            console.log("Tipo de inventario:"+ typeof inventario);
-            console.log("Es array:"+ Array.isArray(inventario));
-            console.log("Contenido:"+ inventario);
+
+
+
+            //console.log("Tipo de inventario:"+ typeof inventario);
+           // console.log("Es array:"+ Array.isArray(inventario));
+            //console.log("Contenido:"+ inventario);
             const itemInventario = inventario.find(p => parseInt(p.id) === parseInt(datos.id));
             let advertencia = '';
             let claseAdvertencia = '';
@@ -1498,15 +1543,149 @@ if (!empty($gastos)) {
 
     window.onload = function () {
         $('.dropify').dropify();
-        iniciarAutoCarga(restaurantId,"alimentos");
+        iniciarAutoCarga(restaurantId,"alimentos",true);
 
     };
+    //let heroIntervalIniciado = false;
+    //Logica de Cargar productos mejorada
+    const CacheCategoriaProductos = (() => {
+        function getClave(idrestaurant, categoria) {
+            return `productos_restaurant${idrestaurant}_categoria${categoria}`;
+        }
 
-    //Mapa
-    const lat = <?php echo $latDecimalJs; ?>;
-    const lon = <?php echo $lonDecimalJs; ?>;
-    const mapaUrl = `https://www.google.com/maps?q=${lat},${lon}&output=embed`;
-    document.getElementById("mapa").src = mapaUrl;
+        function esNuloOVacio(valor) {
+            return valor === null || valor === undefined || (Array.isArray(valor) && valor.length === 0);
+        }
+
+        function mostrarDesdeCache(idrestaurant, categoria,flag) {
+            const clave = getClave(idrestaurant, categoria);
+            const datos = localStorage.getItem(clave);
+            if (!datos) return false;
+
+            try {
+                const parsed = JSON.parse(datos);
+                //allProductData[categoria] = parsed.data;
+                if (parsed && Array.isArray(parsed.data) && parsed.data.length > 0) {
+                    console.warn(`parsed.data no vacío la categoría: ${categoria}`);
+                    allProductData[categoria] = parsed.data;
+                } else {
+                    allProductData[categoria] = []; // objeto vacío por defecto
+                    console.warn(`parsed.data vacío o inválido para la categoría: ${categoria}`);
+                }
+
+                //console.log("mostrarDesdeCache :"+JSON.stringify(parsed));
+                $('#contenido').html(parsed.html);
+                inicializarEventosCarrito();
+                actualizarCarrito();
+
+
+
+                if (flag) {
+                    //console.log("Entre a flag "+flag);
+                    //heroIntervalIniciado = true;
+                    actualizarHero(parsed.data);
+                    initSwiper(categoria);
+                        // Ejecutar por primera vez
+                }
+
+                document.querySelector(".swiper-wrapper").classList.remove("oculto");
+                document.getElementById("testimonials").classList.remove("oculto");
+                return true;
+            } catch (e) {
+                console.warn("Error al parsear localStorage:", e);
+                return false;
+            }
+        }
+
+        function guardarEnCache(idrestaurant, categoria, data) {
+            const clave = getClave(idrestaurant, categoria);
+            localStorage.setItem(clave, JSON.stringify(data));
+        }
+
+        function cargarCategoria(idrestaurant, categoria,flag) {
+            const clave = getClave(idrestaurant, categoria);
+            const datosCache = localStorage.getItem(clave);
+            let datosAnteriores = datosCache ? JSON.parse(datosCache).data : null;
+           // heroIntervalIniciado = false;
+            // Intentar mostrar desde cache primero
+            mostrarDesdeCache(idrestaurant, categoria,flag);
+
+            // Luego llamar al servidor
+            $.ajax({
+                url: '/controllers/mostrar_ofertas.php',
+                dataType: 'json',
+                method: 'POST',
+                data: { idrestaurant, categoria },
+                success: function(data) {
+                    if (data["status"] === "success") {
+                        const nuevosDatos = JSON.stringify(data["data"]);
+                        allProductData[categoria] = data["data"];
+                        if (JSON.stringify(datosAnteriores) === nuevosDatos) {
+                            //console.log('Datos sin cambios, no se actualiza la vista.');
+                            if (!esNuloOVacio(document.getElementById('section-title'))) {
+                                document.getElementById('section-title').innerText = 'En estos momentos no tenemos ' + categoria + ' disponibles!';
+                            }
+                        } else {
+                            $('#contenido').html(data["html"]);
+                            inicializarEventosCarrito();
+                            actualizarCarrito();
+                            if (esNuloOVacio(data["data"])) {
+
+                                if (flag) {
+                                   // heroIntervalIniciado = true;
+                                    if (typeof intervaloHero !== 'undefined' && intervaloHero !== null) clearInterval(intervaloHero);
+                                    // Ejecutar por primera vez
+                                        actualizarHero([]);
+                                        initSwiper(categoria);
+                                    // Repetir cada 30 segundos
+                                    intervaloHero=   setInterval(() => {
+                                            actualizarHero([]);
+                                            initSwiper(categoria);
+                                        }, 30000);
+                                }
+
+                                //const contenedor = document.getElementById("hero-section");
+                                //contenedor.innerHTML = "";
+                               // if (typeof intervaloSlide !== 'undefined' && intervaloSlide !== null) clearInterval(intervaloSlide);
+                               // document.querySelector(".swiper-wrapper").classList.add("oculto");
+                            } else {
+                                if (flag) {
+                                    //heroIntervalIniciado = true;
+                                    if (typeof intervaloHero !== 'undefined' && intervaloHero !== null) clearInterval(intervaloHero);
+                                        // Ejecutar por primera vez
+                                        actualizarHero(data["data"]);
+                                        initSwiper(categoria);
+
+                                        // Repetir cada 30 segundos
+                                    intervaloHero=  setInterval(() => {
+                                            actualizarHero(parsed.data);
+                                            initSwiper(categoria);
+                                        }, 30000);
+
+
+                                }
+
+                                document.querySelector(".swiper-wrapper").classList.remove("oculto");
+                                document.getElementById("testimonials").classList.remove("oculto");
+                            }
+
+                            // Guardar en cache
+                            guardarEnCache(idrestaurant, categoria, {
+                                data: data["data"],
+                                html: data["html"]
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        return {
+            cargarCategoria
+        };
+    })();
+
+
 </script>
 </body>
 </html>

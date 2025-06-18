@@ -77,12 +77,12 @@ $username=$_SESSION['user'];
 <div class="custom-tab-4" id="tabstyle">
         <div class="nav nav-tabs">
             <?php if ($restaurantId==1){ ?>
-                <div class="tab active" id="alimentos" onclick="cargarCategoria('alimentos','<?php echo $restaurantId;?>')">Alimentos</div>
-                <div class="tab" id="bebidas" onclick="cargarCategoria('bebidas','<?php echo $restaurantId;?>')">Bebidas</div>
-                <div class="tab" id="carnicos" onclick="cargarCategoria('carnicos','<?php echo $restaurantId;?>')">Cárnicos</div>
-                <div class="tab" id="confituras" onclick="cargarCategoria('confituras','<?php echo $restaurantId;?>')">Confituras</div>
-                <div class="tab" id="embutidos" onclick="cargarCategoria('embutidos','<?php echo $restaurantId;?>')">Embutidos</div>
-                <div class="tab" id="condimentos" onclick="cargarCategoria('condimentos','<?php echo $restaurantId;?>')">Condimentos</div>
+                <div class="tab active" id="alimentos" onclick="cargarCategoria('alimentos','<?php echo $restaurantId;?>',true)">Alimentos</div>
+                <div class="tab" id="bebidas" onclick="cargarCategoria('bebidas','<?php echo $restaurantId;?>',true)">Bebidas</div>
+                <div class="tab" id="carnicos" onclick="cargarCategoria('carnicos','<?php echo $restaurantId;?>',true)">Cárnicos</div>
+                <div class="tab" id="confituras" onclick="cargarCategoria('confituras','<?php echo $restaurantId;?>',true)">Confituras</div>
+                <div class="tab" id="embutidos" onclick="cargarCategoria('embutidos','<?php echo $restaurantId;?>',true)">Embutidos</div>
+                <div class="tab" id="condimentos" onclick="cargarCategoria('condimentos','<?php echo $restaurantId;?>',true)">Condimentos</div>
             <?php }else{ ?>
                 <div class="tab active" id="entrantes" onclick="cargarCategoria('entrantes','<?php echo $restaurantId;?>')">Entrantes</div>
                 <div class="tab" id="platos" onclick="cargarCategoria('platos','<?php echo $restaurantId;?>')">Platos</div>
@@ -281,7 +281,7 @@ $username=$_SESSION['user'];
        // cargarCategoria(categoriaO);
         if (esNuloOVacio(categoriaO)) {
             if (idrestaurant == 1){
-                cargarCategoria('alimentos',idrestaurant);
+                cargarCategoria('alimentos',idrestaurant,true);
             }else{
                 cargarCategoria('entrantes',idrestaurant);
             }
@@ -289,12 +289,12 @@ $username=$_SESSION['user'];
         }else{
             const elemento =(categoriaO).getAttribute("id");
             //console.log("el:"+elemento);
-            cargarCategoria(elemento,idrestaurant);
+            cargarCategoria(elemento,idrestaurant,true);
             setActiveLinkNav(categoriaO);
         }
 
     };
-    function cargarCategoria(categoria,idrestaurant) {
+    function cargarCategoria(categoria,idrestaurant,flag) {
         $('#contenido').html("");
         //console.log((categoria).getAttribute("id"))
 

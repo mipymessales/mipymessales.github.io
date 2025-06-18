@@ -96,10 +96,14 @@
 
 
         <div class="content-body">
-            <div class="container-fluid tabla-scroll">
+            <div class="tabla-scroll">
+                <div id="descripcion" class="mb-2" ></div>
                 <div id="contenido" style="width: 100%;">No hay pedidos.</div>
             </div>
             <div id="btn-cerrar-cuenta"></div>
+            <div class="alert-warning mb-2" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><h6>Solo los pedidos con el estado marcado como
+                    <span style="color: white; background-color: #0acf97; padding: 4px 8px; border-radius: 4px; display: inline-block; text-align: center; min-width: 70px;">Aprobado</span>
+                     seran vendidos, los otros se eliminaran de la venta !</h6></div>
         </div>
 
 
@@ -478,7 +482,8 @@
                 }else{
                     datosAnterioresPedidoMesa = nuevosDatosP;
                   console.log("✅ Datos recibidos:", data);
-                    table.setData(data);  // Carga datos en la tabla ya creada
+                    $('#descripcion').html(data["html"]);
+                    table.setData(data["data"]);  // Carga datos en la tabla ya creada
                     table.redraw(true);
                 }
 
@@ -492,7 +497,7 @@
                 botonC.style.marginTop="5px";
                 // Asignar la función al onclick usando una función anónima
                 botonC.onclick = function() {
-                    cerrarCuenta(data,idcliente);
+                    cerrarCuenta(data["data"],idcliente);
 
                 };
                 buttonCerrarCuenta.appendChild(botonC);
@@ -510,6 +515,7 @@
     }
     function cerrarCuenta(data,idcliente) {
         //alert(idcliente);
+        $('#descripcion').html('<div class="alert-warning mb-2" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Cerrando Pedido!</h5></div>');
        $.ajax({
             url: '/controllers/edit_pedido_cliente.php',
             dataType:'json',
