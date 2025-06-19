@@ -120,9 +120,9 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                     </div>
                                                                     <div class='image-wrapper text-center'>";
                                                                          if($foto!=null){
-                                                                             $html.="<img class='img-fluid rounded-circle' src='images/{$foto}' style='height: 120px;width: 120px' alt='food menu'>";
+                                                                             $html.="<img class='img-fluid rounded-circle' src='/images/{$foto}' style='height: 120px;width: 120px' alt='food menu'>";
                                                                          }else{
-                                                                          $html.="  <img class='img-fluid rounded-circle' src='images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px'>";
+                                                                          $html.="  <img class='img-fluid rounded-circle' src='/images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px'>";
                                                                          }
                                                                 $html.="  </div>
                                                                 </div>

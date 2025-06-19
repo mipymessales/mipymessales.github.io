@@ -116,8 +116,8 @@ function renderTabla(data, contID, tipo, gastos = []) {
             }else{
                 html += `<h5 class="mt-4">Gastos</h5>
 <div class="table-responsive">
-        <table class="table table-bordered table-sm facturatable">
-            <thead><tr><th>Cantidad del gasto en el mes</th><th>Concepto</th><th>Monto</th></tr></thead><tbody style="background: white;">`;
+        <table class="table table-bordered table-sm">
+            <thead><tr><th>Cantidad</th><th>Concepto</th><th>Monto</th></tr></thead><tbody style="background: white;">`;
             }
             let totalGastos = 0;
             const hoy = tipo === "dia" ? document.getElementById("fecha-dia").value : null;

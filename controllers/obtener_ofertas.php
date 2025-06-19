@@ -165,12 +165,12 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
 
             $a .= "  </div>";
 
-            include "../controllers/modal_editarcategoria.php";
-            include "../controllers/modal_eliminarcategoria.php";
+            include ROOT_DIR."controllers/modal_editarcategoria.php";
+            include ROOT_DIR."controllers/modal_eliminarcategoria.php";
         }
 
     } else {
-        $a .= "<div class='col-sm-6'><p style='font-weight: 700;
+        $a .= "<div class='col-sm-12 mb-2'><p style='font-weight: 700;
   text-transform: uppercase;
   font-size: 10px;
   letter-spacing: .5rem;'><span> ⚠️ </span>No hay elementos en esta categoría.</p></div>";
@@ -178,6 +178,4 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
     $a .= "  </div>";
     echo $a;
 }
-//$stmt->close();
-//$base_de_datos->close();
 

@@ -16,12 +16,13 @@ $username=$_SESSION['user'];
         .tab {
     margin-right: 15px;
             padding: 10px;
-            border: 1px solid #ccc;
+           /* border: 1px solid #ccc;*/
         }
         .tab.active {
             background: var(--main-header-bg);
             color: var(--sidebar-link-active-color);
             border: var(--gray-tint-50) 1px dashed;
+            width: fit-content;
         }
 
         .tab:hover {
@@ -47,10 +48,19 @@ $username=$_SESSION['user'];
             padding: 5px;
         }
 
+        @media (max-width: 580px) {
+            .phone-view {
+                flex: 0 0 auto !important;
+                width: 30% !important;
+            }
+        }
+
+
     </style>
-        <link href="assets/css/dropify.min.css" rel="stylesheet">
-<link href="assets/css/style.css" rel="stylesheet">
-<link href="assets/css/restaurant.css" rel="stylesheet">
+
+<!--        <link href="../assets/css/dropify.min.css" rel="stylesheet">
+<link href="../assets/css/style.css" rel="stylesheet">
+<link href="../assets/css/restaurant.css" rel="stylesheet">-->
     <div id="main-header">
 
         <?php if (isset($_REQUEST["errorUpdate"])){?>
@@ -77,12 +87,26 @@ $username=$_SESSION['user'];
 <div class="custom-tab-4" id="tabstyle">
         <div class="nav nav-tabs">
             <?php if ($restaurantId==1){ ?>
-                <div class="tab active" id="alimentos" onclick="cargarCategoria('alimentos','<?php echo $restaurantId;?>',true)">Alimentos</div>
-                <div class="tab" id="bebidas" onclick="cargarCategoria('bebidas','<?php echo $restaurantId;?>',true)">Bebidas</div>
-                <div class="tab" id="carnicos" onclick="cargarCategoria('carnicos','<?php echo $restaurantId;?>',true)">Cárnicos</div>
-                <div class="tab" id="confituras" onclick="cargarCategoria('confituras','<?php echo $restaurantId;?>',true)">Confituras</div>
-                <div class="tab" id="embutidos" onclick="cargarCategoria('embutidos','<?php echo $restaurantId;?>',true)">Embutidos</div>
-                <div class="tab" id="condimentos" onclick="cargarCategoria('condimentos','<?php echo $restaurantId;?>',true)">Condimentos</div>
+                    <div class="row">
+                        <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                            <div class="tab active" id="alimentos" onclick="cargarCategoria('alimentos','<?php echo $restaurantId;?>',true)">Alimentos</div>
+                        </div>
+                        <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                            <div class="tab" id="bebidas" onclick="cargarCategoria('bebidas','<?php echo $restaurantId;?>',true)">Bebidas</div>
+                        </div>
+                        <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                            <div class="tab" id="carnicos" onclick="cargarCategoria('carnicos','<?php echo $restaurantId;?>',true)">Cárnicos</div>
+                        </div>
+                        <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                            <div class="tab" id="confituras" onclick="cargarCategoria('confituras','<?php echo $restaurantId;?>',true)">Confituras</div>
+                        </div>
+                        <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                            <div class="tab" id="embutidos" onclick="cargarCategoria('embutidos','<?php echo $restaurantId;?>',true)">Embutidos</div>
+                        </div>
+                        <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                            <div class="tab" id="condimentos" onclick="cargarCategoria('condimentos','<?php echo $restaurantId;?>',true)">Condimentos</div>
+                        </div>
+                    </div>
             <?php }else{ ?>
                 <div class="tab active" id="entrantes" onclick="cargarCategoria('entrantes','<?php echo $restaurantId;?>')">Entrantes</div>
                 <div class="tab" id="platos" onclick="cargarCategoria('platos','<?php echo $restaurantId;?>')">Platos</div>
@@ -104,7 +128,7 @@ $username=$_SESSION['user'];
 
     </div>
 
-    <button class="btn-flotante" data-toggle="modal" data-target="#exampleModalCenter" >Insertar</button>
+    <button class="btn-flotante" data-toggle="modal" data-target="#exampleModalCenter">Insertar</button>
     <div class="form-validation">
         <form enctype="multipart/form-data" class="form-valide" action="controllers/categoriaController.php" method="POST" id="main-contact-form">
             <div class="modal fade" id="exampleModalCenter">
@@ -243,9 +267,10 @@ $username=$_SESSION['user'];
 
         </form>
     </div>
-   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/dropify.min.js"></script>
-    <script src="assets/js/dropify-init.js"></script>-->
+<!-- <script src="../assets/js/jquery-3.6.0.min.js"></script>
+ <script src="../assets/js/dropify.min.js"></script>
+<script src="../assets/js/dropify-init.js"></script>-->
+
 <script>
     function esNuloOVacio(v) {
         if (v === null || v === undefined) return true;
@@ -309,7 +334,7 @@ $username=$_SESSION['user'];
                // document.getElementById('contenido').innerHTML =data;
                // console.log(data);
            $('#contenido').html(data);
-        }
+            }
         });
     }
     const navOfertas = document.querySelectorAll('.tab');
@@ -342,7 +367,5 @@ $username=$_SESSION['user'];
             element.style.display = 'none';
         }, 6000);
     }
-
-
 </script>
 

@@ -188,8 +188,8 @@
 
 <div id="btn-change-llamada"></div>
 
-<div class="content-body">
-    <div class="container-fluid tabla-scroll">
+<div class="">
+    <div class="tabla-scroll">
         <div class="buscador-contenedor">
             <input id="buscador" type="text" placeholder="🔍 Buscar por nombre...">
         </div>

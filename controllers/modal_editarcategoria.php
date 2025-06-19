@@ -6,11 +6,9 @@
  * Time: 12:14
  */
 ?>
+<link href="../assets/css/dropify.min.css" rel="stylesheet">
+<!--<script src="../assets/js/dropify.min.js"></script>-->
 <!-- Modal EDIT-->
-<link href="assets/css/dropify.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="assets/js/dropify.min.js"></script>
-<script src="assets/js/dropify-init.js"></script>
 <div class="form-validation">
 
         <div class="modal fade" id="exampleModalEDIT<?php echo $id_bebida;?>">
@@ -43,9 +41,9 @@
                                                 <?php
                                                 $target_file=str_replace("'\'","/", $_SERVER['DOCUMENT_ROOT'])."/images/".$foto;
                                                 if (file_exists($target_file)) {  ?>
-                                                    <input type="file" class="dropify" name="image" id="image" data-default-file="/images/<?php echo $foto;?>" />
+                                                    <input type="file" class="dropify" name="image_<?php echo $id_bebida; ?>" id="image_<?php echo $id_bebida; ?>" data-height="200" data-default-file="/images/<?php echo $foto;?>" />
                                                 <?php  }else{?>
-                                                    <input type="file" class="dropify" name="image" id="image" data-default-file="/images/blank1.jpg" />
+                                                    <input type="file" class="dropify" name="image_<?php echo $id_bebida; ?>" id="image_<?php echo $id_bebida; ?>" data-height="200" data-default-file="/images/blank1.jpg" />
                                                 <?php }  ?>
 
 
@@ -177,9 +175,7 @@
 
 </div>
 <script>
-    window.onload = function () {
         $('.dropify').dropify();
-    };
 </script>
 <!--end modal insert-->
 

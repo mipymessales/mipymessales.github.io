@@ -41,4 +41,4 @@ const switchTheme = () => {
 }
 
 // Add the event listener for the theme switcher
-document.querySelector('#sidebar__theme-switcher').addEventListener('click', switchTheme)
+//document.querySelector('#sidebar__theme-switcher').addEventListener('click', switchTheme)

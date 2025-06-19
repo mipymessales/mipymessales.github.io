@@ -61,9 +61,18 @@ $ingredientes = isset($_POST["ingredientes"])?$_POST["ingredientes"]:"";
 
 $radio = $_POST["radio"];
 $imagess=$_POST["foto"]??"blank1.jpg";
-
+    $id_bebida=$_POST["id"];
 $target_dir = "../images/"; //directorio en el que se subira
-$target_file = $target_dir .  basename($_FILES["image"]["name"]);//se añade el directorio y el nombre del archivo
+
+    if (isset($_POST["insertar"])){
+        $keyname="image";
+    }else{
+        $keyname="image_".$id_bebida;
+    }
+
+
+
+$target_file = $target_dir .  basename($_FILES[$keyname]["name"]);//se añade el directorio y el nombre del archivo
 $uploadOk = 1;//se añade un valor determinado en 1
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 // Comprueba si el archivo de imagen es una imagen real o una imagen falsa
@@ -72,8 +81,8 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
     //ImageResize(250, 250,    basename($_FILES["image"]["name"]));
 
-if($_FILES["image"]["tmp_name"]!=null)
-    $check = getimagesize($_FILES["image"]["tmp_name"]);
+if($_FILES[$keyname]["tmp_name"]!=null)
+    $check = getimagesize($_FILES[$keyname]["tmp_name"]);
 else{
     if (empty($imagess))
       $check=false;
@@ -91,14 +100,14 @@ if($check !== false) {//si es falso es una imagen y si no lanza error
 // Comprobar si el archivo ya existe
 if (file_exists($target_file)) {
     //$uploadOk = 0;//si existe lanza un valor en 0
-    if(!empty(basename($_FILES["image"]["name"]))){
+    if(!empty(basename($_FILES[$keyname]["name"]))){
       //  $uploadOk=1;
-        $imagess=basename($_FILES["image"]["name"]);
+        $imagess=basename($_FILES[$keyname]["name"]);
     }
 
 }else{
 // Comprueba el peso
-if ($_FILES["image"]["size"] > 500000) {
+if ($_FILES[$keyname]["size"] > 500000) {
     $msg.=  "El archivo es muy pesado </br>";
     $uploadOk = 0;
 }
@@ -118,17 +127,17 @@ if ($uploadOk == 0) {
 
     // include_once "imageclass.php";
 
-    if ($_FILES["image"]["error"] === UPLOAD_ERR_OK) {
+    if ($_FILES[$keyname]["error"] === UPLOAD_ERR_OK) {
         // Ok para continuar
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-            $imagess=basename($_FILES["image"]["name"]);
-            echo "El archivo ". basename( $_FILES["image"]["name"]). " Se subio correctamente";
+        if (move_uploaded_file($_FILES[$keyname]["tmp_name"], $target_file)) {
+            $imagess=basename($_FILES[$keyname]["name"]);
+            echo "El archivo ". basename( $_FILES[$keyname]["name"]). " Se subio correctamente";
         } else {
             $msg.=  "Error al cargar el archivo";
 
         }
     } else {
-        $msg.=  "Error al subir la imagen: " . $_FILES["image"]["error"]."</br>";
+        $msg.=  "Error al subir la imagen: " . $_FILES[$keyname]["error"]."</br>";
     }
 
 

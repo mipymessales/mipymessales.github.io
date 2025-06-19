@@ -162,7 +162,7 @@
 </head>
 <body style="font-size: 0.875rem !important;">
 
-<div class="container mt-4">
+<div class="mt-4">
     <h2 class="mb-4 text-center">Resumen de Ventas</h2>
 
     <!-- Nav tabs -->

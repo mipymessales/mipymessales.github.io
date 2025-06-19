@@ -165,13 +165,16 @@ $ano=split('-',$date,1);*/
             padding: 10px;
             font-size: 16px;
         }
-     /*   #main-header svg {
-            width: auto;
-            height: auto;
-            fill: none;
-            transition: fill .4s ease-in-out;
-        }*/
+        #main-header {
+            padding: 1rem 0.5rem !important;
+        }
 
+
+        @media (max-width: 900px) {
+            #main-header h1{
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -516,17 +519,6 @@ $ano=split('-',$date,1);*/
     <script src="app.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/dropify.min.js"></script>
-    <script src="assets/js/dropify-init.js"></script>
-   <!-- <script src="assets/js/common.min.js"></script>
-
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/quixnav.js"></script>
-    <script src="assets/js/styleSwitcher.js"></script>
-    <script src="assets/js/dropify.min.js"></script>
-    <script src="assets/js/dropify-init.js"></script>
-    <script src="assets/js/switchery.min.js"></script>
-    <script src="assets/js/switchery-init.js"></script>-->
-
     <script src="assets/fullcalendar/js/fullcalendar.min.js"></script>
     <script src="assets/fullcalendar/js/sweetalert2.min.js"></script>
     <script src="assets/js/tabulator.min.js"></script>
@@ -566,8 +558,6 @@ $ano=split('-',$date,1);*/
                 localStorage.setItem('activeLink', link.getAttribute('href')); // Guarda el href como identificador
             }
         }
-
-
         // Al cargar la página, revisa si hay un enlace guardado
         window.addEventListener('DOMContentLoaded', () => {
             const savedHref = localStorage.getItem('activeLink');

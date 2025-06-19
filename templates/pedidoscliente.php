@@ -2,28 +2,7 @@
     <meta charset="UTF-8">
     <title>Pedidos</title>
     <style>
-        .tabs {
-    display: flex;
-    cursor: pointer;
-    /*background-color:  var(--gray-base);*/
-            color: var(--sidebar-link-color);
-            padding: 10px;
-        }
 
-        .tab {
-    margin-right: 15px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-        .tab.active {
-            background: var(--main-header-bg);
-            color: var(--sidebar-link-active-color);
-            border: var(--gray-tint-50) 1px dashed;
-        }
-
-        .tab:hover {
-            color: var(--sidebar-link-active-color);
-        }
         .label-info {
             background: var(--gray-base);
             padding: 10px;
@@ -59,9 +38,19 @@
             position: relative;
             z-index: 1;
         }
+        .fila-roja {
+            background-color: #ffe5e5 !important;
+            color: #b30000;
+        }
+
+        .fila-roja .warning-icon::before {
+            content: "⚠️";
+            margin-right: 6px;
+        }
     </style>
         <link href="assets/css/dropify.min.css" rel="stylesheet">
-
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/restaurant.css" rel="stylesheet">
     <div id="main-header">
 
         <?php if (isset($_REQUEST["errorUpdate"])){?>
@@ -95,7 +84,7 @@
 
 
 
-        <div class="content-body">
+        <div class="">
             <div class="tabla-scroll">
                 <div id="descripcion" class="mb-2" ></div>
                 <div id="contenido" style="width: 100%;">No hay pedidos.</div>
@@ -152,6 +141,69 @@
                 height: "auto",
                 layout: "fitColumns",
                 responsiveLayout: "collapse",
+
+               /* rowFormatter: function (row) {
+                    const data = row.getData();
+                    const el = row.getElement();
+
+                    if (parseInt(data.cantidadproducto) < parseInt(data.cantidad) ) {
+                        el.classList.add("fila-roja");
+                        el.classList.add("fila-deshabilitada");
+                        row.getCells().forEach(cell => {
+                            const celda = cell.getElement();
+                            celda.style.pointerEvents = "none"; // Bloquear interacción
+                            celda.style.opacity = "0.5";        // Mostrar como deshabilitado
+                        });
+                        // console.log("❌ Fila deshabilitada:", data);
+                    } else {
+                        el.classList.remove("fila-roja");
+                        el.classList.remove("fila-deshabilitada");
+                        row.getCells().forEach(cell => {
+                            const celda = cell.getElement();
+                            celda.style.pointerEvents = "auto";
+                            celda.style.opacity = "1";
+                        });
+                    }
+                },
+*/
+                rowFormatter: function (row) {
+                    const data = row.getData();
+                    const el = row.getElement();
+
+                    // Obtener solo la celda de la columna "estado"
+                    const estadoCell = row.getCell("estado");
+                    const estadoEl = estadoCell ? estadoCell.getElement() : null;
+
+                    if (parseInt(data.cantidadproducto) < parseInt(data.cantidad)) {
+                        el.classList.add("fila-roja"); // Si aún quieres marcar la fila visualmente
+
+                        if (estadoEl) {
+                            estadoEl.style.pointerEvents = "none"; // Bloquear interacción
+                            estadoEl.style.opacity = "0.5";        // Mostrar como deshabilitado
+                        }
+
+                 /*       const subCell = row.getCell("subtotal");
+                        const subEl = subCell ? subCell.getElement() : null;
+                        if (subEl) {
+                            subEl.value=0;
+                            return subEl;
+                        }*/
+
+
+                    } else {
+                        el.classList.remove("fila-roja");
+
+                        if (estadoEl) {
+                            estadoEl.style.pointerEvents = "auto"; // Rehabilitar interacción
+                            estadoEl.style.opacity = "1";          // Restaurar opacidad
+                        }
+                    }
+                },
+
+
+
+
+
                 columns: [
                     {title: "id", field: "id", visible: false},
                     {title: "cantidadproducto", field: "cantidadproducto", visible: false},
@@ -180,9 +232,9 @@
     `;
                             }else{
                                 return `
-      <button class="btn btn-danger btn-decrement" style="margin-right: 10px">−</button>
+      <button class="btn btn-danger btn-decrement" style="margin-right: 5px">−</button>
       <span class="cantidad-valor">${value}</span>
-      <button class="btn btn-success btn-increment" style="margin-left: 10px">+</button>
+      <button class="btn btn-success btn-increment" style="margin-left: 5px">+</button>
     `;
                             }
 
@@ -237,7 +289,7 @@
                     {
                         title: "Estado",
                         field: "estado",
-                        minWidth: 70,
+                        minWidth: 50,
                         formatter: function (cell) {
                             const value = cell.getValue();
                             let color = "";
@@ -350,13 +402,13 @@
                                  });
                              }
                          }*/,
-                    {title: "Precio", field: "precio", hozAlign: "right", minWidth: 20},
+                    {title: "Precio", field: "precio", hozAlign: "right", minWidth: 90},
 
                     {
                         title: "Subtotal (Precio * Cantidad)",
                         field: "subtotal",
                         hozAlign: "right",
-                        minWidth: 30,
+                        minWidth: 90,
                         bottomCalc: "sum"
                     },
 

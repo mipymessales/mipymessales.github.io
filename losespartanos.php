@@ -66,16 +66,25 @@ if (!empty($gastos)) {
                 min-height: auto!important;
             }
             .hero h1 {
-                margin-top: 12vh !important;
+                margin-top: 200px !important;
             }
             /*    este id #tabstyle menor de*/
 
             /*360px cambiar a custom-tab-2 sino dejarlo en custom-tab-4*/
         }
-        @media (max-width: 400px) {
+        @media (max-width: 350px) {
 
             .hero h1 {
-                margin-top: 6vh !important;
+                margin-top:100px !important;
+            }
+            /*    este id #tabstyle menor de*/
+
+            /*360px cambiar a custom-tab-2 sino dejarlo en custom-tab-4*/
+        }
+        @media (min-width: 450px) {
+
+            .hero h1 {
+                margin-top:180px !important;
             }
             /*    este id #tabstyle menor de*/
 
@@ -334,7 +343,7 @@ if (!empty($gastos)) {
         }
 
         .hero h1 span {
-            color: #0acf97;
+            color: #ff5722bf;
         }
 
         .hero p {
@@ -391,15 +400,30 @@ if (!empty($gastos)) {
         .hero .animated {
             animation: up-down 2s ease-in-out infinite alternate-reverse both;
         }
-
+        @media (max-width: 990px) {
+            .hero h1 {
+                font-size: 24px;
+                line-height: 48px;
+                margin-top: 300px !important;
+            }
+        }
+        @media (min-width: 840px) {
+            .hero h1 {
+                font-size: 38px;
+                line-height: 60px;
+                margin-top: 150px !important;
+            }
+        }
         @media (max-width: 640px) {
             .hero h1 {
-                font-size: 28px;
+                font-size: 18px;
                 line-height: 36px;
+                margin-top: 115px !important;
+                text-align: center;
             }
 
             .hero p {
-                font-size: 18px;
+                font-size: 12px;
                 line-height: 24px;
                 margin-bottom: 30px;
             }
@@ -409,10 +433,13 @@ if (!empty($gastos)) {
                 font-size: 13px;
             }
         }
+
+
         @media (min-width: 992px) {
             .hero {
                 background-size: cover;
             }
+
         }
         @keyframes up-down {
             0% {
@@ -563,8 +590,12 @@ if (!empty($gastos)) {
                 background-size: contain;
             }
         }
-
-
+        @media (max-width: 900px) {
+            .col-sm-6 {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -576,11 +607,13 @@ if (!empty($gastos)) {
         <div class="row gy-4">
 
             <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-                <h1>Bienvenido a: <span><?php echo $nombreRestaurant; ?></span></h1>
-                <p style="color: #332b2b">"Sabores que cuentan historias. Ven y descubre la experiencia gastronómica que
+                <h1 style="text-align: center">Bienvenido a <span><?php echo $nombreRestaurant; ?></span></h1>
+                <p style="color: #332b2b;font-size: 16px;
+  font-weight: 300;
+  line-height: 1.2;text-align: center">"Sabores que cuentan historias. Ven y descubre la experiencia gastronómica que
                     mereces."</p>
 
-                <div class="d-flex">
+                <div class="text-center">
                     <a href="#menu" class="btn-get-started">Ver ofertas!</a>
                     <!--                    <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>-->
                 </div>
@@ -840,7 +873,7 @@ if (!empty($gastos)) {
 
 
 
-<footer class="text-center py-4 bg-light">
+<footer class="container-fluid  text-center py-4 bg-light">
     <p class="mb-0">&copy; 2025 <?php echo $nombreRestaurant; ?> . Todos los derechos reservados.</p>
 </footer>
 
@@ -1186,7 +1219,7 @@ if (!empty($gastos)) {
             try {
                 carritoData = JSON.parse(inputCarrito.value);
             } catch (e) {
-                console.error("El valor del input no es JSON válido:", e);
+               // console.error("El valor del input no es JSON válido:", e);
             }
 
 // Verificar si está vacío
@@ -1215,11 +1248,15 @@ if (!empty($gastos)) {
                             const carritoVisual = document.getElementById('carritoVisual');
                             carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
                             inputCarrito.value='';
-                            e.target.reset();
                             recargarCaptcha('r');
                             carrito = {};
+                            console.log("¡Pedido recibido! con carrito :"+JSON.stringify(carrito));
+                           // const cantidadSpan = producto.querySelector('.cantidad');
+                            document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
+                            // if (cantidadSpan) cantidadSpan.textContent = 0;
                             inicializarEventosCarrito();
                             actualizarCarrito();
+                            e.target.reset();
                             // grecaptcha.reset();
                         } else if (data["status"] === 'RECAPTCHA_FAILED') {
                             // console.log("Captcha no verificado por el servidor.");
@@ -1351,13 +1388,14 @@ if (!empty($gastos)) {
 
 
     // window.addEventListener("load", initSwiper);
-    let carrito = {}; // Mantén este fuera para que se conserve entre llamadas
+    var carrito = {}; // Mantén este fuera para que se conserve entre llamadas
 
     const inputCarrito = document.getElementById('carrito');
     const carritoVisual = document.getElementById('carritoVisual');
 
     function inicializarEventosCarrito() {
         const productos = document.querySelectorAll('.producto');
+        //console.log("inicializarEventosCarrito "+JSON.stringify(productos));
         productos.forEach(producto => {
             const nombre = producto.dataset.nombre;
             const precio = parseFloat(producto.dataset.precio);
@@ -1367,7 +1405,9 @@ if (!empty($gastos)) {
             const btnAgregar = producto.querySelector('.agregar');
             const btnQuitar = producto.querySelector('.quitar');
             const cantidadSpan = producto.querySelector('.cantidad');
-            if (carrito.hasOwnProperty(nombre)){
+           if (carrito.hasOwnProperty(nombre)){
+             //   console.log(JSON.stringify(carrito));
+              //  console.log("carrito[nombre] "+carrito[nombre]+",  carrito[nombre].cantidad "+ carrito[nombre].cantidad);
                 cantidadSpan.textContent = carrito[nombre].cantidad;
             }
             btnAgregar.addEventListener('click', () => {
@@ -1394,55 +1434,6 @@ if (!empty($gastos)) {
             });
         });
     }
-    /*
-    function actualizarCarrito() {
-        inputCarrito.value = JSON.stringify(carrito);
-
-        if (Object.keys(carrito).length === 0) {
-            carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
-            return;
-        }
-
-        let totalGeneral = 0;
-        let html = `
-      <table class="factura">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th class="text-center">Cantidad</th>
-            <th class="text-right">Precio Unitario</th>
-            <th class="text-right">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-
-        for (const [producto, datos] of Object.entries(carrito)) {
-            const subtotal = datos.cantidad * datos.precio;
-            totalGeneral += subtotal;
-
-            html += `
-        <tr>
-          <td>${producto}</td>
-          <td class="text-center">${datos.cantidad}</td>
-          <td class="text-right">$${datos.precio.toFixed(2)}</td>
-          <td class="text-right">$${subtotal.toFixed(2)}</td>
-        </tr>
-      `;
-        }
-
-        html += `
-        <tr class="total-row">
-          <td colspan="3" class="text-right">Total</td>
-          <td class="text-right">$${totalGeneral.toFixed(2)}</td>
-        </tr>
-      </tbody>
-    </table>`;
-
-        carritoVisual.innerHTML = html;
-    }
-
-    */
 
 
     function actualizarCarrito() {
@@ -1465,36 +1456,22 @@ if (!empty($gastos)) {
 
         for (const [producto, datos] of Object.entries(carrito)) {
             const subtotal = datos.cantidad * datos.precio;
-            //console.log("allProductData cargado:"+JSON.stringify(allProductData) );
-           // console.log("producto cargado:"+JSON.stringify(producto) );
-           // console.log("datos cargado:"+JSON.stringify(datos) );
-            // Buscar producto en el inventario
-          /*  let inventario =[];
-            if (!esNuloOVacio(allProductData[datos.categoria])) {
-                console.log("datos.categoria "+datos.categoria);
-                inventario = allProductData[datos.categoria] || [];
-            }*/
             const categoria = datos?.categoria || "";
-            //console.log("categoria cargado:"+categoria);
             const inventario = Array.isArray(allProductData[categoria])
                 ? allProductData[categoria]
                 : [];
-
-            //console.log("inventario cargado:"+JSON.stringify(inventario) );
-
-
-
-
-
-            //console.log("Tipo de inventario:"+ typeof inventario);
-           // console.log("Es array:"+ Array.isArray(inventario));
-            //console.log("Contenido:"+ inventario);
             const itemInventario = inventario.find(p => parseInt(p.id) === parseInt(datos.id));
             let advertencia = '';
             let claseAdvertencia = '';
             let esValido = false;
 
-            if (!itemInventario || parseInt(itemInventario.disponible) !== 1 || parseInt(itemInventario.cantidad) === 0) {
+            console.log(itemInventario);
+
+            if (!itemInventario || typeof itemInventario=='undefined'){
+                advertencia = ' <span style="color:orange;">( » Chequeando disponibilidad...)</span>';
+                claseAdvertencia = ' style="background-color: #fff8e1;"';
+
+            }else if ( parseInt(itemInventario.disponible) !== 1 || parseInt(itemInventario.cantidad) === 0) {
                 advertencia = ' <span style="color:red;">(❌ No disponible)</span>';
                 claseAdvertencia = ' style="background-color: #ffe6e6;"';
             } else if (parseInt(itemInventario.cantidad) < datos.cantidad) {
@@ -1541,6 +1518,58 @@ if (!empty($gastos)) {
         inputCarrito.value = JSON.stringify(carritoValido);
     }
 
+    function sonObjetosIguales(a, b) {
+        if (a === b) return true;
+
+        if (typeof a !== typeof b || a === null || b === null) return false;
+
+        if (Array.isArray(a)) {
+            if (!Array.isArray(b) || a.length !== b.length) return false;
+            return a.every((val, i) => sonObjetosIguales(val, b[i]));
+        }
+
+        if (typeof a === "object") {
+            const clavesA = Object.keys(a).sort();
+            const clavesB = Object.keys(b).sort();
+            if (!sonObjetosIguales(clavesA, clavesB)) return false;
+
+            return clavesA.every(key => sonObjetosIguales(a[key], b[key]));
+        }
+
+        return false;
+    }
+
+
+
+    function renderCarritoConDatosActualizados() {
+        const productos = Object.values(carrito).map(c => ({
+            id: c.id,
+            categoria: c.categoria
+        }));
+
+        $.ajax({
+            url: 'controllers/actualizar_inventario.php',
+            type: 'POST',
+            data: { productos: productos,restaurantid:restaurantId },
+            success: function (data) {
+                if (data.error) {
+                   // console.error(data.error);
+                    return;
+                }
+                // Verificar si el inventario realmente cambió
+
+                    allProductData = data; // actualizar el inventario global
+                    actualizarCarrito(); // solo se llama si hubo cambios
+
+            },
+            error: function (xhr, status, error) {
+               // console.error("Error al actualizar inventario:", error);
+            }
+        });
+    }
+
+
+
     window.onload = function () {
         $('.dropify').dropify();
         iniciarAutoCarga(restaurantId,"alimentos",true);
@@ -1566,11 +1595,11 @@ if (!empty($gastos)) {
                 const parsed = JSON.parse(datos);
                 //allProductData[categoria] = parsed.data;
                 if (parsed && Array.isArray(parsed.data) && parsed.data.length > 0) {
-                    console.warn(`parsed.data no vacío la categoría: ${categoria}`);
+                   // console.warn(`parsed.data no vacío la categoría: ${categoria}`);
                     allProductData[categoria] = parsed.data;
                 } else {
                     allProductData[categoria] = []; // objeto vacío por defecto
-                    console.warn(`parsed.data vacío o inválido para la categoría: ${categoria}`);
+                  //  console.warn(`parsed.data vacío o inválido para la categoría: ${categoria}`);
                 }
 
                 //console.log("mostrarDesdeCache :"+JSON.stringify(parsed));
@@ -1592,7 +1621,7 @@ if (!empty($gastos)) {
                 document.getElementById("testimonials").classList.remove("oculto");
                 return true;
             } catch (e) {
-                console.warn("Error al parsear localStorage:", e);
+               // console.warn("Error al parsear localStorage:", e);
                 return false;
             }
         }
@@ -1608,7 +1637,10 @@ if (!empty($gastos)) {
             let datosAnteriores = datosCache ? JSON.parse(datosCache).data : null;
            // heroIntervalIniciado = false;
             // Intentar mostrar desde cache primero
-            mostrarDesdeCache(idrestaurant, categoria,flag);
+            if (flag){
+                mostrarDesdeCache(idrestaurant, categoria,flag);
+            }
+
 
             // Luego llamar al servidor
             $.ajax({
@@ -1621,11 +1653,14 @@ if (!empty($gastos)) {
                         const nuevosDatos = JSON.stringify(data["data"]);
                         allProductData[categoria] = data["data"];
                         if (JSON.stringify(datosAnteriores) === nuevosDatos) {
-                            //console.log('Datos sin cambios, no se actualiza la vista.');
+                          //  console.log('Datos sin cambios, no se actualiza la vista.');
                             if (!esNuloOVacio(document.getElementById('section-title'))) {
                                 document.getElementById('section-title').innerText = 'En estos momentos no tenemos ' + categoria + ' disponibles!';
                             }
+                          //  console.log(JSON.stringify(carrito));
+                            renderCarritoConDatosActualizados();
                         } else {
+                          //  console.log('Actualizar la vista.');
                             $('#contenido').html(data["html"]);
                             inicializarEventosCarrito();
                             actualizarCarrito();
@@ -1658,7 +1693,7 @@ if (!empty($gastos)) {
 
                                         // Repetir cada 30 segundos
                                     intervaloHero=  setInterval(() => {
-                                            actualizarHero(parsed.data);
+                                            actualizarHero(data["data"]);
                                             initSwiper(categoria);
                                         }, 30000);
 
@@ -1685,6 +1720,18 @@ if (!empty($gastos)) {
         };
     })();
 
+
+
+/*    /!*Chequear carrito*!/
+    const inputCarrito = document.getElementById("carrito");
+
+    let carritoData = {};
+
+    try {
+        carritoData = JSON.parse(inputCarrito.value);
+    } catch (e) {
+        console.error("El valor del input no es JSON válido:", e);
+    }*/
 
 </script>
 </body>
