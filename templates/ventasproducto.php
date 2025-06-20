@@ -619,7 +619,7 @@
             data: { table_id: mesaid,estado:'visto' },
             success: function(data) {
                 // document.getElementById('contenido').innerHTML =data;
-                console.log(data);
+                //console.log(data);
                 if (data["status"]==="success"){
                     document.getElementById("span"+mesaid).style.display = 'none';
                     document.getElementById("btn-change-llamada").replaceChildren();
@@ -731,7 +731,7 @@
             .then(res => res.json())
             .then(data => {
 
-                console.log((data));
+                //console.log((data));
 
                 if (data["status"] === 'success') {
                     const inputCarrito = document.getElementById('carrito');
@@ -744,7 +744,7 @@
                     // grecaptcha.reset();
                 } else {
                     Swal.fire("❌ Error al vender productos.", error.message, "error");
-                    console.log(" Error "+data["msg"]);
+                    //console.log(" Error "+data["msg"]);
                     e.target.reset();
                 }
             });

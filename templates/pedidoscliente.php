@@ -445,7 +445,7 @@
 
         iniciarAutoCargaListadoPedidos();
         esperarZ((idcliente) => {
-         console.log('z está lista:', idcliente);
+         //console.log('z está lista:', idcliente);
             if (idcliente!=='-1')
             iniciarAutoCargaPedidoCliente(idcliente);
             else{
@@ -533,10 +533,10 @@
             success: function (data) {
                 const nuevosDatosP = JSON.stringify(data);
                 if (nuevosDatosP === datosAnterioresPedidoMesa) {
-                  console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
+                  //console.log('Datos sin cambios en pedidos, no se actualiza la vista.');
                 }else{
                     datosAnterioresPedidoMesa = nuevosDatosP;
-                  console.log("✅ Datos recibidos:", data);
+                 // console.log("✅ Datos recibidos:", data);
                     $('#descripcion').html(data["html"]);
                     table.setData(data["data"]);  // Carga datos en la tabla ya creada
                     table.redraw(true);
