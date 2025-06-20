@@ -17,10 +17,24 @@ if (file_exists($controllerPath)) {
     if (method_exists($controller, $method)) {
         call_user_func_array([$controller, $method], $params);
     } else {
-        echo "Método no encontrado";
+        $controllerPath = "controllers/ErrorController.php";
+        $method ='index';
+        if (file_exists($controllerPath)) {
+            require_once $controllerPath;
+            $controllerName = 'ErrorController';
+            $controller = new $controllerName();
+            call_user_func_array([$controller, $method], $params);
+        }
     }
 } else {
-    echo "Controlador no encontrado";
+    $controllerPath = "controllers/ErrorController.php";
+    $method ='index';
+    if (file_exists($controllerPath)) {
+        require_once $controllerPath;
+        $controllerName = 'ErrorController';
+        $controller = new $controllerName();
+        call_user_func_array([$controller, $method], $params);
+    }
 }
 
 
