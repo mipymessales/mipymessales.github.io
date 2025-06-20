@@ -488,7 +488,7 @@ $ano=split('-',$date,1);*/
 				</svg>
 			</div>-->
             <div class="copyright">
-                <p><a href="#">&copy; L'DevGroup <?php $año_actual = date("Y"); echo $año_actual;?> </a></p>
+                <p><a>L'DevGroup 2025 </a></p>
             </div>
 		</div> <!-- sidebar -->
 
@@ -645,7 +645,7 @@ $ano=split('-',$date,1);*/
                     stick: true
                 });*/
                 var eventObject = $(this).data('event');
-                //console.log(this);
+                console.log(this);
                 $(this).data('eventObject',eventObject);
                 // Hace que el elemento sea arrastrable
                 $(this).draggable({
@@ -653,7 +653,7 @@ $ano=split('-',$date,1);*/
                     revert: true,
                     revertDuration: 0
                 });
-                //console.log(this);
+                console.log(this);
             });
 
 

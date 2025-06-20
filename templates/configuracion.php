@@ -267,7 +267,14 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
     .toggle-password:not(.show) .icon-eye {
         display: inline;
     }
-
+    .tabla-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* scroll más suave en iOS */
+        scrollbar-width: thin;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
 </style>
 <div id="loader">
     <div class="spinner"></div>
@@ -292,14 +299,14 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
   font-weight: 700;"><?php echo $sitioRestaurant;?></a>
                 <form enctype="multipart/form-data" action="/panel?section=configuracion" method="POST" id="formHorario" onsubmit="mostrarLoader()">
 
-                    <div class="container h-100" style="margin-bottom: 20px">
-                        <div class="h-100">
-                            <div class="container h-100">
+                    <div class="h-100" style="margin-bottom: 20px">
+
+
                                 <div class="row justify-content-center h-100">
                                     <div class="col-md-6">
                                         <div class="form-input-content">
 
-                                            <div class="card-body">
+
                                                 <h3 class="section-title">Información del Restaurant: <?php echo $nombreRestaurant;?></h3>
                                                 <div class="form-group mb-4">
                                                     <p>Foto de portada</p>
@@ -331,6 +338,7 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
 
                                                 <div class="form-group mb-4  text-left">
                                                     <p>Horario</p><br>
+                                                    <div class="container-fluid tabla-scroll">
                                                     <table>
                                                         <thead>
                                                         <tr>
@@ -341,6 +349,7 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
                                                         </thead>
                                                         <tbody id="horario-table"></tbody>
                                                     </table>
+                                                    </div>
                                                     <input type="hidden" id="jsonInput" name="schedule">
                                                     <br>
                                                 </div>
@@ -349,7 +358,7 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
                                                     <input type="text" class="form-control rounded-0 bg-transparent" id="ubicacion"
                                                            name="ubicacion" placeholder="Ej de formato: 22°48'33.5 N 80°04'25.0W" value="<?php echo $ubicacionRestaurant;?>">
                                                 </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -412,12 +421,12 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
                                     </div>
 
                                 </div>
-                            </div>
+
                             <input type="hidden" name="horariolaborarl" id="horariolaborarl">
                             <input type="hidden" name="action" value="update">
                             <input type="hidden" name="imagebd" value="<?php echo $foto_portadaRestaurant;?>">
                             <button class="btn-warning" type="submit">Actualizar</button>
-                        </div>
+
                     </div>
 
                 </form>
@@ -445,12 +454,14 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
                 <hr>
                 <h4>Lista de Gastos</h4>
                 <button class="btn btn-success" onclick="abrirModalNuevo()">Agregar Nuevo Gasto</button>
+                <div class="container-fluid tabla-scroll">
                 <table id="tabla-gastos" border="1">
                     <thead>
-                    <tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th>Acción</th></tr>
+                    <tr><th>Concepto</th><th>Monto</th><th>Acción</th></tr>
                     </thead>
                     <tbody></tbody>
                 </table>
+                </div>
             </div>
         </div>
         <div class="accordion-item">
@@ -543,6 +554,7 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
                                                 <h4 class="mb-0"><?php echo $nombre?></h4>
                                                 <p class="text-muted mb-0"><strong class="text-dark mr-4 text-left">CI :</strong><?php echo $ci;?></p>
                                                 <p class="text-muted mb-0"><strong class="text-dark mr-4 text-left">Teléfono :</strong><?php echo $telefono;?></p>
+
                                             </div>
                                         </div>
                                         <div class="card-footer border-0 bg-white pb-4">
@@ -896,7 +908,6 @@ document.getElementById("loader").style.display = "none";
                 gastos.forEach(g => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                    <td>${g.fecha}</td>
                     <td>${g.concepto}</td>
                     <td>$${parseFloat(g.monto).toFixed(2)}</td>
                     <td>
