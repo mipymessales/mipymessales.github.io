@@ -17,6 +17,12 @@ if (!empty($resultado)) {
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
+    $activo = $resultado[0]->activo;
+}
+if (intval($activo)!=1){
+    include_once ROOT_DIR."controllers/Host.php";
+    header('Location: ' . Host::getHOSTNAME()."templates/404.php");
+    exit;
 }
 
 $sentenc = $base_de_datos->prepare("SELECT monto FROM gastos WHERE restaurantid=:id and (concepto='Domicilio' || concepto='domicilio') limit 1");
