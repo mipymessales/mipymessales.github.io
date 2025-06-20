@@ -832,6 +832,8 @@ $año_actual = date("Y");
 
                     <script>
                         const direccion = `<?php echo $ubicacionRestaurant;?>`;
+                        console.log(direccion);
+                        console.log(encodeURIComponent(direccion));
                         const mapaUrl = "https://www.google.com/maps?q=" + encodeURIComponent(direccion) + "&output=embed";
                         document.getElementById("mapa").src = mapaUrl;
                     </script>
