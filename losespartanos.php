@@ -16,6 +16,8 @@ if (!empty($resultado)) {
     $direccionRestaurant = $resultado[0]->direccion;
     $horarioRestaurant = json_decode($resultado[0]->horario,true);
     $ubicacionRestaurant = $resultado[0]->ubicacion;
+    $ubicacionRestaurant = str_replace("�", "°", $ubicacionRestaurant);
+    var_dump($ubicacionRestaurant); // depuración
     $foto_portadaRestaurant = $resultado[0]->foto_portada;
     $activo = $resultado[0]->activo;
 }
@@ -830,12 +832,9 @@ $año_actual = date("Y");
                 <div class="mt-3">
 
                     <iframe id="mapa" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-
-                    <?php
-                    $ubicacionRestaurant = str_replace("�", "°", $ubicacionRestaurant);
-                    ?>
                     <script>
-                        const direccion = <?php echo json_encode($ubicacionRestaurant); ?>;
+                        var direccion = <?php echo json_encode($ubicacionRestaurant); ?>;
+                        console.log(direccion);
                         const mapaUrl = "https://www.google.com/maps?q=" + encodeURIComponent(direccion) + "&output=embed";
                         document.getElementById("mapa").src = mapaUrl;
                     </script>
