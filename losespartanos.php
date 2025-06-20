@@ -28,6 +28,8 @@ if (!empty($gastos)) {
     $monto = $gastos[0]->monto;
 }
 
+$año_actual = date("Y");
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -874,7 +876,7 @@ if (!empty($gastos)) {
 
 
 <footer class="container-fluid  text-center py-4 bg-light">
-    <p class="mb-0">&copy; 2025 <?php echo $nombreRestaurant; ?> . Todos los derechos reservados.</p>
+    <p class="mb-0">&copy; <?php echo $año_actual." ".$nombreRestaurant; ?> . Todos los derechos reservados.</p>
 </footer>
 
 

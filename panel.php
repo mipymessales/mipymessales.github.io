@@ -488,7 +488,7 @@ $ano=split('-',$date,1);*/
 				</svg>
 			</div>-->
             <div class="copyright">
-                <p><a href="#">L'DevGroup 2025 </a></p>
+                <p><a href="#">&copy; L'DevGroup <?php $año_actual = date("Y"); echo $año_actual;?> </a></p>
             </div>
 		</div> <!-- sidebar -->
 
