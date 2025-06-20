@@ -308,7 +308,7 @@ $ano=split('-',$date,1);*/
 				</li>-->
 			</ul>
 
-			<a href="#">
+			<a href="?section=configuracion">
 				<span>Bienvenido, <?php echo $username;?></span>
 				<svg>
 					<use xlink:href="#icon-user"></use>
