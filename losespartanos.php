@@ -1,6 +1,6 @@
 <?php $id = 1; ?>
 <?php
-
+header('Content-Type: text/html; charset=utf-8');
 session_start();
 
 defined('ROOT_DIR') || define('ROOT_DIR', dirname(__FILE__, 1) . '/');
@@ -831,7 +831,7 @@ $año_actual = date("Y");
                     <iframe id="mapa" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 
                     <script>
-                        const direccion = `<?php echo $ubicacionRestaurant;?>`;
+                        const direccion = `<?php $ubicacionRestaurant = str_replace("�", "°", $ubicacionRestaurant); echo $ubicacionRestaurant;?>`;
                         console.log(direccion);
                         console.log(encodeURIComponent(direccion));
                         const mapaUrl = "https://www.google.com/maps?q=" + encodeURIComponent(direccion) + "&output=embed";
