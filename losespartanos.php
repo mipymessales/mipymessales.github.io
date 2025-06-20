@@ -828,15 +828,20 @@ $año_actual = date("Y");
 
                 </div>
                 <div class="mt-3">
+                    <?php
+                    $ubicacionRestaurant = str_replace("�", "°", $ubicacionRestaurant);
+                    $ubicacionRestaurantJS = htmlspecialchars($ubicacionRestaurant, ENT_QUOTES, 'UTF-8');
+                    ?>
                     <iframe id="mapa" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 
                     <script>
-                        const direccion = `<?php $ubicacionRestaurant = str_replace("�", "°", $ubicacionRestaurant); echo $ubicacionRestaurant;?>`;
+                        const direccion = "<?php echo $ubicacionRestaurantJS; ?>";
                         console.log(direccion);
                         console.log(encodeURIComponent(direccion));
                         const mapaUrl = "https://www.google.com/maps?q=" + encodeURIComponent(direccion) + "&output=embed";
                         document.getElementById("mapa").src = mapaUrl;
                     </script>
+
 
                 </div>
 
