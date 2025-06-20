@@ -65,11 +65,11 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
                 //header('Location: panel');
             } else {
                 $incorrecta="¡Contraseña incorrecta!";
-                header("Location: /login");
+               // header("Location: /login");
             }
         }else{
             $incorrecta="¡Usuario no encontrado!";
-            header("Location: /login");
+           // header("Location: /login");
         }
     }
 }
@@ -178,9 +178,9 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
                                     <button class="btn btn-primary btn-block border-0" type="submit">Entrar</button>
                                 </form>
                             </div>
-                            <div class="card-footer text-center border-0 pt-0">
+                            <div class="card-footer text-center border-0 pt-0" style="display: none">
                                 <p class="mb-1">No tienes una cuenta creada ?</p>
-                                <h6><a href="/register">Crear nueva cuenta</a></h6>
+                                <h6><a href="/register" >Crear nueva cuenta</a></h6>
                             </div>
                         </div>
                     </div>

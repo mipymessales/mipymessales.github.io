@@ -90,9 +90,12 @@
                 <div id="contenido" style="width: 100%;">No hay pedidos.</div>
             </div>
             <div id="btn-cerrar-cuenta"></div>
-            <div class="alert-warning mb-2" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><h6>Solo los pedidos con el estado marcado como
+            <div class="alert-warning mb-2" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><h6>» Solo los pedidos con el estado marcado como
                     <span style="color: white; background-color: #0acf97; padding: 4px 8px; border-radius: 4px; display: inline-block; text-align: center; min-width: 70px;">Aprobado</span>
-                     seran vendidos, los otros se eliminaran de la venta !</h6></div>
+                     seran vendidos, los otros se eliminaran de la venta !</h6><br>
+                <h6>» Los productos que excedan a la cantidad que hay en el almacen no se Aprobaran hasta que se rebajen a una cantidad disponible
+                    !</h6>
+            </div>
         </div>
 
 
@@ -207,8 +210,8 @@
                 columns: [
                     {title: "id", field: "id", visible: false},
                     {title: "cantidadproducto", field: "cantidadproducto", visible: false},
-                    {title: "Categoría", field: "categoria", minWidth: 30},
-                    {title: "Nombre(Cantidad)", field: "nombre", minWidth: 80,
+                    {title: "Categoría", field: "categoria", minWidth: 20},
+                    {title: "Nombre(Cantidad)", field: "nombre", minWidth: 170,
                         formatter: function (cell) {
                             const rowData = cell.getRow().getData();
                             const value = cell.getValue();
@@ -218,9 +221,9 @@
                     },
 
                     {
-                        title: "Cantidad del pedido",
+                        title: "Cantidad",
                         field: "cantidad",
-                        minWidth: 100,
+                        minWidth: 120,
                         formatter: function(cell) {
                             const value = cell.getValue();
                             const rowData = cell.getRow().getData();
@@ -289,7 +292,7 @@
                     {
                         title: "Estado",
                         field: "estado",
-                        minWidth: 50,
+                        minWidth: 80,
                         formatter: function (cell) {
                             const value = cell.getValue();
                             let color = "";
@@ -342,7 +345,7 @@
                     },
                     {
                         title: "Eliminar",
-                        minWidth: 30,
+                        minWidth: 80,
                         align: "center",
                         formatter: function (cell, formatterParams, onRendered) {
                             const data = cell.getData();
@@ -402,13 +405,13 @@
                                  });
                              }
                          }*/,
-                    {title: "Precio", field: "precio", hozAlign: "right", minWidth: 90},
+                    {title: "Precio", field: "precio", hozAlign: "right", minWidth: 10},
 
                     {
                         title: "Subtotal (Precio * Cantidad)",
                         field: "subtotal",
                         hozAlign: "right",
-                        minWidth: 90,
+                        minWidth: 10,
                         bottomCalc: "sum"
                     },
 

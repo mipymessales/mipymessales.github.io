@@ -155,7 +155,7 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
 
             }
             header('Location: ' . Host::getHOSTNAME()."panel.php?section=configuracion");
-            exit;
+            //exit;
         }
     }catch (Exception $e){
         echo  print_r($e->getTraceAsString());
