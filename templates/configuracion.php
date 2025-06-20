@@ -542,9 +542,7 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
 
                                                 <h4 class="mb-0"><?php echo $nombre?></h4>
                                                 <p class="text-muted mb-0"><strong class="text-dark mr-4 text-left">CI :</strong><?php echo $ci;?></p>
-                                                <ul class="card-profile__info ">
-                                                    <li class="mb-1"><strong class="text-dark mr-4 text-left">Teléfono :</strong>  <?php echo $telefono;?></li>
-                                                </ul>
+                                                <p class="text-muted mb-0"><strong class="text-dark mr-4 text-left">Teléfono :</strong><?php echo $telefono;?></p>
                                             </div>
                                         </div>
                                         <div class="card-footer border-0 bg-white pb-4">
