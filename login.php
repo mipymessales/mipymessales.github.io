@@ -14,7 +14,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
 // Consulta segura
 
 
-    $sentencia = $base_de_datos->prepare("SELECT id,contrasena,restaurantid FROM admin WHERE usuario =:usuario");
+    $sentencia = $base_de_datos->prepare("SELECT id,contrasena,restaurantid,status FROM admin WHERE usuario =:usuario");
     $sentencia->bindParam(':usuario', $user);
 
     try {
@@ -27,21 +27,26 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
     if ($sentencia->rowCount() === 1) {
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
        $contrasena= $resultado[0]->contrasena;
-        if (password_verify($pass,$contrasena)) {
-            $tiempo_vida = 1800;
-            ini_set('session.gc_maxlifetime', $tiempo_vida);
-            session_set_cookie_params($tiempo_vida);
-            $_SESSION['user'] = $user;
-            $_SESSION['userrolid'] = 33333;
-            $_SESSION['idrestaurant'] = $resultado[0]->restaurantid;
-            header("Location: /panel");
-            exit;
-            //header('Location: panel');
-        } else {
-            $incorrecta="¡Contraseña incorrecta!";
-        }
+       $status= $resultado[0]->status;
+       if (intval($status)==1){
+           if (password_verify($pass,$contrasena)) {
+               $tiempo_vida = 1800;
+               ini_set('session.gc_maxlifetime', $tiempo_vida);
+               session_set_cookie_params($tiempo_vida);
+               $_SESSION['user'] = $user;
+               $_SESSION['userrolid'] = 33333;
+               $_SESSION['idrestaurant'] = $resultado[0]->restaurantid;
+               header("Location: /panel");
+               exit;
+               //header('Location: panel');
+           } else {
+               $incorrecta="¡Contraseña incorrecta!";
+           }
+       }else{
+           $incorrecta="¡Su cuenta no está activa!";
+       }
     } else {
-        $sentencia = $base_de_datos->prepare("SELECT id_rol_usuario as id,contrasena_usuario as contrasena,restaurantid FROM trabajador WHERE nombre_usuario =:usuario");
+        $sentencia = $base_de_datos->prepare("SELECT id_rol_usuario as id,contrasena_usuario as contrasena,restaurantid,activo FROM trabajador WHERE nombre_usuario =:usuario");
         $sentencia->bindParam(':usuario', $user);
 
         try {
@@ -53,6 +58,9 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
         if ($sentencia->rowCount() === 1) {
             $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
             $contrasena= $resultado[0]->contrasena;
+            $status= $resultado[0]->activo;
+
+            if (intval($status)==1){
             if (password_verify(bin2hex($pass),$contrasena)) {
                 $tiempo_vida = 1800;
                 ini_set('session.gc_maxlifetime', $tiempo_vida);
@@ -66,6 +74,9 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
             } else {
                 $incorrecta="¡Contraseña incorrecta!";
                // header("Location: /login");
+            }
+            }else{
+                $incorrecta="¡Su cuenta no está activa!";
             }
         }else{
             $incorrecta="¡Usuario no encontrado!";
