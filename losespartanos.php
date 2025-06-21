@@ -1332,42 +1332,43 @@ $año_actual = date("Y");
         // Mensajes de marketing por categoría
         const mensajesMarketing = {
             alimentos: [
-                "¡Descubre lo mejor de nuestra cocina, sabor casero en cada bocado!",
-                "Nuestros alimentos te conectan con lo auténtico y delicioso.",
-                "Ingredientes frescos, recetas memorables.",
-                "¡El sabor de casa en cada platillo que pruebas!"
+                "Alimentos frescos y seleccionados para tu mesa.",
+                "Productos esenciales para tu cocina diaria.",
+                "Lleva a casa lo mejor del campo, directo y natural.",
+                "Confía en nosotros para tu despensa de calidad."
             ],
             bebidas: [
-                "Refresca tus sentidos con nuestras bebidas exclusivas y naturales.",
-                "Siente la chispa en cada sorbo.",
-                "Disfruta de nuestras bebidas artesanales, frías y deliciosas.",
-                "¡Eleva tu día con una bebida perfecta!"
+                "Refresca tu día con nuestras bebidas naturales y deliciosas.",
+                "Hidratación con sabor y calidad garantizada.",
+                "La bebida ideal para cada momento.",
+                "Encuentra tu bebida favorita al mejor precio."
             ],
             carnicos: [
-                "Calidad y frescura garantizada en cada corte de carne.",
-                "Carnes seleccionadas para los paladares exigentes.",
-                "El sabor fuerte de la tradición en cada bocado.",
-                "Saborea lo mejor del campo en tu mesa."
+                "Cortes de carne frescos y de excelente calidad.",
+                "Carnes seleccionadas para una mejor alimentación.",
+                "Frescura y sabor en cada pieza.",
+                "Calidad garantizada en cada corte de carne."
             ],
             confituras: [
-                "Endulza tu día con nuestras confituras artesanales irresistibles.",
-                "Dulces momentos que no olvidarás.",
-                "Hechas con amor, servidas con sabor.",
-                "¡Cada cucharada es puro placer!"
+                "Disfruta de nuestras galletas, dulces y confituras listas para saborear.",
+                "El toque dulce que no puede faltar en tu día.",
+                "Variedad de productos dulces para todos los gustos.",
+                "Satisface tu antojo con nuestras confituras listas para consumir."
             ],
             embutidos: [
-                "El sabor tradicional en embutidos curados con pasión.",
-                "Sabores intensos, calidad insuperable.",
-                "Hechos con recetas familiares, como debe ser.",
-                "¡Los mejores embutidos para tu picada perfecta!"
+                "Embutidos de calidad, perfectos para tus comidas o picadas.",
+                "Sabores clásicos que combinan con todo.",
+                "La mejor selección de embutidos listos para servir.",
+                "Calidad, sabor y practicidad en cada producto."
             ],
             condimentos: [
-                "Realza el sabor de tus platos con nuestros condimentos gourmet.",
-                "El toque secreto de cada receta está aquí.",
-                "Transforma lo simple en espectacular.",
-                "Una pizca de nuestros condimentos hace la diferencia."
+                "Potencia el sabor de tus comidas con nuestros condimentos.",
+                "El ingrediente que transforma cada receta.",
+                "Condimentos seleccionados para realzar tus platos.",
+                "Una pizca de calidad en cada preparación."
             ]
         };
+
 
         const mensajes = mensajesMarketing[categoria.toLowerCase()] || [];
 
