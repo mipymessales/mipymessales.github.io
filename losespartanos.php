@@ -1258,6 +1258,62 @@ $año_actual = date("Y");
                             document.getElementById('reservationMessage').style.color = 'green';
                             const inputCarrito = document.getElementById('carrito');
                             const carritoVisual = document.getElementById('carritoVisual');
+
+
+
+                            //contenidoHtml+='<div class="alert-warning" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><p>Tras confirmar su pedido, las cantidades están sujetas a cambios según el stock disponible y la demanda en línea de otros clientes. </p></div>';
+
+                            // Obtener contenido HTML del carrito
+                            var contenidoHtml = carritoVisual.innerHTML;
+
+// Obtener datos del cliente
+                            const nombre = document.getElementById("nombre").value.trim();
+                            const telefono = document.getElementById("telefono").value.trim();
+                            const correo = document.getElementById("correo").value.trim();
+                            const direccion = document.getElementById("direccion").value.trim();
+// const observaciones = document.getElementById("observaciones").value.trim(); // si lo necesitas
+
+// Validación básica
+                            if (!esNuloOVacio(correo)) {
+                                console.log("Enviar correo a > " + correo);
+
+                                // Preparar parámetros
+                                const params = `contenido=${encodeURIComponent(contenidoHtml)}&nombre=${encodeURIComponent(nombre)}&telefono=${encodeURIComponent(telefono)}&correo=${encodeURIComponent(correo)}&direccion=${encodeURIComponent(direccion)}`;
+
+                                const xhr = new XMLHttpRequest();
+                                xhr.open("POST", "controllers/enviar_pedido.php", true);
+                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                                xhr.onreadystatechange = function () {
+                                    if (xhr.readyState === 4) {
+                                        try {
+                                            const respuesta = JSON.parse(xhr.responseText);
+                                            if (xhr.status === 200 && respuesta.success) {
+                                                console.log(respuesta.message);
+                                            } else {
+                                                console.error("Error en respuesta:", respuesta.message);
+                                            }
+                                        } catch (e) {
+                                            console.error("Respuesta no válida del servidor:", xhr.responseText);
+                                        }
+                                    }
+                                };
+
+                                xhr.send(params);
+                            }
+
+
+
+
+
+
+
+
+
+
+
+
+
                             carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
                             inputCarrito.value='';
                             recargarCaptcha('r');
@@ -1454,14 +1510,14 @@ $año_actual = date("Y");
         let totalGeneral = 0;
        // let domicilio = 50;
         let html = `
- <div class="table-responsive">
-    <table class="factura">
+ <div class='table-responsive'>
+    <table class='factura'>
       <thead>
         <tr>
           <th>Producto</th>
-          <th class="text-center">Cantidad</th>
-          <th class="text-right">Precio Unitario</th>
-          <th class="text-right">Subtotal</th>
+          <th class='text-center'>Cantidad</th>
+          <th class='text-right'>Precio Unitario</th>
+          <th class='text-right'>Subtotal</th>
         </tr>
       </thead>
       <tbody>
@@ -1481,15 +1537,15 @@ $año_actual = date("Y");
             console.log(itemInventario);
 
             if (!itemInventario || typeof itemInventario=='undefined'){
-                advertencia = ' <span style="color:orange;">( » Chequeando disponibilidad...)</span>';
-                claseAdvertencia = ' style="background-color: #fff8e1;"';
+                advertencia = " <span style='color:orange;'>( » Chequeando disponibilidad...)</span>";
+                claseAdvertencia = " style='background-color: #fff8e1;'";
 
             }else if ( parseInt(itemInventario.disponible) !== 1 || parseInt(itemInventario.cantidad) === 0) {
-                advertencia = ' <span style="color:red;">(❌ No disponible)</span>';
-                claseAdvertencia = ' style="background-color: #ffe6e6;"';
+                advertencia =  " <span style='color:red;'>(❌ No disponible)</span> ";
+                claseAdvertencia =  " style='background-color: #ffe6e6;' ";
             } else if (parseInt(itemInventario.cantidad) < datos.cantidad) {
-                advertencia = ' <span style="color:orange;">(⚠ Stock insuficiente, rebaje la cantidad a: ('+ itemInventario.cantidad+')</span>';
-                claseAdvertencia = ' style="background-color: #fff8e1;"';
+                advertencia =  "<span style='color:orange;'>(⚠ Stock insuficiente, rebaje la cantidad a: ("+ itemInventario.cantidad+")</span> ";
+                claseAdvertencia =  " style='background-color: #fff8e1;' ";
             } else {
                 esValido = true;
             }
@@ -1503,21 +1559,21 @@ $año_actual = date("Y");
             html += `
         <tr${claseAdvertencia}>
           <td>${producto}${advertencia}</td>
-          <td class="text-center">${datos.cantidad}</td>
-          <td class="text-right">$${datos.precio.toFixed(2)}</td>
-          <td class="text-right">$${subtotal.toFixed(2)}</td>
+          <td class='text-center'>${datos.cantidad}</td>
+          <td class='text-right'>$${datos.precio.toFixed(2)}</td>
+          <td class='text-right'>$${subtotal.toFixed(2)}</td>
         </tr>
       `;
         }
         totalGeneral+=domicilio;
         html += `
-<tr class="total-row">
-          <td colspan="3" class="text-right"><strong>Domicilio</strong></td>
-          <td class="text-right"><strong>$${domicilio.toFixed(2)}</strong></td>
+<tr class='total-row'>
+          <td colspan='3' class='text-right'><strong>Domicilio</strong></td>
+          <td class='text-right'><strong>$${domicilio.toFixed(2)}</strong></td>
         </tr>
-        <tr class="total-row">
-          <td colspan="3" class="text-right"><strong>Total</strong></td>
-          <td class="text-right"><strong>$${totalGeneral.toFixed(2)}</strong></td>
+        <tr class='total-row'>
+          <td colspan='3' class='text-right'><strong>Total</strong></td>
+          <td class='text-right'><strong>$${totalGeneral.toFixed(2)}</strong></td>
         </tr>
 
       </tbody>
