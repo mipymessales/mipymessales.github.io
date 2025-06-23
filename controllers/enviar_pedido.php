@@ -109,7 +109,18 @@ $style="<html>
         .total-row td {
             font-weight: bold;
             background-color: #f0f0f0;
-        }</style></head>";
+        }
+        .alert-warning {
+    color: #856200;
+    background-color: #fff2cc;
+    border-color: #ffecb8; }
+        .section-title {
+    color: #856200;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .5rem;
+}
+        </style></head>";
 // Cuerpo del mensaje
 $contenido=$style."<body>".$contenido."</body>
 </html>";
@@ -119,7 +130,7 @@ $mensaje = "
 <p><strong>Teléfono:</strong> {$telefono}</p>
 <p><strong>Dirección:</strong> {$direccion}</p>
 <hr>
-<h3>Resumen del pedido:</h3>
+<h3>Resumen del pedido</h3>
 {$contenido}
 ";
 
