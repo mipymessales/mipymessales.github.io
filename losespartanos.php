@@ -1507,7 +1507,7 @@ $año_actual = date("Y");
         let carritoValido = {};
         let totalGeneral = 0;
        // let domicilio = 50;
-        let html = `
+        let html = `<div class="table-responsive">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 10px;">
   <tr><td align="center">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:max-content;border-collapse:collapse;">
@@ -1575,7 +1575,7 @@ $año_actual = date("Y");
       </td></tr>
     </table>
   </td></tr>
-</table>`;
+</table></div>`;
 
 
         // Mostrar HTML completo (con advertencias)
