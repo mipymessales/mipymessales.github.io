@@ -460,9 +460,6 @@ $año_actual = date("Y");
             }
         }
         #carritoVisual {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 16px;
             width: 100%;
             /*max-width: 500px;*/
             background-color: #fdfdfd;
@@ -482,7 +479,7 @@ $año_actual = date("Y");
 
         table.factura th,
         table.factura td {
-            border: 1px solid #ccc;
+           /* border: 1px solid #ccc;*/
             padding: 8px;
             text-align: left;
         }
@@ -512,7 +509,7 @@ $año_actual = date("Y");
         td, th {
             padding: 10px 15px; /* ← aquí ajustas el espacio interno */
             text-align: left;   /* mejora la lectura */
-            border: 0.5px solid #ccc;
+           /* border: 0.5px solid #ccc;*/
         }
         #estado-container {
             margin-top: 20px;
@@ -540,7 +537,7 @@ $año_actual = date("Y");
 
         .factura th, .factura td {
             padding: 8px;
-            border: 1px solid #ddd;
+           /* border: 1px solid #ddd;*/
             text-align: left;
         }
 
