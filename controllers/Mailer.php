@@ -15,12 +15,12 @@ class Mailer {
             $this->mailer->isSMTP();
             $this->mailer->Host = 'smtp.gmail.com';
             $this->mailer->SMTPAuth = true;
-            $this->mailer->Username = 'mipymessales@gmail.com'; // tu gmail
+            $this->mailer->Username = 'mipymessalesmanager@gmail.com'; // tu gmail
             $this->mailer->Password = 'lyxj jall tsiu ityv'; // generada en Gmail
             $this->mailer->SMTPSecure = 'tls';
             $this->mailer->Port = 587;
 
-            $this->mailer->setFrom('mipymessales@gmail.com', 'LosEspartanos');
+            $this->mailer->setFrom('mipymessalesmanager@gmail.com', 'LosEspartanos');
             $this->mailer->addAddress($to);
             $this->mailer->isHTML(true);
             $this->mailer->Subject = $subject;
