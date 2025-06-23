@@ -1511,75 +1511,75 @@ $año_actual = date("Y");
         let totalGeneral = 0;
        // let domicilio = 50;
         let html = `
- <div class='table-responsive'>
-    <table class='factura'>
-      <thead>
-        <tr>
-          <th>Producto</th>
-          <th class='text-center'>Cantidad</th>
-          <th class='text-right'>Precio Unitario</th>
-          <th class='text-right'>Subtotal</th>
-        </tr>
-      </thead>
-      <tbody>
-    `;
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 10px;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;border-collapse:collapse;">
+      <tr><td>
+        <h2 style="text-align:center;margin:0 0 20px;">Resumen del Pedido</h2>
+        <table cellpadding="0" cellspacing="0" border="1" width="100%" style="border-collapse:collapse;font-size:14px;">
+          <thead>
+            <tr style="background-color:#f2f2f2;">
+              <th align="left" style="padding:8px;">Producto</th>
+              <th align="center" style="padding:8px;">Cantidad</th>
+              <th align="right" style="padding:8px;">Precio Unitario</th>
+              <th align="right" style="padding:8px;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+`;
 
         for (const [producto, datos] of Object.entries(carrito)) {
             const subtotal = datos.cantidad * datos.precio;
-            const categoria = datos?.categoria || "";
-            const inventario = Array.isArray(allProductData[categoria])
-                ? allProductData[categoria]
-                : [];
-            const itemInventario = inventario.find(p => parseInt(p.id) === parseInt(datos.id));
+            const categoria = datos.categoria || '';
+            const invArr = Array.isArray(allProductData[categoria]) ? allProductData[categoria] : [];
+            const item = invArr.find(p => +p.id === +datos.id);
+
             let advertencia = '';
-            let claseAdvertencia = '';
-            let esValido = false;
+            let bg = '';
+            let valido = false;
 
-            console.log(itemInventario);
-
-            if (!itemInventario || typeof itemInventario=='undefined'){
-                advertencia = " <span style='color:orange;'>( » Chequeando disponibilidad...)</span>";
-                claseAdvertencia = " style='background-color: #fff8e1;'";
-
-            }else if ( parseInt(itemInventario.disponible) !== 1 || parseInt(itemInventario.cantidad) === 0) {
-                advertencia =  " <span style='color:red;'>(❌ No disponible)</span> ";
-                claseAdvertencia =  " style='background-color: #ffe6e6;' ";
-            } else if (parseInt(itemInventario.cantidad) < datos.cantidad) {
-                advertencia =  "<span style='color:orange;'>(⚠ Stock insuficiente, rebaje la cantidad a: ("+ itemInventario.cantidad+")</span> ";
-                claseAdvertencia =  " style='background-color: #fff8e1;' ";
+            if (!item) {
+                advertencia = `<span style="color:orange;">( » Chequeando disponibilidad...)</span>`;
+                bg = '#fff8e1';
+            } else if (+item.disponible !== 1 || +item.cantidad === 0) {
+                advertencia = `<span style="color:red;">(❌ No disponible)</span>`;
+                bg = '#ffe6e6';
+            } else if (+item.cantidad < datos.cantidad) {
+                advertencia = `<span style="color:orange;">(⚠ Stock insuficiente, rebaje la cantidad a: ${item.cantidad})</span>`;
+                bg = '#fff8e1';
             } else {
-                esValido = true;
+                valido = true;
             }
 
-            // Solo sumamos al total si es válido
-            if (esValido) {
-                totalGeneral += subtotal;
-                carritoValido[producto] = datos; // Añadir a carrito limpio
-            }
+            if (valido) totalGeneral += subtotal, carritoValido[producto] = datos;
 
             html += `
-        <tr${claseAdvertencia}>
-          <td>${producto}${advertencia}</td>
-          <td class='text-center'>${datos.cantidad}</td>
-          <td class='text-right'>$${datos.precio.toFixed(2)}</td>
-          <td class='text-right'>$${subtotal.toFixed(2)}</td>
-        </tr>
-      `;
+    <tr style="background-color:${bg};">
+      <td style="padding:8px;">${producto} ${advertencia}</td>
+      <td align="center" style="padding:8px;">${datos.cantidad}</td>
+      <td align="right" style="padding:8px;">$${datos.precio.toFixed(2)}</td>
+      <td align="right" style="padding:8px;">$${subtotal.toFixed(2)}</td>
+    </tr>`;
         }
-        totalGeneral+=domicilio;
-        html += `
-<tr class='total-row'>
-          <td colspan='3' class='text-right'><strong>Domicilio</strong></td>
-          <td class='text-right'><strong>$${domicilio.toFixed(2)}</strong></td>
-        </tr>
-        <tr class='total-row'>
-          <td colspan='3' class='text-right'><strong>Total</strong></td>
-          <td class='text-right'><strong>$${totalGeneral.toFixed(2)}</strong></td>
-        </tr>
 
-      </tbody>
+        totalGeneral += domicilio;
+
+        html += `
+    <tr style="background-color:#f2f2f2;">
+      <td colspan="3" align="right" style="padding:8px;"><strong>Domicilio</strong></td>
+      <td align="right" style="padding:8px;"><strong>$${domicilio.toFixed(2)}</strong></td>
+    </tr>
+    <tr style="background-color:#e2e2e2;">
+      <td colspan="3" align="right" style="padding:8px;"><strong>Total</strong></td>
+      <td align="right" style="padding:8px;"><strong>$${totalGeneral.toFixed(2)}</strong></td>
+    </tr>
+          </tbody>
+        </table>
+      </td></tr>
     </table>
-            </div>`;
+  </td></tr>
+</table>`;
+
 
         // Mostrar HTML completo (con advertencias)
         carritoVisual.innerHTML = html;
