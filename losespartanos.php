@@ -1261,10 +1261,11 @@ $año_actual = date("Y");
 
 
 
-                            //contenidoHtml+='<div class="alert-warning" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><p>Tras confirmar su pedido, las cantidades están sujetas a cambios según el stock disponible y la demanda en línea de otros clientes. </p></div>';
+                            //
 
                             // Obtener contenido HTML del carrito
                             var contenidoHtml = carritoVisual.innerHTML;
+                            contenidoHtml+='<div class="alert-warning" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><p>Tras confirmar su pedido, las cantidades están sujetas a cambios según el stock disponible y la demanda en línea de otros clientes. </p></div>';
 
 // Obtener datos del cliente
                             const nombre = document.getElementById("nombre").value.trim();
