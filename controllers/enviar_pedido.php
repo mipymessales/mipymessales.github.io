@@ -34,7 +34,6 @@ $mensaje = "
 <p><strong>Teléfono:</strong> {$telefono}</p>
 <p><strong>Dirección:</strong> {$direccion}</p>
 <hr>
-<h3>Resumen del pedido</h3>
 {$contenido}
 ";
 
