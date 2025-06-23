@@ -1513,7 +1513,7 @@ $año_actual = date("Y");
         let html = `
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 10px;">
   <tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;border-collapse:collapse;">
+    <table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:max-content;border-collapse:collapse;">
       <tr><td>
         <h2 style="text-align:center;margin:0 0 20px;">Resumen del Pedido</h2>
         <table cellpadding="0" cellspacing="0" border="1" width="100%" style="border-collapse:collapse;font-size:14px;">
