@@ -431,15 +431,15 @@ $año_actual = date("Y");
                 text-align: center;
             }
             .display-3 {
-                font-size: 18px;
-                text-align: center;
+                font-size: 35px;
+                font-weight: bold;
             }
-            .section h2 {
-                font-size: 18px;
-                text-align: center;
+            section h2 {
+                font-size: 20px!important;
+                text-align: center!important;
             }
             td h2 {
-                font-size: 18px;
+                font-size: 20px;
                 text-align: center;
             }
 
@@ -492,7 +492,7 @@ $año_actual = date("Y");
         table.factura th,
         table.factura td {
            /* border: 1px solid #ccc;*/
-            padding: 8px;
+            padding: 5px;
             text-align: left;
         }
 
@@ -548,7 +548,7 @@ $año_actual = date("Y");
         }
 
         .factura th, .factura td {
-            padding: 8px;
+            padding: 5px;
            /* border: 1px solid #ddd;*/
             text-align: left;
         }
