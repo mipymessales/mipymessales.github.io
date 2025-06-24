@@ -330,7 +330,7 @@ $año_actual = date("Y");
             background-repeat: no-repeat;
             background-position: top center;
         }
-        .hero:before {
+     /*   .hero:before {
             content: "";
             background: color-mix(in srgb, #fafbfe, transparent 30%);
             position: absolute;
@@ -338,7 +338,7 @@ $año_actual = date("Y");
             top: 0;
             left: 0;
             right: 0;
-        }
+        }*/
 
         .hero .container {
             position: relative;
@@ -1008,14 +1008,14 @@ $año_actual = date("Y");
             const img = document.createElement("img");
             img.src = "images/" + producto.foto + "?v=" + Date.now();
             img.alt = "Slide " + (index+1);
-            if (index === 1) img.classList.add("active"); // solo el primero con clase active
+            if (index === 0) img.classList.add("active"); // solo el primero con clase active
             contenedor.appendChild(img);
         });
         if (esNuloOVacio(product)){
             for (var i=1;i<6;i++){
                 console.log("Product es nulo");
                 const img = document.createElement("img");
-                img.src = "/images/abarrotes.png";
+                img.src = "images/abarrotes.png";
                 img.alt = "Slide " + (i);
                 if (i === 1) img.classList.add("active"); // solo el primero con clase active
                 contenedor.appendChild(img);
