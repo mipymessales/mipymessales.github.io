@@ -614,6 +614,10 @@ $año_actual = date("Y");
                 width: 100%;
             }
         }
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
