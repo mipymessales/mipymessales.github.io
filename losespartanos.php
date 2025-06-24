@@ -1006,14 +1006,14 @@ $año_actual = date("Y");
                 contenedor.innerHTML = "";
         product.forEach((producto, index) => {
             const img = document.createElement("img");
-            img.src = "/images/" + producto.foto;
+            img.src = "images/" + producto.foto + "?v=" + Date.now();
             img.alt = "Slide " + (index+1);
             if (index === 1) img.classList.add("active"); // solo el primero con clase active
             contenedor.appendChild(img);
         });
         if (esNuloOVacio(product)){
             for (var i=1;i<6;i++){
-                //console.log("Product es nulo");
+                console.log("Product es nulo");
                 const img = document.createElement("img");
                 img.src = "/images/abarrotes.png";
                 img.alt = "Slide " + (i);
@@ -1025,7 +1025,7 @@ $año_actual = date("Y");
             const slides = document.querySelectorAll('.hero-section img');
             // //console.log(slides);
             // console.log("InDEX: "+index);
-            //if (typeof intervaloSlide !== 'undefined' && intervaloSlide !== null) clearInterval(intervaloSlide);
+           if (typeof intervaloSlide !== 'undefined' && intervaloSlide !== null) clearInterval(intervaloSlide);
             index=1;
             intervaloSlide =setInterval(() => {
                 if (slides.hasOwnProperty(index)){
