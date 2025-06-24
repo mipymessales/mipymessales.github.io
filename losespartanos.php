@@ -330,7 +330,7 @@ $año_actual = date("Y");
             background-repeat: no-repeat;
             background-position: top center;
         }
-     /*   .hero:before {
+        .hero:before {
             content: "";
             background: color-mix(in srgb, #fafbfe, transparent 30%);
             position: absolute;
@@ -338,7 +338,7 @@ $año_actual = date("Y");
             top: 0;
             left: 0;
             right: 0;
-        }*/
+        }
 
         .hero .container {
             position: relative;
