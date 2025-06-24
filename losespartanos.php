@@ -430,6 +430,18 @@ $año_actual = date("Y");
                 margin-top: 115px !important;
                 text-align: center;
             }
+            .display-3 {
+                font-size: 18px;
+                text-align: center;
+            }
+            .section h2 {
+                font-size: 18px;
+                text-align: center;
+            }
+            td h2 {
+                font-size: 18px;
+                text-align: center;
+            }
 
             .hero p {
                 font-size: 12px;
@@ -507,7 +519,7 @@ $año_actual = date("Y");
         }
 
         td, th {
-            padding: 10px 15px; /* ← aquí ajustas el espacio interno */
+           /* padding: 10px 15px;*/ /* ← aquí ajustas el espacio interno */
             text-align: left;   /* mejora la lectura */
            /* border: 0.5px solid #ccc;*/
         }
@@ -994,7 +1006,7 @@ $año_actual = date("Y");
                 contenedor.innerHTML = "";
         product.forEach((producto, index) => {
             const img = document.createElement("img");
-            img.src = "images/" + producto.foto;
+            img.src = "/images/" + producto.foto;
             img.alt = "Slide " + (index+1);
             if (index === 1) img.classList.add("active"); // solo el primero con clase active
             contenedor.appendChild(img);
@@ -1003,7 +1015,7 @@ $año_actual = date("Y");
             for (var i=1;i<6;i++){
                 //console.log("Product es nulo");
                 const img = document.createElement("img");
-                img.src = "images/abarrotes.png";
+                img.src = "/images/abarrotes.png";
                 img.alt = "Slide " + (i);
                 if (i === 1) img.classList.add("active"); // solo el primero con clase active
                 contenedor.appendChild(img);
