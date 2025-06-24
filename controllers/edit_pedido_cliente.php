@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !SqlInjectionUtils::checkSqlInjecti
         $data = ($_POST['data']);
         $idrestaurant=empty($_POST['idrestaurant'])?$_SESSION['idrestaurant']:$_POST['idrestaurant'];
         $trans= 0;
+
         foreach ($data as $cliente) {
         $categoria = $cliente['categoria'];
 
@@ -69,7 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !SqlInjectionUtils::checkSqlInjecti
             $id_pedidos = $cliente['id'];
             $sentencia = $base_de_datos->prepare("DELETE FROM pedidoscliente WHERE id=:idpedidos");
             $sentencia->bindParam(':idpedidos',$id_pedidos);
-           $sentencia->execute();
+            try {
+                $sentencia->execute();
+            }catch (Exception $e){
+                echo  print_r($e->getTraceAsString());
+            }
+
         }else{
             $idplato=$cliente['idplato'];
             $sql = "INSERT INTO ventas (restaurantid, id_producto, cantidad, precioactual, subtotal, categoria,transferencia) 
@@ -84,12 +90,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !SqlInjectionUtils::checkSqlInjecti
             $stmt->bindParam(":categoria",  $categoria);
             $stmt->bindParam(":transferencia",  $trans);
             try {
-                $stmt->execute();
+                if ($stmt->execute()){
+                $cantidadARestar=intval($cliente['cantidad']);
+                $stmP = $base_de_datos->prepare("UPDATE ".$categoria." SET cantidad = cantidad - ? WHERE id = ? AND cantidad >= ?");
+                $stmP->execute([$cantidadARestar, $idplato, $cantidadARestar]);
+            }
             }catch (Exception $e){
                 echo  print_r($e->getTraceAsString());
             }
         }
     }
+
         $sentencia = $base_de_datos->prepare("UPDATE cliente SET estado_cuenta = :estado WHERE id = :id");
         $sentencia->bindParam(':id',$idcliente);
         $estadocuenta=0;
