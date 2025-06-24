@@ -435,7 +435,10 @@ $año_actual = date("Y");
                 font-weight: bold;
             }
             section h2 {
-                font-size: 20px!important;
+                font-size: 30px!important;
+                text-align: center!important;
+            }
+            section h4 {
                 text-align: center!important;
             }
             td h2 {
