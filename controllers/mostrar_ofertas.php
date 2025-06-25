@@ -49,9 +49,9 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                     <div class='image-wrapper text-center mb-2'>";
 
                                                                          if($foto!=null){
-                                                                             $html.="    <img class='img-fluid rounded-circle' src='/images/{$foto}' style='height: 120px;width: 120px; object-fit: cover;'>";
+                                                                             $html.="    <img class='img-fluid rounded-circle' src='/images/{$foto}' style='height: 120px;width: 120px; object-fit: cover !important'>";
                                                                          }else{
-                                                                          $html.="    <img class='img-fluid rounded-circle' src='/images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px; object-fit: cover;'>";
+                                                                          $html.="    <img class='img-fluid rounded-circle' src='/images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px; object-fit: cover !important'>";
                                                                          }
                                                                 $html.="</div>
                                                                     <div class='card-body'>
@@ -120,9 +120,9 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                     </div>
                                                                     <div class='image-wrapper text-center'>";
                                                                          if($foto!=null){
-                                                                             $html.="<img class='img-fluid rounded-circle' src='/images/{$foto}' style='height: 120px;width: 120px; object-fit: cover;'>";
+                                                                             $html.="<img class='img-fluid rounded-circle' src='/images/{$foto}' style='height: 120px;width: 120px; object-fit: cover !important'>";
                                                                          }else{
-                                                                          $html.="  <img class='img-fluid rounded-circle' src='/images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px; object-fit: cover;'>";
+                                                                          $html.="  <img class='img-fluid rounded-circle' src='/images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px; object-fit: cover !important'>";
                                                                          }
                                                                 $html.="  </div>
                                                                 </div>
