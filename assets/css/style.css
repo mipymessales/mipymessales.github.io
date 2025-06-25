@@ -15788,11 +15788,13 @@ button {
     width: 100%;
     height: 287px !important;
     border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem; }
+    border-top-right-radius: 0.25rem;
+    object-fit: cover;}
 
 @media (max-width: 768px) {
   .vertical-card__menu--image img {
     height: 200px !important;
+    object-fit: cover;
   }
 }
 

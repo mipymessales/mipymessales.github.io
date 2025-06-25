@@ -194,7 +194,7 @@ $username=$_SESSION['user'];
                                                     <label class="col-lg-4 col-form-label" for="cantidad">Cantidad <span class="text-danger">*</span>
                                                     </label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" id="cantidad" name="cantidad" placeholder="10">
+                                                        <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="10">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">

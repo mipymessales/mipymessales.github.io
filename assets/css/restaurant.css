@@ -15986,7 +15986,8 @@ button:focus {
 .vertical-card__menu--image img {
     width: 100%;
     border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem; }
+    border-top-right-radius: 0.25rem;
+    object-fit: cover;}
 
 .vertical-card__menu--status.closed {
     background: #fa5c7c; }
