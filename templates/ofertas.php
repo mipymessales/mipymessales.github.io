@@ -1,6 +1,7 @@
 <?php
 $restaurantId=$_SESSION['idrestaurant'];
 $username=$_SESSION['user'];
+global $availableIds;
 ?>
     <meta charset="UTF-8">
     <title>Ofertas</title>
@@ -86,7 +87,7 @@ $username=$_SESSION['user'];
         <h1>Selecciona una categoría para ver los productos.</h1>
 <div class="custom-tab-4" id="tabstyle">
         <div class="nav nav-tabs">
-            <?php if ($restaurantId==1){ ?>
+            <?php if (in_array($restaurantId,$availableIds)){ ?>
                     <div class="row">
                         <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
                             <div class="tab active" id="alimentos" onclick="cargarCategoria('alimentos','<?php echo $restaurantId;?>',true)">Alimentos</div>
@@ -175,7 +176,7 @@ $username=$_SESSION['user'];
                                                 </div>
                                             </div>
 
-                                            <?php   if($restaurantId!=1){ ?>
+                                            <?php   if(!in_array($restaurantId,$availableIds)){ ?>
                                             <div class="form-group row">
                                                 <label class="col-lg-4 col-form-label" for="ingredientes">Ingredientes <span class="text-danger">*</span>
                                                 </label>
@@ -189,7 +190,7 @@ $username=$_SESSION['user'];
                                         </div>
                                         <div class="col-12">
 
-                                            <?php   if($restaurantId==1){ ?>
+                                            <?php   if(in_array($restaurantId,$availableIds)){ ?>
                                                 <div class="form-group row">
                                                     <label class="col-lg-4 col-form-label" for="cantidad">Cantidad <span class="text-danger">*</span>
                                                     </label>
@@ -305,7 +306,7 @@ $username=$_SESSION['user'];
         const categoriaO = <?php echo ($_REQUEST["categoria"])??"undefined"; ?>;
        // cargarCategoria(categoriaO);
         if (esNuloOVacio(categoriaO)) {
-            if (idrestaurant == 1){
+            if (idrestaurant == 1 || idrestaurant==2){
                 cargarCategoria('alimentos',idrestaurant,true);
             }else{
                 cargarCategoria('entrantes',idrestaurant);

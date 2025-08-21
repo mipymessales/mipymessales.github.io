@@ -26,6 +26,7 @@ if (isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($
             $idplato=$cliente['id_plato'];
             $idpedido=$cliente['id'];
             $cantidad=$cliente['cantidad'];
+            $ip=$cliente['ip'];
             if (empty($categoria)) {
                 continue;
             }
@@ -44,6 +45,7 @@ if (isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($
                 $resultado[0]->idcliente = $idcliente;
                 $resultado[0]->idplato = $idplato;
                 $resultado[0]->cantidad = $cantidad;
+                $resultado[0]->ip = $ip;
               //  $subtotal+= intval($cantidad)*floatval($resultado[0]->precio);
                 $resultado[0]->subtotal= intval($cantidad)*floatval($resultado[0]->precio);
                 $pedidos[] =

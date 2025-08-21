@@ -117,6 +117,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !SqlInjectionUtils::checkSqlInjecti
         }catch (Exception $e){
             echo  print_r($e->getTraceAsString());
         }
+    }elseif ($action==='bloquear'){
+        $idcliente = $_POST['idcliente'];
+        $data = ($_POST['data']);
+        $sentencia = $base_de_datos->prepare("UPDATE cliente SET estado_cuenta = :estado WHERE id = :id");
+        $sentencia->bindParam(':id',$idcliente);
+        $estadocuenta=0;
+        $sentencia->bindParam(':estado',$estadocuenta);
+
+        try {
+            if ($sentencia->execute()) {
+
+                echo json_encode(["status" => "success"]);
+
+            } else {
+                echo json_encode(["status" => "error"]);
+            }
+        }catch (Exception $e){
+            echo  print_r($e->getTraceAsString());
+        }
+
+        $intentos = [];
+        $archivo_log = 'bloqueos.txt';
+        $idrestaurant=empty($_POST['idrestaurant'])?$_SESSION['idrestaurant']:$_POST['idrestaurant'];
+     foreach ($data as $cliente) {
+         $categoria = $cliente['categoria'];
+         $ip=$cliente['ip'];
+         $intentos[$ip] = ['bloqueado' => 1, 'fecha' => time(),"restaurantid"=>$idrestaurant];
+
+             $id_pedidos = $cliente['id'];
+             $sentencia = $base_de_datos->prepare("DELETE FROM pedidoscliente WHERE id=:idpedidos");
+             $sentencia->bindParam(':idpedidos', $id_pedidos);
+             try {
+                 $sentencia->execute();
+             } catch (Exception $e) {
+                 echo print_r($e->getTraceAsString());
+             }
+
+     }
+
+        // Guardar log actualizado
+        file_put_contents($archivo_log, json_encode($intentos));
+
+
     }else{
         http_response_code(400);
         echo "Acción no válida";

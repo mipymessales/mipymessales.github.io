@@ -555,8 +555,18 @@
                     cerrarCuenta(data["data"],idcliente);
 
                 };
-                buttonCerrarCuenta.appendChild(botonC);
+                const botonB = document.createElement('button');
+                botonB.textContent = 'Bloquear Cliente';
+                botonB.classList.add('btn','btn-danger','btn-block', 'border-0', 'text-black-50');
+                botonB.style.width="100%";
+                botonB.style.right="0";
+                botonB.style.marginTop="15px";
+                botonB.onclick = function() {
+                    bloquearCliente(data["data"],idcliente);
 
+                };
+                buttonCerrarCuenta.appendChild(botonC);
+                buttonCerrarCuenta.appendChild(botonB);
 
 
             },
@@ -593,7 +603,31 @@
             }
         });
     }
+    function bloquearCliente(data,idcliente) {
+        //alert(idcliente);
+        $('#descripcion').html('<div class="alert-warning mb-2" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Cerrando Pedido!</h5></div>');
+        $.ajax({
+            url: '/controllers/edit_pedido_cliente.php',
+            dataType:'json',
+            method: 'POST',
+            data: { data: data,idcliente:idcliente,action:'bloquear'},
+            success: function(data) {
+                // document.getElementById('contenido').innerHTML =data;
+                //console.log(data);
+                if (data["status"]==="success"){
+                    var pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+                    idcliente = Number(idcliente);
+                    // console.log(JSON.stringify(pedidos));
+                    pedidos = pedidos.filter(item => item.idcliente !== idcliente);
+                    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+                    //console.log(JSON.stringify(pedidos));
+                    location.reload();
 
+                }
+
+            }
+        });
+    }
     const navOfertas = document.querySelectorAll('.tab');
     // Función para establecer el enlace activo
     function setActiveLinkNav(link) {

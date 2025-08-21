@@ -10,6 +10,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
 
     $ip = $_SERVER['REMOTE_ADDR'];
     $archivo_log = 'intentos.txt';
+    $archivo_bloqueo = 'bloqueos.txt';
     $captcha_usuario = $_POST['captchar'] ?? '';
     $captcha_sesion = $_SESSION['captchar'] ?? '';
 
@@ -18,8 +19,21 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
     if (file_exists($archivo_log)) {
         $intentos = json_decode(file_get_contents($archivo_log), true);
     }
+    $bloqueados = [];
+    if (file_exists($archivo_bloqueo)) {
+        $bloqueados = json_decode(file_get_contents($archivo_bloqueo), true);
+    }
     if (!isset($intentos[$ip])) {
         $intentos[$ip] = ['intentos' => 0, 'ultimo' => time()];
+    }
+
+    // Chequear bloqueos
+    if ($bloqueados[$ip]['bloqueado']) {
+        echo json_encode([
+            "status" => "RATE_LIMITED",
+            "message" => "El pedido no se ha registrado porque ha usado la aplicación de forma inadecuada. Contacte con soporte: mipymessalesmanager@gmail.com"
+        ]);
+        exit;
     }
 
 // Limitar intentos
@@ -60,8 +74,8 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                 $idcliente = $base_de_datos->lastInsertId();
 
                 foreach ($carrito as $item){
-                    $sql = "INSERT INTO pedidoscliente (id_cliente, id_plato, nombre, cantidad,precioventa, telefono, direccion, correo, restaurantid, categoria) 
-        VALUES (:idcliente, :idplato, :nombre, :cantidad,:precioventa, :telefono, :direccion, :correo, :restaurantid, :categoria) ";
+                    $sql = "INSERT INTO pedidoscliente (id_cliente, id_plato, nombre, cantidad,precioventa, telefono, direccion, correo, restaurantid, categoria, ip) 
+        VALUES (:idcliente, :idplato, :nombre, :cantidad,:precioventa, :telefono, :direccion, :correo, :restaurantid, :categoria,:ip) ";
 
                     $stmt = $base_de_datos->prepare($sql);
                     $stmt->bindParam(":idcliente", $idcliente);
@@ -76,6 +90,8 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                     $stmt->bindParam(":direccion", $direccion);
                     $stmt->bindParam(":correo", $correo);
                     $stmt->bindParam(":restaurantid",  $restaurantid);
+                    $stmt->bindParam(":ip",  $ip);
+
                     $stmt->execute();
                 }
 

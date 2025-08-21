@@ -476,7 +476,7 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
 
 
 
-                    $sentencia = $base_de_datos->query("select * from trabajador;");
+                    $sentencia = $base_de_datos->query("select * from trabajador where restaurantid='.$restaurantid.';");
                     $trabajadores = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
 
@@ -582,6 +582,57 @@ if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInj
             </div>
             </div>
         </div>
+
+        <div class="accordion-item">
+            <button class="accordion-header">Usuarios bloqueados</button>
+            <div class="accordion-content" id="gastos-lista">
+                <hr>
+                <h4>Lista de Ip</h4>
+                <?php
+
+                $archivo_bloqueo = ROOT_DIR.'controllers/bloqueos.txt';
+                $bloqueados = [];
+                if (file_exists($archivo_bloqueo)) {
+                    $bloqueados = json_decode(file_get_contents($archivo_bloqueo), true);
+                }
+                ?>
+                <div class="container-fluid tabla-scroll">
+                    <table id="tabla-gastos" border="1">
+                        <thead>
+                        <tr><th>Ip</th><th>Estado</th><th>Fecha</th><th>Acción</th></tr>
+                        </thead>
+                        <tbody>
+                        <?php  foreach ($bloqueados as $item=>$tmp){
+
+
+
+                        ?>
+                        <tr>
+                            <td><?php echo $item  ?></td>
+                            <td><?php echo $tmp['bloqueado']  ?></td>
+                            <td><?php $fecha = date("d/m/Y", $tmp['fecha']);  echo $fecha;  ?></td>
+                            <?php if ($tmp['bloqueado']){ ?>
+                                <td><button class="btn btn-success" onclick="editarbloqueo(<?php echo "'".$item."'" ?>,<?php echo "'".$restaurantid."'" ?>)">Desbloquear ip</button></td>
+
+                            <?php
+                            }else{
+                            ?>
+                                <td><button class="btn btn-warning" onclick="editarbloqueo(<?php echo "'".$item."'" ?>,<?php echo "'".$restaurantid."'" ?>)">Bloquear ip</button></td>
+                            <?php
+                            }
+                            ?>
+                        </tr>
+
+                        <?php
+                            }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
     </div>
     </div>
 
@@ -925,6 +976,17 @@ document.getElementById("loader").style.display = "none";
             if (content.classList.contains("expanded")) {
                 content.style.maxHeight = "100%";
             }
+        });
+    }
+    function editarbloqueo(ip,restaurantid) {
+        fetch('controllers/config_bloqueo.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ip,restaurantid})
+        }).then(() => {
+            location.reload();
+           // Swal.fire('Guardado', 'Bloqueo actualizado con éxito', 'success');
+
         });
     }
 

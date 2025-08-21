@@ -6,11 +6,12 @@ require_once ROOT_DIR . "controllers/class.SqlInjectionUtils.php";
 if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
     require_once ROOT_DIR . "pdo/conexion.php";
     global $base_de_datos;
+    global $availableIds;
     $idrestaurant = $_POST['idrestaurant'];
     if (isset($_POST['categoria']))
         $categoria = $_POST['categoria'];
     else {
-        if ($idrestaurant == 1) {
+        if (in_array($idrestaurant,$availableIds)) {
             $categoria = 'alimentos';
         } else
             $categoria = 'entrantes';
@@ -39,7 +40,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
             $nombre = $fila->nombre;
             $ingredientes = $fila->ingredientes;
             $tipo = $fila->tipo;
-            if ($idrestaurant == 1) {
+            if (in_array($idrestaurant,$availableIds)) {
                 $precioventa = $fila->precioventa;
                 $preciocompra = $fila->preciocompra;
                 $preciotransferencia = $fila->preciotransferencia;

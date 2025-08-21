@@ -9,7 +9,7 @@ require ROOT_DIR .'library/PHPMailer/Exception.php';
 class Mailer {
     private $mailer;
 
-    public function __construct($to, $subject = 'Nuevo Pedido') {
+    public function __construct($to, $subject = 'Datos de la compra') {
         $this->mailer = new PHPMailer(true);
         try {
             $this->mailer->isSMTP();
@@ -20,7 +20,7 @@ class Mailer {
             $this->mailer->SMTPSecure = 'tls';
             $this->mailer->Port = 587;
 
-            $this->mailer->setFrom('mipymessalesmanager@gmail.com', 'LosEspartanos');
+            $this->mailer->setFrom('mipymessalesmanager@gmail.com', 'Recibo de compra');
             $this->mailer->addAddress($to);
             $this->mailer->isHTML(true);
             $this->mailer->Subject = $subject;

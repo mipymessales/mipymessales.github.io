@@ -147,9 +147,10 @@ if ($uploadOk == 0) {
     defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
     include_once ROOT_DIR."pdo/conexion.php";
 global $base_de_datos;
+    global $availableIds;
 if (isset($_POST["insertar"])){
     $categoria=$_POST["categ"];
-    if ($idrestaurant==1){
+    if (in_array($idrestaurant,$availableIds)){
         $sentencia = $base_de_datos->prepare("INSERT INTO ".$categoria." (nombre, ingredientes, cantidad, preciocompra, precioventa, preciotransferencia, expira, disponible, restaurantid, tipo, foto, valoracion) VALUES (:nombrep, :ingredientes, :cantidad,:preciocompra,:precioventa,:preciotranferencia,:expira, :disponible, :idrestaurant, :tipo, :image,'5')");
         $cantidad = $_POST["cantidad"];
         $preciocompra = $_POST["preciocompra"];
@@ -176,7 +177,7 @@ if (isset($_POST["insertar"])){
     $sentencia->bindParam(':tipo',$categoria);
 }else{
 
-    if ($idrestaurant==1){
+    if (in_array($idrestaurant,$availableIds)){
         $sentencia = $base_de_datos->prepare("UPDATE ".$categoria." SET  nombre=:nombrep, ingredientes=:ingredientes, expira=:expira,preciotransferencia=:preciotranferencia, cantidad=:cantidad, preciocompra=:preciocompra, precioventa=:precioventa, disponible=:disponible, foto=:image WHERE id=:id_bedida");
         $cantidad = $_POST["cantidad"];
         $preciocompra = $_POST["preciocompra"];

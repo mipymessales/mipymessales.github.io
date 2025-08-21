@@ -74,11 +74,11 @@
 
 
                                                     </div>
-                                                    <?php   if($idrestaurant!=1){ ?>
+                                                    <?php   if(!in_array($idrestaurant,$availableIds)){ ?>
                                                     <p><?php echo $ingredientes;  ?></p>
                                                     <?php  } ?>
                                                     <div class="mb-2">
-                                                        <?php   if($idrestaurant==1){ ?>
+                                                        <?php   if(in_array($idrestaurant,$availableIds)){ ?>
                                                         <p class="">Cantidad: <span><?php echo $cantidad;  ?></span></p>
                                                         <p class="">Precio compra: $<span><?php echo $preciocompra;  ?> cup</span></p>
                                                         <p class="">Precio venta: $<span><?php echo $precioventa;  ?> cup</span></p>

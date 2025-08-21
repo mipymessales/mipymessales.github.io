@@ -73,7 +73,7 @@
                                                     <input type="text" class="form-control" id="nombrep" name="nombrep" value="<?php echo $nombre;?>" placeholder="Inserte el nombre de la bebida..">
                                                 </div>
                                             </div>
-                                            <?php   if($idrestaurant!=1){ ?>
+                                            <?php   if(!in_array($idrestaurant,$availableIds)){ ?>
                                             <div class="form-group row">
                                                 <label class="col-lg-4 col-form-label" for="ingredientes">Ingredientes <span class="text-danger">*</span>
                                                 </label>
@@ -86,7 +86,7 @@
                                         <div class="col-12">
 
 
-                                         <?php   if($idrestaurant==1){ ?>
+                                         <?php   if(in_array($idrestaurant,$availableIds)){ ?>
                                              <div class="form-group row">
                                                  <label class="col-lg-4 col-form-label" for="cantidad">Cantidad <span class="text-danger">*</span>
                                                  </label>

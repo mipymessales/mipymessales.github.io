@@ -103,8 +103,8 @@
         }
 
         th {
-            background-color: #3498db;
-            color: white;
+            background-color: #3498db!important;
+            color: white!important;
         }
 
         .total-mesa {

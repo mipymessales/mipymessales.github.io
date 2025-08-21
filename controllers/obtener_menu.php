@@ -4,19 +4,19 @@ defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
 require_once ROOT_DIR . "controllers/class.SqlInjectionUtils.php";
 if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
     require_once ROOT_DIR."pdo/conexion.php";
-    global $base_de_datos;
+    global $base_de_datos,$availableIds;
     $idrestaurant = $_POST['idrestaurant'];
     if (isset($_POST['categoria']))
         $categoria = $_POST['categoria'];
     else {
-        if ($idrestaurant == 1) {
+        if (in_array($idrestaurant,$availableIds)) {
             $categoria = 'alimentos';
         } else
             $categoria = 'entrantes';
     }
 
 
-    if ($idrestaurant == 1) {
+    if (in_array($idrestaurant,$availableIds)) {
         $stmt = $base_de_datos->prepare("SELECT id,nombre,ingredientes,tipo,precioventa,disponible,preciocompra,preciotransferencia,valoracion,cantidad,expira,foto FROM " . $categoria . " WHERE restaurantid= " . $idrestaurant . "; ");
     } else {
         $stmt = $base_de_datos->prepare("SELECT id,nombre,ingredientes,tipo,precio,disponible,valoracion,foto FROM " . $categoria . " WHERE restaurantid= " . $idrestaurant . "; ");
@@ -46,7 +46,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
             $nombre = $fila->nombre;
             $ingredientes = $fila->ingredientes;
             $tipo = $fila->tipo;
-            if ($idrestaurant == 1) {
+            if (in_array($idrestaurant,$availableIds)) {
                 $precioventa = $fila->precioventa;
                 $preciocompra = $fila->preciocompra;
                 $preciotransferencia = $fila->preciotransferencia;
@@ -106,7 +106,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                         </div> ";
 
 
-            if ($idrestaurant == 1) {
+            if (in_array($idrestaurant,$availableIds)) {
                 $a .= "   <div class='mb-2'>
                             <p class='mb-2'>Cantidad:<span>" . $cantidad . "</span></p>";
                 $a .= "   

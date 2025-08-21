@@ -10,6 +10,8 @@ $contraseña = "123ok";
 $nombreBaseDeDatos = "if0_38726532_restaurant_uno";
 $rutaServidor = "localhost";
 $puerto = "3306";*/
+global $availableIds;
+$availableIds=[1,2];
 try {
     global $base_de_datos;
     $base_de_datos = new PDO("mysql:host=$rutaServidor;port=$puerto;dbname=$nombreBaseDeDatos;charset=utf8mb4", $usuario, $contraseña);
