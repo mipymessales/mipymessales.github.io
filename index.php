@@ -4,7 +4,7 @@
 $url = isset($_GET['url']) ? rtrim($_GET['url'], '/') : '';
 $segments = explode('/', $url);
 
-$controllerName = !empty($segments[0]) ? ucfirst($segments[0]) . 'Controller' : 'RestaurantController';
+$controllerName = !empty($segments[0]) ? ucfirst($segments[0]) . 'Controller' : 'SaguaenlineaController';
 $method = $segments[1] ?? 'index';
 $params = array_slice($segments, 2);
 
