@@ -18,12 +18,13 @@ if (SqlInjectionUtils::checkSqlInjectionAttempt($_POST)){
 $restaurantId=$_SESSION['idrestaurant'];
 $username=$_SESSION['user'];
 $userrolid=$_SESSION['userrolid'];
-if ($restaurantId==1){
+global $base_de_datos,$availableIds;
+if (in_array($restaurantId,$availableIds)){
     $section = $_GET['section'] ?? 'ofertas';
 }else{
     $section = $_GET['section'] ?? 'salon';
 }
-global $base_de_datos;
+
 $stmt = $base_de_datos->prepare("SELECT * FROM restaurant_info WHERE id=:id limit 1");
 $stmt->bindParam(':id', $restaurantId);
 $stmt->execute();
@@ -56,7 +57,7 @@ if ($userrolid==33333){
 }else{
     $roles = obtenerRoles($userrolid, $base_de_datos); // Ej: ["ofertas", "ventas"]
 }
-if ($restaurantId==1){
+if (in_array($restaurantId,$availableIds)){
     if (empty($roles)){
         $section ="nopermisos";
     }
@@ -345,7 +346,7 @@ $ano=split('-',$date,1);*/
 			<nav id="sidebar__nav">
 				<ul>
 					<li class="menu-heading"><span><?php echo $nombreRestaurant;?></span></li>
-                    <?php $active=0; if ($restaurantId==1){ ?>
+                    <?php $active=0; if (in_array($restaurantId,$availableIds)){ ?>
                         <?php if (in_array('ofertas', $roles)){  ?>
                         <li>
                             <a href="?section=ofertas" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
@@ -559,7 +560,7 @@ $ano=split('-',$date,1);*/
                 //console.log("entre vacio setActiveLink: "+link);
                 var username="<?php echo $username;?>";
                 var defaultLink = "?section=salon";
-                if (username === "losespartanos"){
+                if (username === "losespartanos" || username === "saguaenlinea"){
                     defaultLink = "?section=ofertas";
                 }
              //   console.log("defaultLink defaultLink "+defaultLink);
