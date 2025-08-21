@@ -23,6 +23,7 @@ if (!empty($resultado)) {
 if (intval($activo)!=1){
     include_once ROOT_DIR."controllers/Host.php";
     header('Location: ' . Host::getHOSTNAME()."templates/404.php");
+    var_dump("No activo-> ".$activo);
     exit;
 }
 
