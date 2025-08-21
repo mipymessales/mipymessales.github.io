@@ -5,8 +5,9 @@ class ErrorController
     public function index() {
         // Aquí podrías cargar datos del modelo y luego mostrar la vista
         defined('ROOT_DIR') || define('ROOT_DIR',dirname(__FILE__,2).'/');
-        include_once ROOT_DIR."controllers/Host.php";
-        header('Location: ' . Host::getHOSTNAME()."templates/404.php");
+        //include_once ROOT_DIR."controllers/Host.php";
+        require_once ROOT_DIR.'templates/404.php';
+       // header('Location: ' . Host::getHOSTNAME()."templates/404.php");
     }
 
     public function login() {

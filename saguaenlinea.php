@@ -437,6 +437,12 @@ $año_actual = date("Y");
                 margin-top: 185px !important;
                 text-align: center;
             }
+            .section-title {
+                font-size: 14px;
+                padding-right: 5px;
+                padding-left: 5px;
+                margin-bottom: 10px;
+            }
             .display-3 {
                 font-size: 26px;
                 font-weight: bold;
