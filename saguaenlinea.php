@@ -911,7 +911,6 @@ $año_actual = date("Y");
         /* Productos flotando */
         .product {
             position: absolute;
-            bottom: 30px;
             left: 50%;
             font-size: 22px;
             opacity: 0;
@@ -1543,12 +1542,12 @@ $año_actual = date("Y");
         document.getElementById('pedidosForm').addEventListener('submit', (e) => {
             e.preventDefault();
 
-            Swal.fire({
+           /* Swal.fire({
                 title: 'Enviando pedido...',
                 allowOutsideClick: false,
                 showConfirmButton: false,
                 html: `
-          <div class="cart-animation">
+          <div class="cart-animation" style="margin-top: 20px">
 
  <!-- Productos animados -->
             <div class="product">🍎</div>
@@ -1574,7 +1573,40 @@ $año_actual = date("Y");
             <div class="cart-text">Por favor espere!</div>
           </div>
         `
+            });*/
+            Swal.fire({
+                title: 'Enviando pedido...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                html: `
+      <div class="cart-animation" style="margin-top: 20px">
+        <div class="product">🍎</div>
+        <div class="product">🍞</div>
+        <div class="product">🍷</div>
+        <div class="product">🧀</div>
+        <div class="product">🥤</div>
+        <div class="product">🍫</div>
+
+        <svg viewBox="0 0 24 24" stroke="#ff5722bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <defs>
+            <linearGradient id="carritoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ff5722bf" />
+              <stop offset="100%" stop-color="#ff8a65bf" />
+            </linearGradient>
+          </defs>
+          <circle cx="9" cy="21" r="1.5" fill="url(#carritoGradient)"></circle>
+          <circle cx="20" cy="21" r="1.5" fill="url(#carritoGradient)"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" fill="url(#carritoGradient)"></path>
+        </svg>
+
+        <div class="cart-text">Por favor espere!</div>
+      </div>
+    `,
+                didOpen: () => {
+                    Swal.showLoading(); // Muestra el spinner automáticamente
+                }
             });
+
             const inputCarrito = document.getElementById("carrito");
 
             let carritoData = {};
@@ -1603,10 +1635,16 @@ $año_actual = date("Y");
                 })
                     .then(res => res.json())
                     .then(data => {
-
-                      console.log((data));
+                        Swal.close(); // Cierra el modal de "Enviando pedido"
+                      //console.log((data));
 
                         if (data["status"] === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Pedido recibido correctamente',
+                                text: 'Espere a ser contactado',
+                                confirmButtonText: 'Aceptar'
+                            });
                             document.getElementById('reservationMessage').textContent = "✅ ¡Pedido recibido!";
                             document.getElementById('reservationMessage').style.color = 'green';
                             const inputCarrito = document.getElementById('carrito');
@@ -1655,19 +1693,6 @@ $año_actual = date("Y");
 
                                 xhr.send(params);
                             }
-
-
-
-
-
-
-
-
-
-
-
-
-
                             carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
                             inputCarrito.value='';
                             recargarCaptcha('r');
@@ -1679,15 +1704,6 @@ $año_actual = date("Y");
                             inicializarEventosCarrito();
                             actualizarCarrito();
                             e.target.reset();
-
-                            setTimeout(() => {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Pedido recibido correctamente',
-                                    text: 'Espere a ser contactado',
-                                    confirmButtonText: 'Aceptar'
-                                });
-                            }, 2500);
                             // grecaptcha.reset();
                         } else if (data["status"] === 'RECAPTCHA_FAILED') {
                             // console.log("Captcha no verificado por el servidor.");
