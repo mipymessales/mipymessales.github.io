@@ -883,6 +883,43 @@ $año_actual = date("Y");
             to   { transform: scale(1); opacity: 1; }
         }
     </style>
+    <style>
+        .cart-animation {
+            position: relative;
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+        }
+
+        .cart-animation svg {
+            width: 70px;
+            height: 70px;
+            color: #4CAF50;
+        }
+
+        /* Productos flotando */
+        .product {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatUp 2s ease-in-out infinite;
+        }
+
+        /* Variantes con delay para que no salgan todas juntas */
+        .product:nth-child(2) { animation-delay: 0.3s; }
+        .product:nth-child(3) { animation-delay: 0.6s; }
+        .product:nth-child(4) { animation-delay: 0.9s; }
+        .product:nth-child(5) { animation-delay: 1.2s; }
+
+        @keyframes floatUp {
+            0%   { transform: translateX(-50%) translateY(0); opacity: 0; }
+            20%  { opacity: 1; }
+            80%  { opacity: 1; }
+            100% { transform: translateX(-50%) translateY(-70px); opacity: 0; }
+        }
+    </style>
 
 </head>
 <body>
@@ -1203,6 +1240,7 @@ $año_actual = date("Y");
 <!--<script src="assets/js/bootstrap-icons.json"></script>-->
     <script src="assets/js/dropify.min.js"></script>
     <script src="assets/js/dropify-init.js"></script>
+<script src="assets/fullcalendar/js/sweetalert2.min.js"></script>
 <script>
     // Slider automático de imágenes
 
@@ -1491,7 +1529,25 @@ $año_actual = date("Y");
         document.getElementById('pedidosForm').addEventListener('submit', (e) => {
             e.preventDefault();
 
-
+            Swal.fire({
+                title: 'Enviando pedido...',
+                text: 'Por favor espere',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                html: `
+          <div class="cart-animation">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 3h2l.4 2M7 13h9l3-7H6.4M7 13L6 6M7 13l-1.2 6H19M7 13h12M10 21a1 1 0 1 0 0-2a1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2a1 1 0 0 0 0 2Z"
+              stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="product">🍎</div>
+            <div class="product">🍞</div>
+            <div class="product">🍷</div>
+            <div class="product">🧀</div>
+            <div class="product">🥤</div>
+          </div>
+        `
+            });
             const inputCarrito = document.getElementById("carrito");
 
             let carritoData = {};
@@ -1596,6 +1652,14 @@ $año_actual = date("Y");
                             inicializarEventosCarrito();
                             actualizarCarrito();
                             e.target.reset();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Pedido recibido correctamente',
+                                text: 'Espere a ser contactado',
+                                confirmButtonText: 'Aceptar'
+                            });
+
                             // grecaptcha.reset();
                         } else if (data["status"] === 'RECAPTCHA_FAILED') {
                             // console.log("Captcha no verificado por el servidor.");
@@ -1606,14 +1670,34 @@ $año_actual = date("Y");
                             // console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
                             document.getElementById('reservationMessage').textContent = "❌ "+data["message"];
                             document.getElementById('reservationMessage').style.color = 'red';
-                            e.target.reset();
+
+                            carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
+                            inputCarrito.value='';
                             recargarCaptcha('r');
+                            carrito = {};
+                            document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
+                            inicializarEventosCarrito();
+                            actualizarCarrito();
+                            e.target.reset();
+
+
                         } else {
                             document.getElementById('reservationMessage').textContent = "❌ Error al guardar el pedido.";
                             document.getElementById('reservationMessage').style.color = 'red';
                             // console.log("❌ Error al guardar el pedido.");
-                            e.target.reset();
+                            carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
+                            inputCarrito.value='';
                             recargarCaptcha('r');
+                            carrito = {};
+                            document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
+                            inicializarEventosCarrito();
+                            actualizarCarrito();
+                            e.target.reset();
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un problema al enviar el pedido. Intente nuevamente.'
+                            });
                         }
                     });
 
@@ -2263,7 +2347,7 @@ $año_actual = date("Y");
             let estrellas = "★★★★★".substring(0, valoracion || 5);
             modalBody.innerHTML = `
       <img src="${foto}" alt="${nombre}" style="max-height:300px; object-fit:contain">
-      <h3>${nombre}</h3>
+      <h3 style="font-weight: normal;">${nombre}</h3>
       <div style="font-size:20px;color:#f39c12">${estrellas}</div>
       <h4 class="text-primary" style="margin-top:10px">$ ${precio}</h4>
       <div>

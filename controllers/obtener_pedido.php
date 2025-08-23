@@ -56,10 +56,12 @@ if (isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($
                 if (empty($html)){
                     $html.="<div class='card-body'  style='background: white;
   padding: 5px;'>
-                   Telefono: <span style='
-  padding: 5px;'>".$cliente['telefono']."</span>
+                   Teléfono: <span style='
+  padding: 5px;'>".$cliente['telefono']."</span><br>
                   Correo: <span style='
-  padding: 5px;'>".$cliente['correo']." </span>
+  padding: 5px;'>".$cliente['correo']." </span><br>
+    Dirección: <span style='
+  padding: 5px;'>".$cliente['direccion']." </span><br>
                 </div>";
                 }
 
