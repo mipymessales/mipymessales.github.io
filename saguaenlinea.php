@@ -886,38 +886,52 @@ $año_actual = date("Y");
     <style>
         .cart-animation {
             position: relative;
-            display: inline-block;
-            width: 70px;
-            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
         }
 
+        /* Carrito estilizado */
         .cart-animation svg {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             color: #4CAF50;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        /* Texto debajo del carrito */
+        .cart-text {
+            font-size: 16px;
+            color: #555;
+            margin-top: 8px;
         }
 
         /* Productos flotando */
         .product {
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
-            font-size: 20px;
+            font-size: 22px;
             opacity: 0;
-            animation: floatUp 2s ease-in-out infinite;
+            animation: floatSpin 2.8s ease-in-out infinite;
         }
 
-        /* Variantes con delay para que no salgan todas juntas */
-        .product:nth-child(2) { animation-delay: 0.3s; }
-        .product:nth-child(3) { animation-delay: 0.6s; }
-        .product:nth-child(4) { animation-delay: 0.9s; }
-        .product:nth-child(5) { animation-delay: 1.2s; }
+        /* Delays para escalonar la salida */
+        .product:nth-child(2) { animation-delay: 0.2s; }
+        .product:nth-child(3) { animation-delay: 0.5s; }
+        .product:nth-child(4) { animation-delay: 0.8s; }
+        .product:nth-child(5) { animation-delay: 1.1s; }
+        .product:nth-child(6) { animation-delay: 1.4s; }
 
-        @keyframes floatUp {
-            0%   { transform: translateX(-50%) translateY(0); opacity: 0; }
+        /* Animación con subida + rotación */
+        @keyframes floatSpin {
+            0%   { transform: translate(-50%, 0) scale(0.6) rotate(0deg); opacity: 0; }
             20%  { opacity: 1; }
+            50%  { transform: translate(calc(-50% - 20px), -50px) scale(1) rotate(90deg); opacity: 1; }
             80%  { opacity: 1; }
-            100% { transform: translateX(-50%) translateY(-70px); opacity: 0; }
+            100% { transform: translate(calc(-50% + 20px), -100px) scale(0.8) rotate(180deg); opacity: 0; }
         }
     </style>
 
@@ -1531,20 +1545,28 @@ $año_actual = date("Y");
 
             Swal.fire({
                 title: 'Enviando pedido...',
-                text: 'Por favor espere',
                 allowOutsideClick: false,
                 showConfirmButton: false,
                 html: `
           <div class="cart-animation">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M3 3h2l.4 2M7 13h9l3-7H6.4M7 13L6 6M7 13l-1.2 6H19M7 13h12M10 21a1 1 0 1 0 0-2a1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2a1 1 0 0 0 0 2Z"
-              stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Carrito SVG mejorado -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1.5" fill="currentColor"></circle>
+              <circle cx="20" cy="21" r="1.5" fill="currentColor"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
+
+            <!-- Productos animados -->
             <div class="product">🍎</div>
             <div class="product">🍞</div>
             <div class="product">🍷</div>
             <div class="product">🧀</div>
             <div class="product">🥤</div>
+            <div class="product">🍫</div>
+
+            <!-- Texto visible debajo -->
+            <div class="cart-text">Por favor espere!</div>
           </div>
         `
             });
