@@ -1549,21 +1549,26 @@ $año_actual = date("Y");
                 showConfirmButton: false,
                 html: `
           <div class="cart-animation">
-            <!-- Carrito SVG mejorado -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="9" cy="21" r="1.5" fill="#ff5722bf"></circle>
-              <circle cx="20" cy="21" r="1.5" fill="#ff5722bf"></circle>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-            </svg>
 
-            <!-- Productos animados -->
+ <!-- Productos animados -->
             <div class="product">🍎</div>
             <div class="product">🍞</div>
             <div class="product">🍷</div>
             <div class="product">🧀</div>
             <div class="product">🥤</div>
             <div class="product">🍫</div>
+            <!-- Carrito SVG mejorado -->
+          <svg viewBox="0 0 24 24" stroke="#ff5722bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <defs>
+                <linearGradient id="carritoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ff5722bf" />
+                  <stop offset="100%" stop-color="#ff8a65bf" />
+                </linearGradient>
+              </defs>
+          <circle cx="9" cy="21" r="1.5" fill="url(#carritoGradient)"></circle>
+          <circle cx="20" cy="21" r="1.5" fill="url(#carritoGradient)"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" fill="url(#carritoGradient)"></path>
+        </svg>
 
             <!-- Texto visible debajo -->
             <div class="cart-text">Por favor espere!</div>
