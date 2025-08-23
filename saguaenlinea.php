@@ -1675,13 +1675,14 @@ $año_actual = date("Y");
                             actualizarCarrito();
                             e.target.reset();
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Pedido recibido correctamente',
-                                text: 'Espere a ser contactado',
-                                confirmButtonText: 'Aceptar'
-                            });
-
+                            setTimeout(() => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pedido recibido correctamente',
+                                    text: 'Espere a ser contactado',
+                                    confirmButtonText: 'Aceptar'
+                                });
+                            }, 2500);
                             // grecaptcha.reset();
                         } else if (data["status"] === 'RECAPTCHA_FAILED') {
                             // console.log("Captcha no verificado por el servidor.");
