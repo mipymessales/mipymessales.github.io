@@ -107,10 +107,23 @@ if (file_exists($target_file)) {
 
 }else{
 // Comprueba el peso
-if ($_FILES[$keyname]["size"] > 500000) {
-    $msg.=  "El archivo es muy pesado </br>";
-    $uploadOk = 0;
-}
+    if ($_FILES[$keyname]["size"] > 500000) {
+        // Redimensionar antes de subir
+        $tmpPath = $_FILES[$keyname]["tmp_name"];
+        $resizedPath = $target_dir . "resized_" . basename($_FILES[$keyname]["name"]);
+
+        if (resizeImage($tmpPath, $resizedPath, 800, 800, $imageFileType)) {
+            // Usamos la imagen redimensionada como la definitiva
+            $imagess = basename($resizedPath);
+            $target_file = $resizedPath;
+            $uploadOk = 1;
+            $msg.= "La imagen fue redimensionada para reducir peso </br>";
+        } else {
+            $msg.= "Error al redimensionar la imagen </br>";
+            $uploadOk = 0;
+        }
+    }
+
 // Permitir ciertos formatos de archivo
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
@@ -338,4 +351,70 @@ function ImageResize($width, $height, $img_name)
     imagedestroy($tmp);
     return true;
 }
+
+function resizeImage($sourcePath, $destinationPath, $maxWidth, $maxHeight, $imageFileType) {
+    // Obtener dimensiones originales
+    list($width, $height) = getimagesize($sourcePath);
+
+    // Calcular proporción
+    $ratio = $width / $height;
+
+    if ($maxWidth / $maxHeight > $ratio) {
+        $newWidth = $maxHeight * $ratio;
+        $newHeight = $maxHeight;
+    } else {
+        $newHeight = $maxWidth / $ratio;
+        $newWidth = $maxWidth;
+    }
+
+    // Crear imagen según tipo
+    switch($imageFileType) {
+        case "jpg":
+        case "jpeg":
+            $src = imagecreatefromjpeg($sourcePath);
+            break;
+        case "png":
+            $src = imagecreatefrompng($sourcePath);
+            break;
+        case "gif":
+            $src = imagecreatefromgif($sourcePath);
+            break;
+        default:
+            return false;
+    }
+
+    // Crear lienzo nuevo
+    $dst = imagecreatetruecolor($newWidth, $newHeight);
+
+    // Mantener transparencia si es PNG o GIF
+    if ($imageFileType == "png" || $imageFileType == "gif") {
+        imagecolortransparent($dst, imagecolorallocatealpha($dst, 0, 0, 0, 127));
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+    }
+
+    // Redimensionar
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+    // Guardar según tipo
+    switch($imageFileType) {
+        case "jpg":
+        case "jpeg":
+            imagejpeg($dst, $destinationPath, 85); // calidad 85%
+            break;
+        case "png":
+            imagepng($dst, $destinationPath, 6); // compresión 0-9
+            break;
+        case "gif":
+            imagegif($dst, $destinationPath);
+            break;
+    }
+
+    // Liberar memoria
+    imagedestroy($src);
+    imagedestroy($dst);
+
+    return true;
+}
+
 ?>

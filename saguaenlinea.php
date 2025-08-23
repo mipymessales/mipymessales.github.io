@@ -834,6 +834,56 @@ $año_actual = date("Y");
       animation: dibujar-linea 3s ease-in-out infinite;
   }
 </style>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            padding: 20px;
+            overflow-y: auto;
+
+            /* centrado con flex */
+
+            justify-content: center;
+            align-items: center;
+
+
+        }
+        .modal-content {
+            background: #fff;
+            margin: auto;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 95%;
+            position: relative;
+            animation: zoomIn 0.3s ease;
+            text-align: center;
+        }
+        .close {
+            position: absolute;
+            top: 10px; right: 20px;
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+    </style>
+
 </head>
 <body>
 
@@ -1029,6 +1079,34 @@ $año_actual = date("Y");
         <!--        </div>-->
         </div>
    <!-- </div>-->
+<!-- Modal -->
+<!--<div id="productModal" class="modal modal-lg">
+    <div class="modal-content ">
+        <span class="close">&times;</span>
+        <div id="modalBody"></div>
+    </div>
+</div>-->
+
+
+<div class="modal" id="productModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title section-title" style="text-align: center;
+  width: 100%;">Vista previa</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+                    <div class="modal-body">
+                        <div id="modalBody"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 
@@ -2103,7 +2181,7 @@ $año_actual = date("Y");
         totalItems += (datos.cantidad || 0);
         sum += (datos.cantidad || 0) * (datos.precio || 0);
 
-        li.innerHTML = `<span>${nombre} &times; ${datos.cantidad}</span><strong>${currency(datos.precio)}</strong>`;
+        li.innerHTML = `<span>${nombre} &times; ${datos.cantidad}</span><strong>${currency(datos.precio*datos.cantidad)}</strong>`;
         list.appendChild(li);
       });
 
@@ -2163,6 +2241,68 @@ $año_actual = date("Y");
 
 })();
 </script>
+<script>
+    const modal = document.getElementById("productModal");
+    const modalBody = document.getElementById("modalBody");
+    const span = document.getElementsByClassName("close")[0];
+
+    // Escuchar clicks en imágenes
+    document.addEventListener("click", function(e){
+        if(e.target.classList.contains("product-trigger")){
+            const img = e.target;
+            const id = img.dataset.id;
+            const nombre = img.dataset.nombre;
+            const precio = img.dataset.precio;
+            const foto = img.dataset.foto;
+            const valoracion = img.dataset.valoracion;
+
+            // Encontrar la tarjeta original
+            const originalCard = img.closest(".card");
+
+            // Construir modal dinámico
+            let estrellas = "★★★★★".substring(0, valoracion || 5);
+            modalBody.innerHTML = `
+      <img src="${foto}" alt="${nombre}" style="max-height:300px; object-fit:contain">
+      <h3>${nombre}</h3>
+      <div style="font-size:20px;color:#f39c12">${estrellas}</div>
+      <h4 class="text-primary" style="margin-top:10px">$ ${precio}</h4>
+      <div>
+        <button class="agregar btn btn-success">+</button>
+        <span class="cantidad">${originalCard.querySelector('.cantidad').innerText}</span>
+        <button class="quitar btn btn-danger">−</button>
+      </div>
+    `;
+
+            // Mostrar modal
+            modal.style.display = "block";
+
+            // Enlazar botones del modal con los reales
+            const modalAgregar = modalBody.querySelector(".agregar");
+            const modalQuitar  = modalBody.querySelector(".quitar");
+            const modalCantidad = modalBody.querySelector(".cantidad");
+            const realAgregar = originalCard.querySelector(".agregar");
+            const realQuitar  = originalCard.querySelector(".quitar");
+            const realCantidad = originalCard.querySelector(".cantidad");
+
+            modalAgregar.addEventListener("click", ()=>{
+                realAgregar.click(); // disparar el real
+                modalCantidad.innerText = realCantidad.innerText;
+            });
+            modalQuitar.addEventListener("click", ()=>{
+                realQuitar.click();
+                modalCantidad.innerText = realCantidad.innerText;
+            });
+        }
+    });
+
+    // Cerrar modal
+    span.onclick = function() { modal.style.display = "none"; }
+    window.onclick = function(event) {
+        if (event.target == modal) modal.style.display = "none";
+    }
+</script>
+
+
 </body>
 </html>
 
