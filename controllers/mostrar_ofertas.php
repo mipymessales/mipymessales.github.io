@@ -49,9 +49,30 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                     <div class='image-wrapper text-center mb-2'>";
 
                                                                          if($foto!=null){
-                                                                             $html.="    <img class='img-fluid rounded-circle' src='/images/{$foto}' style='height: 120px;width: 120px; object-fit: cover !important'>";
+                                                                             $html.="<img class='img-fluid rounded-circle product-trigger' alt='food menu' 
+                                     src='/images/{$foto}' 
+                                     data-id='{$idproducto}'
+                                     data-nombre='{$nombre}'
+                                     data-precio='{$precio}'
+                                     data-foto='/images/{$foto}'
+                                     data-cat='{$categoria}'
+                                     data-valoracion='{$valoracion}'
+                                     style='height: 120px;width: 120px; object-fit: cover !important; cursor:pointer'>";
+
+
+
+
+
                                                                          }else{
-                                                                          $html.="    <img class='img-fluid rounded-circle' src='/images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px; object-fit: cover !important'>";
+                                                                          $html.="<img class='img-fluid rounded-circle product-trigger' alt='food menu' 
+                                     src='/images/blank1.jpg' 
+                                     data-id='{$idproducto}'
+                                     data-nombre='{$nombre}'
+                                     data-precio='{$precio}'
+                                     data-foto='/images/{$foto}'
+                                     data-cat='{$categoria}'
+                                     data-valoracion='{$valoracion}'
+                                     style='height: 120px;width: 120px; object-fit: cover !important; cursor:pointer'>";
                                                                          }
                                                                 $html.="</div>
                                                                     <div class='card-body'>
@@ -119,11 +140,29 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                         </div>
                                                                     </div>
                                                                     <div class='image-wrapper text-center'>";
-                                                                         if($foto!=null){
-                                                                             $html.="<img class='img-fluid rounded-circle' src='/images/{$foto}' style='height: 120px;width: 120px; object-fit: cover !important'>";
-                                                                         }else{
-                                                                          $html.="  <img class='img-fluid rounded-circle' src='/images/blank1.jpg' alt='food menu' style='height: 120px;width: 120px; object-fit: cover !important'>";
-                                                                         }
+                                                                if ($foto != null) {
+                                                                    $html .= "<img class='img-fluid rounded-circle product-trigger' alt='food menu' 
+                                     src='/images/{$foto}' 
+                                     data-id='{$idproducto}'
+                                     data-nombre='{$nombre}'
+                                     data-precio='{$precio}'
+                                     data-foto='/images/{$foto}'
+                                     data-cat='{$categoria}'
+                                     data-valoracion='{$valoracion}'
+                                     style='height: 120px;width: 120px; object-fit: cover !important; cursor:pointer'>";
+
+
+                                                                } else {
+                                                                    $html .= "<img class='img-fluid rounded-circle product-trigger' alt='food menu' 
+                                     src='/images/blank1.jpg'  
+                                     data-id='{$idproducto}'
+                                     data-nombre='{$nombre}'
+                                     data-precio='{$precio}'
+                                     data-foto='/images/{$foto}'
+                                     data-cat='{$categoria}'
+                                     data-valoracion='{$valoracion}'
+                                     style='height: 120px;width: 120px; object-fit: cover !important; cursor:pointer'>";
+                                                                }
                                                                 $html.="  </div>
                                                                 </div>
                                                             </div>";
