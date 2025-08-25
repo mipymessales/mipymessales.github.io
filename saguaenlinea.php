@@ -2431,7 +2431,7 @@ $año_actual = date("Y");
             let estrellas = "★★★★★".substring(0, valoracion || 5);
             modalBody.innerHTML = `
       <img src="${foto}" alt="${nombre}" style="max-height:300px; object-fit:contain">
-      <h3 style="font-weight: normal;">${nombre}</h3>
+      <h3 style="font-weight: normal;font-size: 16px;">${nombre}</h3>
       <div style="font-size:20px;color:#f39c12">${estrellas}</div>
       <h4 class="text-primary" style="margin-top:10px">$ ${precio}</h4>
       <div>
