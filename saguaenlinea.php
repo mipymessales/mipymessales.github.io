@@ -911,6 +911,7 @@ $año_actual = date("Y");
         /* Productos flotando */
         .product {
             position: absolute;
+            position: absolute;
             left: 50%;
             font-size: 22px;
             opacity: 0;
@@ -1541,39 +1542,6 @@ $año_actual = date("Y");
         // RESERVAS
         document.getElementById('pedidosForm').addEventListener('submit', (e) => {
             e.preventDefault();
-
-           /* Swal.fire({
-                title: 'Enviando pedido...',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                html: `
-          <div class="cart-animation" style="margin-top: 20px">
-
- <!-- Productos animados -->
-            <div class="product">🍎</div>
-            <div class="product">🍞</div>
-            <div class="product">🍷</div>
-            <div class="product">🧀</div>
-            <div class="product">🥤</div>
-            <div class="product">🍫</div>
-            <!-- Carrito SVG mejorado -->
-          <svg viewBox="0 0 24 24" stroke="#ff5722bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <defs>
-                <linearGradient id="carritoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#ff5722bf" />
-                  <stop offset="100%" stop-color="#ff8a65bf" />
-                </linearGradient>
-              </defs>
-          <circle cx="9" cy="21" r="1.5" fill="url(#carritoGradient)"></circle>
-          <circle cx="20" cy="21" r="1.5" fill="url(#carritoGradient)"></circle>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" fill="url(#carritoGradient)"></path>
-        </svg>
-
-            <!-- Texto visible debajo -->
-            <div class="cart-text">Por favor espere!</div>
-          </div>
-        `
-            });*/
             Swal.fire({
                 title: 'Enviando pedido...',
                 allowOutsideClick: false,
@@ -1628,93 +1596,40 @@ $año_actual = date("Y");
                 const formData = new FormData(e.target);
                 formData.append('restaurantid', restaurantId);
                console.log((JSON.stringify(formData)));
-                fetch('controllers/guardar_pedido.php', {
+                fetch('controllers/guardar_pedidook.php', {
                     method: 'POST',
-                    dataType: 'json',
-                    body:  formData
+                    body: formData
                 })
-                    .then(res => res.json())
-                    .then(data => {
-                        Swal.close(); // Cierra el modal de "Enviando pedido"
-                      //console.log((data));
+                    .then(async (res) => {
+                        if (!res.ok) {
+                            throw new Error("Error HTTP: " + res.status);
+                        }
+                        const text = await res.text();
 
-                        if (data["status"] === 'success') {
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error("Respuesta no es JSON válido:", text);
+                            throw new Error("El servidor no devolvió JSON válido");
+                        }
+                    })
+                    .then(data => {
+                        Swal.close(); // cerrar el “Enviando pedido...”
+
+                        if (data.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Pedido recibido correctamente',
                                 text: 'Espere a ser contactado',
                                 confirmButtonText: 'Aceptar'
                             });
+
+                            // ✅ aquí pones tu lógica de limpiar carrito, recargar captcha, etc.
                             document.getElementById('reservationMessage').textContent = "✅ ¡Pedido recibido!";
                             document.getElementById('reservationMessage').style.color = 'green';
+                            // limpiar carrito visual
                             const inputCarrito = document.getElementById('carrito');
                             const carritoVisual = document.getElementById('carritoVisual');
-
-
-
-                            //
-
-                            // Obtener contenido HTML del carrito
-                            var contenidoHtml = carritoVisual.innerHTML;
-                            contenidoHtml+='<div class="alert-warning" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><p>Tras confirmar su pedido, las cantidades están sujetas a cambios según el stock disponible y la demanda en línea de otros clientes. </p></div>';
-
-// Obtener datos del cliente
-                            const nombre = document.getElementById("nombre").value.trim();
-                            const telefono = document.getElementById("telefono").value.trim();
-                            const correo = document.getElementById("correo").value.trim();
-                            const direccion = document.getElementById("direccion").value.trim();
-// const observaciones = document.getElementById("observaciones").value.trim(); // si lo necesitas
-
-// Validación básica
-                            if (!esNuloOVacio(correo)) {
-                                console.log("Enviar correo a > " + correo);
-
-                                // Preparar parámetros
-                                const params = `contenido=${encodeURIComponent(contenidoHtml)}&nombre=${encodeURIComponent(nombre)}&telefono=${encodeURIComponent(telefono)}&correo=${encodeURIComponent(correo)}&direccion=${encodeURIComponent(direccion)}`;
-
-                                const xhr = new XMLHttpRequest();
-                                xhr.open("POST", "controllers/enviar_pedido.php", true);
-                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                                xhr.onreadystatechange = function () {
-                                    if (xhr.readyState === 4) {
-                                        try {
-                                            const respuesta = JSON.parse(xhr.responseText);
-                                            if (xhr.status === 200 && respuesta.success) {
-                                                console.log(respuesta.message);
-                                            } else {
-                                                console.error("Error en respuesta:", respuesta.message);
-                                            }
-                                        } catch (e) {
-                                            console.error("Respuesta no válida del servidor:", xhr.responseText);
-                                        }
-                                    }
-                                };
-
-                                xhr.send(params);
-                            }
-                            carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
-                            inputCarrito.value='';
-                            recargarCaptcha('r');
-                            carrito = {};
-                            console.log("¡Pedido recibido! con carrito :"+JSON.stringify(carrito));
-                           // const cantidadSpan = producto.querySelector('.cantidad');
-                            document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
-                            // if (cantidadSpan) cantidadSpan.textContent = 0;
-                            inicializarEventosCarrito();
-                            actualizarCarrito();
-                            e.target.reset();
-                            // grecaptcha.reset();
-                        } else if (data["status"] === 'RECAPTCHA_FAILED') {
-                            // console.log("Captcha no verificado por el servidor.");
-                            document.getElementById('reservationMessage').textContent = "❌ Captcha no verificado por el servidor.";
-                            document.getElementById('reservationMessage').style.color = 'red';
-                            recargarCaptcha('r');
-                        } else if (data["status"] === 'RATE_LIMITED') {
-                            // console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
-                            document.getElementById('reservationMessage').textContent = "❌ "+data["message"];
-                            document.getElementById('reservationMessage').style.color = 'red';
-
                             carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
                             inputCarrito.value='';
                             recargarCaptcha('r');
@@ -1723,28 +1638,147 @@ $año_actual = date("Y");
                             inicializarEventosCarrito();
                             actualizarCarrito();
                             e.target.reset();
-
 
                         } else {
-                            document.getElementById('reservationMessage').textContent = "❌ Error al guardar el pedido.";
-                            document.getElementById('reservationMessage').style.color = 'red';
-                            // console.log("❌ Error al guardar el pedido.");
-                            carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
-                            inputCarrito.value='';
-                            recargarCaptcha('r');
-                            carrito = {};
-                            document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
-                            inicializarEventosCarrito();
-                            actualizarCarrito();
-                            e.target.reset();
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Hubo un problema al enviar el pedido. Intente nuevamente.'
+                                text: data.message || 'Hubo un problema al enviar el pedido.'
                             });
                         }
+                    })
+                    .catch(err => {
+                        Swal.close(); // siempre cerrar el modal de cargando
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de conexión',
+                            text: 'No se pudo contactar al servidor. Revisa tu conexión.'
+                        });
+                        console.error("Error en fetch:", err);
                     });
 
+
+
+                /*
+                 fetch('controllers/guardar_pedido.php', {
+                     method: 'POST',
+                     dataType: 'json',
+                     body:  formData
+                 })
+                     .then(res => res.json())
+                     .then(data => {
+                         Swal.close(); // Cierra el modal de "Enviando pedido"
+                       //console.log((data));
+
+                         if (data["status"] === 'success') {
+                             Swal.fire({
+                                 icon: 'success',
+                                 title: 'Pedido recibido correctamente',
+                                 text: 'Espere a ser contactado',
+                                 confirmButtonText: 'Aceptar'
+                             });
+                             document.getElementById('reservationMessage').textContent = "✅ ¡Pedido recibido!";
+                             document.getElementById('reservationMessage').style.color = 'green';
+                             const inputCarrito = document.getElementById('carrito');
+                             const carritoVisual = document.getElementById('carritoVisual');
+
+
+
+                             //
+
+                             // Obtener contenido HTML del carrito
+                             var contenidoHtml = carritoVisual.innerHTML;
+                             contenidoHtml+='<div class="alert-warning" style="padding: 10px"><h5 class="section-title" style="font-weight: bold">¡Importante!</h5><p>Tras confirmar su pedido, las cantidades están sujetas a cambios según el stock disponible y la demanda en línea de otros clientes. </p></div>';
+
+ // Obtener datos del cliente
+                             const nombre = document.getElementById("nombre").value.trim();
+                             const telefono = document.getElementById("telefono").value.trim();
+                             const correo = document.getElementById("correo").value.trim();
+                             const direccion = document.getElementById("direccion").value.trim();
+ // const observaciones = document.getElementById("observaciones").value.trim(); // si lo necesitas
+
+ // Validación básica
+                             if (!esNuloOVacio(correo)) {
+                                 console.log("Enviar correo a > " + correo);
+
+                                 // Preparar parámetros
+                                 const params = `contenido=${encodeURIComponent(contenidoHtml)}&nombre=${encodeURIComponent(nombre)}&telefono=${encodeURIComponent(telefono)}&correo=${encodeURIComponent(correo)}&direccion=${encodeURIComponent(direccion)}`;
+
+                                 const xhr = new XMLHttpRequest();
+                                 xhr.open("POST", "controllers/enviar_pedido.php", true);
+                                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                                 xhr.onreadystatechange = function () {
+                                     if (xhr.readyState === 4) {
+                                         try {
+                                             const respuesta = JSON.parse(xhr.responseText);
+                                             if (xhr.status === 200 && respuesta.success) {
+                                                 console.log(respuesta.message);
+                                             } else {
+                                                 console.error("Error en respuesta:", respuesta.message);
+                                             }
+                                         } catch (e) {
+                                             console.error("Respuesta no válida del servidor:", xhr.responseText);
+                                         }
+                                     }
+                                 };
+
+                                 xhr.send(params);
+                             }
+                             carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
+                             inputCarrito.value='';
+                             recargarCaptcha('r');
+                             carrito = {};
+                             console.log("¡Pedido recibido! con carrito :"+JSON.stringify(carrito));
+                            // const cantidadSpan = producto.querySelector('.cantidad');
+                             document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
+                             // if (cantidadSpan) cantidadSpan.textContent = 0;
+                             inicializarEventosCarrito();
+                             actualizarCarrito();
+                             e.target.reset();
+                             // grecaptcha.reset();
+                         } else if (data["status"] === 'RECAPTCHA_FAILED') {
+                             // console.log("Captcha no verificado por el servidor.");
+                             document.getElementById('reservationMessage').textContent = "❌ Captcha no verificado por el servidor.";
+                             document.getElementById('reservationMessage').style.color = 'red';
+                             recargarCaptcha('r');
+                         } else if (data["status"] === 'RATE_LIMITED') {
+                             // console.log("Has enviado demasiadas solicitudes. Intenta en un minuto.");
+                             document.getElementById('reservationMessage').textContent = "❌ "+data["message"];
+                             document.getElementById('reservationMessage').style.color = 'red';
+
+                             carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
+                             inputCarrito.value='';
+                             recargarCaptcha('r');
+                             carrito = {};
+                             document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
+                             inicializarEventosCarrito();
+                             actualizarCarrito();
+                             e.target.reset();
+
+
+                         } else {
+                             document.getElementById('reservationMessage').textContent = "❌ Error al guardar el pedido.";
+                             document.getElementById('reservationMessage').style.color = 'red';
+                             // console.log("❌ Error al guardar el pedido.");
+                             carritoVisual.innerHTML = 'Carrito: <strong>(vacío)</strong>';
+                             inputCarrito.value='';
+                             recargarCaptcha('r');
+                             carrito = {};
+                             document.querySelectorAll('span.cantidad').forEach(el => el.textContent = 0);
+                             inicializarEventosCarrito();
+                             actualizarCarrito();
+                             e.target.reset();
+                             Swal.fire({
+                                 icon: 'error',
+                                 title: 'Error',
+                                 text: 'Hubo un problema al enviar el pedido. Intente nuevamente.'
+                             });
+                         }
+                     });
+
+
+          */
             }
 
 

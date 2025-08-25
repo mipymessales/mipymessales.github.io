@@ -364,7 +364,7 @@ $ano=split('-',$date,1);*/
 
                         <?php if (in_array('pedidoscliente', $roles)){ ?>
                         <li>
-                            <a href="?section=pedidoscliente" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
+                            <a href="?section=pedidoscliente" class="nav-menu <?= ($active==0) ? 'active' : '' ?>" onclick="cargarPedidosPendientes()">
                                 $
                                 <span>Pedidos</span>
                             </a>
@@ -842,6 +842,17 @@ $ano=split('-',$date,1);*/
             document.getElementById("nromesa_pedido").value=nro_mesa;
             // $('#pedidoModalCenter').modal('show');
 
+        }
+        function cargarPedidosPendientes() {
+
+            $.ajax({
+                // url: '/mipymessales/controllers/salonController.php',
+                url: '/controllers/procesar_pedidos.php',
+                method: 'GET',
+                success: function(data) {
+                 console.log(JSON.stringify(data));
+                }
+            });
         }
         function agregarCliente(nro_mesa){
             $.ajax({
