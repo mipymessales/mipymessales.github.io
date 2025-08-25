@@ -1104,7 +1104,7 @@ $año_actual = date("Y");
             <div class="row">
                 <div class="col-md-2 col-12">
                     <ul class="nav nav-tabs">
-                        <?php $array=["alimentos","bebidas","carnicos","embutidos","confituras","condimentos"]; global $base_de_datos;$i=0;?>
+                        <?php $array=["alimentos","bebidas","carnicos","embutidos","confituras","condimentos","aseo"]; global $base_de_datos;$i=0;?>
                         <?php foreach($array as $arraypedidos) {
                             ?>
                             <?php    if($i==0){ ?>
@@ -1855,6 +1855,12 @@ $año_actual = date("Y");
                 "El ingrediente que transforma cada receta.",
                 "Condimentos seleccionados para realzar tus platos.",
                 "Una pizca de calidad en cada preparación."
+            ],
+            aseo: [
+                "Productos de aseo que cuidan de ti y de tu hogar.",
+                "Mantén tu espacio limpio y fresco con nuestra selección de aseo.",
+                "Calidad y eficacia en cada producto de limpieza.",
+                "Todo lo que necesitas para un hogar impecable y saludable."
             ]
         };
 

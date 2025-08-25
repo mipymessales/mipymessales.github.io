@@ -107,6 +107,9 @@ global $availableIds;
                         <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
                             <div class="tab" id="condimentos" onclick="cargarCategoria('condimentos','<?php echo $restaurantId;?>',true)">Condimentos</div>
                         </div>
+                        <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                            <div class="tab" id="aseo" onclick="cargarCategoria('aseo','<?php echo $restaurantId;?>',true)">Aseo</div>
+                        </div>
                     </div>
             <?php }else{ ?>
                 <div class="tab active" id="entrantes" onclick="cargarCategoria('entrantes','<?php echo $restaurantId;?>')">Entrantes</div>
@@ -164,6 +167,7 @@ global $availableIds;
                                                         <option value="confituras">Confituras</option>
                                                         <option value="embutidos">Embutidos</option>
                                                         <option value="condimentos">Condimentos</option>
+                                                        <option value="aseo">Aseo</option>
 
                                                     </select>
                                                 </div>

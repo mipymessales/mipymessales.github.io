@@ -10,7 +10,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
 
         // $i = 0;
 
-  $array=["alimentos","bebidas","carnicos","embutidos","confituras","condimentos"];
+  $array=["alimentos","bebidas","carnicos","embutidos","confituras","condimentos","aseo"];
   global $base_de_datos;
         $idrestaurant=empty($_POST['idrestaurant'])?$_SESSION['idrestaurant']:$_POST['idrestaurant'];
 
