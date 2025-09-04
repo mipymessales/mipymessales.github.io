@@ -368,6 +368,9 @@ $año_actual = date("Y");
             font-size: 20px;
             font-weight: 400;
         }
+        .ribbon__two {
+            background:#ff5722bf!important;
+        }
 
         .hero .btn-get-started {
             color: #000000;
@@ -698,7 +701,7 @@ $año_actual = date("Y");
     overflow: hidden;
   }*/
 
-  .producto .title, .producto h3, .producto h4 { font-weight: 700; letter-spacing: .2px; }
+  .producto .title, .producto h3, .producto h4 { font-weight: lighter; letter-spacing: .2px; }
   .producto .precio, .producto .price { font-weight: 700; }
   .producto .actions, .producto .buttons { display:flex; align-items:center; gap:.5rem; }
 /*  .producto .agregar, .producto .quitar {
@@ -1104,7 +1107,7 @@ $año_actual = date("Y");
             <div class="row">
                 <div class="col-md-2 col-12">
                     <ul class="nav nav-tabs">
-                        <?php $array=["alimentos","bebidas","carnicos","embutidos","confituras","condimentos","aseo"]; global $base_de_datos;$i=0;?>
+                        <?php $array=["alimentos","bebidas","carnicos","embutidos","confituras","condimentos","aseo","combos"]; global $base_de_datos;$i=0;?>
                         <?php foreach($array as $arraypedidos) {
                             ?>
                             <?php    if($i==0){ ?>

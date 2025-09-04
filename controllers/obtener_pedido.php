@@ -30,6 +30,9 @@ if (isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($
             if (empty($categoria)) {
                 continue;
             }
+            if (hash_equals("combos",$categoria)){
+                $stmt = $base_de_datos->prepare("SELECT nombre,stock as cantidadproducto,monto_descuento as precio FROM " . $categoria . " WHERE id= ".$idplato);
+            }else
             $stmt = $base_de_datos->prepare("SELECT nombre,cantidad as cantidadproducto,precioventa as precio FROM " . $categoria . " WHERE id= ".$idplato);
            // $stmt->bindParam(':id', $idplato);
             $stmt->execute();
@@ -56,6 +59,7 @@ if (isset($_POST['idcliente']) && !SqlInjectionUtils::checkSqlInjectionAttempt($
                 if (empty($html)){
                     $html.="<div class='card-body'  style='background: white;
   padding: 5px;'>
+                   Teléfono: <span style='
                    Teléfono: <span style='
   padding: 5px;'>".$cliente['telefono']."</span><br>
                   Correo: <span style='

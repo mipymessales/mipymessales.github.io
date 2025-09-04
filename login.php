@@ -34,6 +34,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
                ini_set('session.gc_maxlifetime', $tiempo_vida);
                session_set_cookie_params($tiempo_vida);
                $_SESSION['user'] = $user;
+               $_SESSION['userId'] = $resultado[0]->id;
                $_SESSION['userrolid'] = 33333;
                $_SESSION['idrestaurant'] = $resultado[0]->restaurantid;
                header("Location: /panel");
@@ -67,6 +68,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST) && isset($_POST['usuari
                 session_set_cookie_params($tiempo_vida);
                 $_SESSION['user'] = $user;
                 $_SESSION['userrolid'] = $resultado[0]->id;
+                $_SESSION['userId'] = $resultado[0]->id;
                 $_SESSION['idrestaurant'] = $resultado[0]->restaurantid;
                 header("Location: /panel");
                 exit;

@@ -25,8 +25,14 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)){
         if (!$id || !$categoria || !$idrestaurant) continue;
 
         // Consulta SQL segura
-        $query = "SELECT id, nombre, cantidad, disponible FROM `$categoria` 
+        if (hash_equals("combos",$categoria)){
+            $query = "SELECT id, nombre, stock as cantidad, disponible FROM `$categoria` 
               WHERE id = :id AND restaurantid = :restaurantid LIMIT 1";
+        }else{
+            $query = "SELECT id, nombre, cantidad, disponible FROM `$categoria` 
+              WHERE id = :id AND restaurantid = :restaurantid LIMIT 1";
+        }
+
 
         $stmt = $base_de_datos->prepare($query);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);

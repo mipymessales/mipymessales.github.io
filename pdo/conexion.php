@@ -12,6 +12,15 @@ $rutaServidor = "localhost";
 $puerto = "3306";*/
 global $availableIds;
 $availableIds=[1,2];
+
+global $availableCombos;
+$availableCombos=[2];
+/*Push*/
+define('VAPID_PUBLIC_KEY', 'BPCWRVWc3IqGGoFJno3BhYn5e9-YSObP6RKw5wD3V31RWqBl7RDIKbu7wS_PDtHJGFVy50c1UskStJhA7MWy29I');
+define('VAPID_PRIVATE_KEY', 'MhckwSTucZXQM55GYQ3MZuveAPDFLnq9auhzboelz8w');
+define('VAPID_SUBJECT', 'mailto:mipymessalesmanager@gmail.com');
+
+
 try {
     global $base_de_datos;
     $base_de_datos = new PDO("mysql:host=$rutaServidor;port=$puerto;dbname=$nombreBaseDeDatos;charset=utf8mb4", $usuario, $contraseña);

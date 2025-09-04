@@ -9,6 +9,11 @@ define('ROOT_DIR', dirname(__FILE__, 2) . '/');
 include_once ROOT_DIR . "pdo/conexion.php";
 require_once ROOT_DIR . "controllers/class.SqlInjectionUtils.php";
 require_once ROOT_DIR . "controllers/error_handler.php";
+require_once ROOT_DIR . "controllers/Host.php";
+require ROOT_DIR .'vendor/autoload.php';
+
+use Minishlink\WebPush\WebPush;
+use Minishlink\WebPush\Subscription;
 
 $response = ["status" => "error", "message" => "Error desconocido"];
 
@@ -96,6 +101,45 @@ try {
         "pedido_id" => $pedido_id
     ];
 
+
+    /*Push*/
+    $res = $base_de_datos->prepare("Select token from tokens_admin;");
+    $res->execute();
+    $subscriptions = [];
+
+    while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+       $tokentmp=$row['token'];
+        $subscriptions[] = json_decode($tokentmp, true);
+    }
+    if (!empty($subscriptions) && sizeof($subscriptions)>0){
+        $auth = [
+            'VAPID' => [
+                'subject' => VAPID_SUBJECT,
+                'publicKey' => VAPID_PUBLIC_KEY,
+                'privateKey' => VAPID_PRIVATE_KEY,
+            ],
+        ];
+
+        $webPush = new WebPush($auth);
+
+        foreach ($subscriptions as $sub) {
+            $subscription = Subscription::create($sub);
+            $webPush->queueNotification(
+                $subscription,
+                json_encode([
+                    "title" => "Nuevo pedido recibido",
+                    "body" => "Revisa el panel de administración",
+                    "url" => Host::getHOSTNAME()."login"
+                ])
+            );
+        }
+
+        foreach ($webPush->flush() as $report) {
+            if (!$report->isSuccess()) {
+                error_log("Error enviando push: " . $report->getReason());
+            }
+        }
+    }
     echo json_encode($response);
     exit;
 

@@ -34,6 +34,10 @@ global $availableIds;
             background: var(--gray-base);
             padding: 10px;
             color: #fff; }
+        label {
+            display: contents;
+            margin-bottom: 0.5rem;
+        }
 
         #contenido {
            margin-top: 5px;
@@ -56,8 +60,137 @@ global $availableIds;
             }
         }
 
+        .accordion {
+            /* max-width: 600px;*/
+            margin: 30px auto;
+           /* padding: 0 15px;*/
+        }
 
+        .accordion-header {
+            background-color: #eee;
+            color: black;
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            font-size: 1rem;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 5px;
+        }
+
+        .accordion-header:hover {
+            background-color: rgba(144, 146, 152, 0.55);
+        }
+
+        .accordion-content {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease;
+            background: white;
+          /*  padding: 0 15px;*/
+            border-left: 3px solid rgba(144, 146, 152, 0.55);
+            border-radius: 5px;
+        }
+
+        .accordion-content p {
+            margin: 15px 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .accordion-header {
+                font-size: 0.95rem;
+                padding: 12px;
+            }
+
+            .accordion-content p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
+
+<style>
+    /* ===== Estilos Accordion ===== */
+    /* ===== Estilo productos ===== */
+    .producto-item.card {
+        display:flex;
+        justify-content:space-between;
+        align-items:start;
+        background:#fff;
+        padding:12px;
+        border:1px solid #eee;
+        border-radius:10px;
+        margin-bottom:10px;
+        transition:0.2s;
+    }
+    .producto-item.card:hover {
+        background:#f9f9f9;
+    }
+    .info {
+        display:flex;
+        flex-direction:column;
+    }
+    .nombre {
+        font-weight:600;
+        font-size:12px;
+        margin-left:5px;
+    }
+    .precio-unit {
+        font-size:12px;
+        color:#888;
+    }
+
+    /* ===== Controles ===== */
+    .acciones {
+        display:flex;
+        align-items:center;
+        gap:8px;
+    }
+    .btn-cantidad {
+        width:32px;
+        height:32px;
+        border:none;
+        border-radius:6px;
+        background:#4CAF50;
+        color:#fff;
+        font-size:18px;
+        cursor:pointer;
+        transition:0.2s;
+    }
+    .btn-cantidad:hover {
+        background:#45a049;
+    }
+    .acciones input {
+        width:40px;
+        text-align:center;
+        font-size:14px;
+        border:1px solid #ccc;
+        border-radius:5px;
+        padding:3px;
+    }
+    .precio {
+        font-weight:bold;
+        font-size:14px;
+        color:#333;
+    }
+
+    /* ===== Total General ===== */
+    .total-general {
+
+        padding:15px;
+        background:#f1f1f1;
+        border-radius:10px;
+        text-align:center;
+        font-size:18px;
+        font-weight:bold;
+        box-shadow:0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+    }
+</style>
 
 <!--        <link href="../assets/css/dropify.min.css" rel="stylesheet">
 <link href="../assets/css/style.css" rel="stylesheet">
@@ -107,9 +240,14 @@ global $availableIds;
                         <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
                             <div class="tab" id="condimentos" onclick="cargarCategoria('condimentos','<?php echo $restaurantId;?>',true)">Condimentos</div>
                         </div>
+                        <?php global $availableCombos; if (in_array($restaurantId,$availableCombos)){ ?>
+                            <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
+                                <div class="tab" id="aseo" onclick="cargarCategoria('aseo','<?php echo $restaurantId;?>',true)">Aseo</div>
+                            </div>
                         <div class="col-xl-2 col-sm-2 col-xxl-2 phone-view" >
-                            <div class="tab" id="aseo" onclick="cargarCategoria('aseo','<?php echo $restaurantId;?>',true)">Aseo</div>
+                            <div class="tab" id="combos" onclick="cargarCategoria('combos','<?php echo $restaurantId;?>',true)">Combos</div>
                         </div>
+                        <?php }?>
                     </div>
             <?php }else{ ?>
                 <div class="tab active" id="entrantes" onclick="cargarCategoria('entrantes','<?php echo $restaurantId;?>')">Entrantes</div>
@@ -132,7 +270,8 @@ global $availableIds;
 
     </div>
 
-    <button class="btn-flotante" data-toggle="modal" data-target="#exampleModalCenter">Insertar</button>
+    <button class="btn-flotante" data-toggle="modal" data-target="#exampleModalCenter">Insertar Producto</button>
+    <button class="btn-flotante-c" data-toggle="modal" data-target="#exampleModalCenterCombo">Insertar Combo</button>
     <div class="form-validation">
         <form enctype="multipart/form-data" class="form-valide" action="controllers/categoriaController.php" method="POST" id="main-contact-form">
             <div class="modal fade" id="exampleModalCenter">
@@ -167,7 +306,10 @@ global $availableIds;
                                                         <option value="confituras">Confituras</option>
                                                         <option value="embutidos">Embutidos</option>
                                                         <option value="condimentos">Condimentos</option>
-                                                        <option value="aseo">Aseo</option>
+                                                        <?php global $availableCombos; if (in_array($restaurantId,$availableCombos)){ ?>
+                                                            <option value="aseo">Aseo</option>
+                                                        <?php }?>
+
 
                                                     </select>
                                                 </div>
@@ -272,9 +414,314 @@ global $availableIds;
 
         </form>
     </div>
+
+    <div class="form-validation">
+        <form enctype="multipart/form-data" class="form-valide" action="controllers/comboController.php" method="POST" id="main-contact-form">
+            <div class="modal fade" id="exampleModalCenterCombo">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" style="color: black">Agregando nuevo combo ...</h5>
+                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-header pb-0">
+                                    <h4 class="card-title" style="color: black">Inserte los datos del combo</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 ">
+                                            <input type="file" class="dropify" name="imagecombo" data-height="200" id="imagecombo" data-default-file="/images/blank1.jpg" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <div class="accordion">
+                                                <?php
+                                                $array=["alimentos","bebidas","carnicos","embutidos","confituras","condimentos","aseo"];
+                                                global $base_de_datos;
+                                                ?>
+
+                                                <?php foreach($array as $arraypedidos) { ?>
+                                                    <div class="accordion-item">
+                                                        <button type="button" class="accordion-header">
+                                                            <?php echo ucfirst(strtolower($arraypedidos)); ?>
+                                                        </button>
+                                                        <div class="accordion-content">
+                                                            <?php
+                                                            $stmt = $base_de_datos->prepare("SELECT id as idplato,nombre,precioventa,preciocompra
+                                                FROM $arraypedidos 
+                                                WHERE restaurantid=:id");
+                                                            $stmt->bindParam(':id',$restaurantId);
+                                                            $stmt->execute();
+
+                                                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                                                $id = $row["idplato"];
+                                                                $nombre = $row["nombre"];
+                                                                $precio = $row["precioventa"];
+                                                                $compra = $row["preciocompra"];
+                                                                ?>
+
+                                                                <div class="producto-item card"
+                                                                     data-id="<?= $id ?>"
+                                                                     data-precio="<?= $precio ?>"
+                                                                     data-compra="<?= $compra ?>"
+                                                                     data-nombre="<?= htmlspecialchars($nombre) ?>"
+                                                                     data-categoria="<?= $arraypedidos ?>">
+
+
+
+                                                                    <div class="acciones">
+                                                                        <input type="checkbox" class="check-producto" id="prod<?= $id ?>" />
+                                                                        <label for="prod<?= $id ?>" class="nombre"><?= $nombre ?></label>
+                                                                        <span class="precio-unit">Precio: $<?= number_format($precio,2) ?></span>
+                                                                        <button type="button" class="btn-cantidad btn-menos" data-id="<?= $id ?>">−</button>
+                                                                        <input type="text" id="cantidad<?= $id ?>" value="0" readonly />
+                                                                        <button type="button" class="btn btn-danger btn-decrement btn-mas" data-id="<?= $id ?>">+</button>
+                                                                        <span class="precio" id="precio<?= $id ?>">$0.00</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+
+                                            <!-- TOTAL GENERAL -->
+                                            <div class="total-general">
+
+                                                <p class="display-3 mb-0" style="font-size: 1.5rem !important;"> Total sin descuento: <span id="totalBruto">$0.00</span></p><br>
+                                                <div class="form-group row">
+
+                                                    <label class="col-lg-4 col-form-label" for="descuento">Descuento (%): <span class="text-danger">*</span><br>
+                                                    </label><br>
+                                                    <div class="col-lg-8">
+                                                        <input type="number" class="form-control" id="descuento"  value="0" min="0" max="100" name="descuento" placeholder="10%">
+                                                    </div>
+                                                </div>
+                                                <p class="display-3 mb-0" style="font-size: 1.5rem !important;">Total con descuento: <span id="totalCarrito">$0.00</span></p><br>
+                                                <p class="display-3 mb-0" style="font-size: 1.5rem !important;">Ganancia: <span id="ganancia">$0.00</span></p><br>
+
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="nombrep">Nombre <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control" id="nombrep" name="nombrep" placeholder="Inserte el nombre del combo..">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="descripcion">Descripcion <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Inserte breve descripcion..">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="cantidad">Cantidad <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-8">
+                                                    <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="10">
+                                                </div>
+                                            </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4 col-form-label" for="expira">Fecha de caducidad <span class="text-danger">*</span>
+                                                    </label>
+                                                    <div class="col-lg-8">
+                                                        <input type="date" class="form-control" id="expira" name="expira" placeholder="">
+                                                    </div>
+                                                </div>
+
+
+                                            <h4 class="card-title mt-5">Estado de disponibilidad </h4>
+                                            <div class="basic-form">
+
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="radio" id="radio" value="d" checked="true"> Disponible</label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="radio" id="radio" value="a"> Agotado</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="idrestaurant" id="idrestaurant" value="<?php echo $restaurantId;?>">
+                            <input type="hidden" name="montototal" id="montototal" value="0">
+                            <input type="hidden" name="montototaldescuento" id="montototaldescuento" value="0">
+                            <input type="hidden" name="insertar" id="insertar" value="1">
+                            <!-- Input oculto con el JSON -->
+                            <input type="hidden" name="carrito" id="carritoJSON">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button  type="submit" class="btn btn-success">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
 <!-- <script src="../assets/js/jquery-3.6.0.min.js"></script>
  <script src="../assets/js/dropify.min.js"></script>
 <script src="../assets/js/dropify-init.js"></script>-->
+
+<script>
+
+
+
+    // Construir JSON del carrito
+    function actualizarCarritoJSON() {
+        let carrito = {};
+
+        document.querySelectorAll(".producto-item").forEach(prod => {
+            let id = prod.dataset.id;
+            let nombre = prod.dataset.nombre;
+            let precio = parseFloat(prod.dataset.precio);
+            let categoria = prod.dataset.categoria;
+            let cantidad = parseInt(document.getElementById("cantidad"+id).value);
+
+            let checked = document.getElementById("prod"+id).checked;
+
+            if (checked && cantidad > 0) {
+                if (!carrito[categoria]) carrito[categoria] = [];
+                carrito[categoria].push({
+                    id: parseInt(id),
+                    nombre: nombre,
+                    precio: precio,
+                    cantidad: cantidad
+                });
+            }
+        });
+
+        document.getElementById("carritoJSON").value = JSON.stringify(carrito, null, 2);
+    }
+
+    function actualizarTotales() {
+        let totalVenta = 0;
+        let totalCompra = 0;
+
+        document.querySelectorAll(".producto-item").forEach(prod => {
+            let id = prod.dataset.id;
+            let cantidad = parseInt(document.getElementById("cantidad"+id).value);
+            if (cantidad > 0 && document.getElementById("prod"+id).checked) {
+                let precioVenta = parseFloat(prod.dataset.precio);
+                let precioCompra = parseFloat(prod.dataset.compra);
+
+                totalVenta += precioVenta * cantidad;
+                totalCompra += precioCompra * cantidad;
+            }
+        });
+
+        // Descuento ingresado por el usuario
+        let descuentoPorc = parseFloat(document.getElementById("descuento").value) || 0;
+        let descuento = (totalVenta * descuentoPorc) / 100;
+        let totalConDescuento = totalVenta - descuento;
+
+        // Ganancia = venta - compra
+        let ganancia = totalConDescuento - totalCompra;
+
+        // Mostrar resultados
+        document.getElementById("totalBruto").innerText = "$" + totalVenta.toFixed(2);
+        document.getElementById("montototal").value = totalVenta.toFixed(2);
+
+        document.getElementById("totalCarrito").innerText = "$" + totalConDescuento.toFixed(2);
+        document.getElementById("montototaldescuento").value =totalConDescuento.toFixed(2);
+
+        document.getElementById("ganancia").innerText = "$" + ganancia.toFixed(2);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Botón +
+        document.querySelectorAll(".btn-mas").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let id = btn.dataset.id;
+                let input = document.getElementById("cantidad"+id);
+                let chk = document.getElementById("prod"+id);
+                let cantidad = parseInt(input.value) + 1;
+                input.value = cantidad;
+
+                if (!chk.checked) chk.checked = true;
+
+                let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${id}']`).dataset.precio);
+                document.getElementById("precio"+id).innerText = "$" + (cantidad * precioUnit).toFixed(2);
+
+                actualizarTotales();
+                actualizarCarritoJSON();
+            });
+        });
+
+        // Botón -
+        document.querySelectorAll(".btn-menos").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let id = btn.dataset.id;
+                let input = document.getElementById("cantidad"+id);
+                let chk = document.getElementById("prod"+id);
+                let cantidad = Math.max(0, parseInt(input.value) - 1);
+                input.value = cantidad;
+
+                let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${id}']`).dataset.precio);
+                document.getElementById("precio"+id).innerText = "$" + (cantidad * precioUnit).toFixed(2);
+
+                if (cantidad === 0) chk.checked = false;
+
+                actualizarTotales();
+                actualizarCarritoJSON();
+            });
+        });
+
+        // Checkbox manual
+        document.querySelectorAll(".check-producto").forEach(chk => {
+            chk.addEventListener("change", () => {
+                let id = chk.id.replace("prod","");
+                let input = document.getElementById("cantidad"+id);
+                let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${id}']`).dataset.precio);
+
+                if (chk.checked) {
+                    if (parseInt(input.value) === 0) {
+                        input.value = 1;
+                        document.getElementById("precio"+id).innerText = "$" + precioUnit.toFixed(2);
+                    }
+                } else {
+                    input.value = 0;
+                    document.getElementById("precio"+id).innerText = "$0.00";
+                }
+
+                actualizarTotales();
+                actualizarCarritoJSON();
+            });
+        });
+
+        // Escuchar cambios en descuento
+        document.getElementById("descuento").addEventListener("input", () => {
+            actualizarTotales();
+        });
+    });
+
+
+</script>
 
 <script>
     function esNuloOVacio(v) {
@@ -325,6 +772,9 @@ global $availableIds;
 
     };
     function cargarCategoria(categoria,idrestaurant,flag) {
+        //mostrar el boton flotante del combo
+        
+
         $('#contenido').html("");
         //console.log((categoria).getAttribute("id"))
 
@@ -372,5 +822,41 @@ global $availableIds;
             element.style.display = 'none';
         }, 6000);
     }
+
+
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        // Solo actualizar si ya está expandido
+        const content = header.nextElementSibling;
+        if (content.classList.contains("expanded")) {
+            content.style.maxHeight = "100%";
+        }
+    });
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            const isOpen = content.style.maxHeight;
+
+            // Cierra todos
+            document.querySelectorAll('.accordion-content').forEach(c => {
+                c.style.maxHeight = null;
+            });
+
+            // Si estaba cerrado, lo abre
+            if (!isOpen) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    });
+
+
+        // Acordeón toggle
+   /*     document.querySelectorAll(".accordion-header").forEach(header=>{
+        header.addEventListener("click",()=>{
+            let content = header.nextElementSibling;
+            content.style.display = (content.style.display==="block") ? "none" : "block";
+        });
+    });*/
+
+
 </script>
 

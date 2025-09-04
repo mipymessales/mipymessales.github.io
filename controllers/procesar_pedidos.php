@@ -55,13 +55,22 @@ try {
 
         $base_de_datos->commit();
     }
+    $response = [
+        "status" => "success",
+        "message" => "Procesados " . count($pendientes) . " pedidos\n"
+    ];
 
-    echo "Procesados " . count($pendientes) . " pedidos\n";
+    echo json_encode($response);
 
 } catch (Exception $e) {
     if ($base_de_datos->inTransaction()) {
         $base_de_datos->rollBack();
     }
     error_log("Error al procesar pedidos: " . $e->getMessage());
-    echo "Error: " . $e->getMessage();
+    $response = [
+        "status" => "error",
+        "message" => "Error: " . $e->getMessage()
+    ];
+
+    echo json_encode($response);
 }

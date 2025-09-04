@@ -18,6 +18,7 @@ if (SqlInjectionUtils::checkSqlInjectionAttempt($_POST)){
 $restaurantId=$_SESSION['idrestaurant'];
 $username=$_SESSION['user'];
 $userrolid=$_SESSION['userrolid'];
+$userId=$_SESSION['userId'];
 global $base_de_datos,$availableIds;
 if (in_array($restaurantId,$availableIds)){
     $section = $_GET['section'] ?? 'ofertas';
@@ -295,6 +296,14 @@ $ano=split('-',$date,1);*/
 						<span>Sitio web</span>
 					</a>
 				</li>
+                <li>
+                    <a href="#" onclick="activarNotificaciones()">
+                        <svg>
+                            <use xlink:href="#icon-top-comments"></use>
+                        </svg>
+                        <span>Notificaciones</span>
+                    </a>
+                </li>
                 <li>
                     <a href="/logout">
                         <svg>
@@ -874,6 +883,47 @@ $ano=split('-',$date,1);*/
             });
 
         }
+
+        async function activarNotificaciones() {
+            if (!("serviceWorker" in navigator)) {
+                alert("Tu navegador no soporta notificaciones push");
+                return;
+            }
+
+            const registration = await navigator.serviceWorker.register("/service-worker.js");
+
+            const permission = await Notification.requestPermission();
+            if (permission !== "granted") {
+                alert("Debes permitir las notificaciones");
+                return;
+            }
+
+            const subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array("BPCWRVWc3IqGGoFJno3BhYn5e9-YSObP6RKw5wD3V31RWqBl7RDIKbu7wS_PDtHJGFVy50c1UskStJhA7MWy29I")
+            });
+
+            // Guardar en tu backend
+            await fetch("/controllers/guardar_token.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(subscription)
+            });
+
+            alert("✅ Notificaciones activadas");
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = "=".repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
 
     </script>
 </body>

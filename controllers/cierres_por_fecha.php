@@ -46,12 +46,20 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($post)) {
         $cat = $r['categoria'];
         $pid = $r['id_producto'];
         $precioactual = $r['precioactual'];
-        $qry = $base_de_datos->prepare("SELECT nombre, precioventa, preciotransferencia,preciocompra FROM `$cat` WHERE id = ?");
+        if (hash_equals("combos",$cat)){
+            $qry = $base_de_datos->prepare("SELECT nombre,monto_total as precioventa,monto_descuento as preciotransferencia,monto_descuento as preciocompra FROM `$cat` WHERE id = ?");
+        }else{
+            $qry = $base_de_datos->prepare("SELECT nombre, precioventa, preciotransferencia,preciocompra FROM `$cat` WHERE id = ?");
+        }
+
         $qry->execute([$pid]);
         $prod = $qry->fetch(PDO::FETCH_ASSOC);
         if (!$prod) continue;
-
+        if (hash_equals("combos",$cat)){
+            $precio =floatval($prod['precioventa']);
+        }else
         $precio = floatval($precioactual);
+
         $data[$cat][] = [
             'nombre' => $prod['nombre'],
             'venta_dia' => intval($r['venta_dia']),
