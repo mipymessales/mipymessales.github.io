@@ -1,5 +1,5 @@
 .gradle
-.idea
+.idea/
 build
 # Configuración de VS Code
 .vscode/

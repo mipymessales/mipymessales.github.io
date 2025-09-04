@@ -9,11 +9,6 @@ define('ROOT_DIR', dirname(__FILE__, 2) . '/');
 include_once ROOT_DIR . "pdo/conexion.php";
 require_once ROOT_DIR . "controllers/class.SqlInjectionUtils.php";
 require_once ROOT_DIR . "controllers/error_handler.php";
-require_once ROOT_DIR . "controllers/Host.php";
-require ROOT_DIR .'vendor/autoload.php';
-
-use Minishlink\WebPush\WebPush;
-use Minishlink\WebPush\Subscription;
 
 $response = ["status" => "error", "message" => "Error desconocido"];
 
@@ -101,57 +96,16 @@ try {
         "pedido_id" => $pedido_id
     ];
 
+    $nombre    = escapeshellarg($nombre);
+    $telefono  = escapeshellarg($telefono);
 
-    /*Push*/
-    $res = $base_de_datos->prepare("Select token from tokens_admin;");
-    $res->execute();
-    $subscriptions = [];
-
-    while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
-       $tokentmp=$row['token'];
-        $subscriptions[] = json_decode($tokentmp, true);
+    if (is_array($carrito)) {
+        $carrito = json_encode($carrito, JSON_UNESCAPED_UNICODE);
     }
-    if (!empty($subscriptions) && sizeof($subscriptions)>0){
-        $auth = [
-            'VAPID' => [
-                'subject' => VAPID_SUBJECT,
-                'publicKey' => VAPID_PUBLIC_KEY,
-                'privateKey' => VAPID_PRIVATE_KEY,
-            ],
-        ];
+    $carritoArg = escapeshellarg($carrito);
 
-        $webPush = new WebPush($auth);
+    exec("php " . ROOT_DIR . "controllers/send_push.php {$pedido_id} {$nombre} {$telefono} {$carritoArg} > /dev/null 2>&1 &");
 
-
-
-// Resumir carrito para notificación
-        $items = [];
-        foreach ($carrito as $categoria => $productos) {
-            $items[] = $categoria . " x " . $productos['cantidad']."\n";
-        }
-        $carritoResumen = implode(" ", $items);
-        // Preparar notificación
-        $title = "Nuevo pedido de " . $nombre;
-        $body = "Teléfono 📞: " . $telefono . "\n Productos 🛒 \n" . $carritoResumen;
-
-        foreach ($subscriptions as $sub) {
-            $subscription = Subscription::create($sub);
-            $webPush->queueNotification(
-                $subscription,
-                json_encode([
-                    "title" => $title,
-                    "body" => $body,
-                    "url" => Host::getHOSTNAME()."login"
-                ])
-            );
-        }
-
-        foreach ($webPush->flush() as $report) {
-            if (!$report->isSuccess()) {
-                error_log("Error enviando push: " . $report->getReason());
-            }
-        }
-    }
     echo json_encode($response);
     exit;
 
