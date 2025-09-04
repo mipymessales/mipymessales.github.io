@@ -6,11 +6,19 @@ require ROOT_DIR .'vendor/autoload.php';
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 
-$pedidoId = $argv[1];
-$nombre   = $argv[2];
-$telefono = $argv[3];
-$carrito  = $argv[4]; // si viene en JSON, recuerda decodificarlo
-$carritoArray = json_decode($carrito, true);
+// Leer JSON del body
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (!$input) {
+    http_response_code(400);
+    exit("Datos inválidos");
+}
+
+$pedido_id = $input['pedido_id'] ?? null;
+$nombre    = $input['nombre'] ?? '';
+$telefono  = $input['telefono'] ?? '';
+$carritoArray   = $input['carrito'] ?? '[]'; // llega como JSON string
+
 /*Push*/
 global $base_de_datos;
 $res = $base_de_datos->prepare("Select token from tokens_admin;");
@@ -42,7 +50,7 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
     $carritoResumen = implode(" ", $items);
     // Preparar notificación
     $title = "Nuevo pedido de " . $nombre;
-    $body = "Teléfono 📞: " . $telefono . "\n Productos 🛒 \n" . $carritoResumen;
+    $body = " 📞Teléfono \n" . $telefono . "\n 🛒Productos \n" . $carritoResumen;
 
     foreach ($subscriptions as $sub) {
         $subscription = Subscription::create($sub);

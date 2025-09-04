@@ -1627,6 +1627,21 @@ $año_actual = date("Y");
                                 confirmButtonText: 'Aceptar'
                             });
 
+
+                            // ✅ Llamada asíncrona para enviar push con TODOS los datos
+                            fetch('controllers/send_push.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    pedido_id: data.pedido_id,
+                                    nombre: data.nombre,
+                                    telefono: data.telefono,
+                                    carrito: data.carrito
+                                })
+                            });
+
                             // ✅ aquí pones tu lógica de limpiar carrito, recargar captcha, etc.
                             document.getElementById('reservationMessage').textContent = "✅ ¡Pedido recibido!";
                             document.getElementById('reservationMessage').style.color = 'green';

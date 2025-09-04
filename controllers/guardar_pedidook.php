@@ -89,22 +89,19 @@ try {
     $stmt->execute([$restaurantid, $nombre, $telefono, $correo, $direccion, json_encode($carrito),$ip]);
     $pedido_id = $base_de_datos->lastInsertId();
 
+    //exec("php " . ROOT_DIR . "controllers/send_push.php {$pedido_id} {$nombre} {$telefono} {$carritoArg} > /dev/null 2>&1 &");
+
     // --- Responder inmediatamente ---
     $response = [
         "status" => "success",
         "message" => "Pedido recibido",
-        "pedido_id" => $pedido_id
+        "pedido_id" => $pedido_id,
+        "nombre" => $nombre,
+        "telefono" => $telefono,
+        "carrito" => $carrito,
+
     ];
 
-    $nombre    = escapeshellarg($nombre);
-    $telefono  = escapeshellarg($telefono);
-
-    if (is_array($carrito)) {
-        $carrito = json_encode($carrito, JSON_UNESCAPED_UNICODE);
-    }
-    $carritoArg = escapeshellarg($carrito);
-
-    exec("php " . ROOT_DIR . "controllers/send_push.php {$pedido_id} {$nombre} {$telefono} {$carritoArg} > /dev/null 2>&1 &");
 
     echo json_encode($response);
     exit;
