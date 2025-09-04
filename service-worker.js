@@ -4,8 +4,9 @@ self.addEventListener("push", (event) => {
     event.waitUntil(
         self.registration.showNotification(data.title, {
             body: data.body,
-            icon: "images/logo.png",
-            data: data.url
+            icon: "images/logo_color.png",
+            data: data.url,
+            vibrate: [200, 100, 200] // vibración en móviles
         })
     );
 });
