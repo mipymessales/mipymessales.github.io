@@ -19,6 +19,8 @@ $availableCombos=[2];
 define('VAPID_PUBLIC_KEY', 'BPCWRVWc3IqGGoFJno3BhYn5e9-YSObP6RKw5wD3V31RWqBl7RDIKbu7wS_PDtHJGFVy50c1UskStJhA7MWy29I');
 define('VAPID_PRIVATE_KEY', 'MhckwSTucZXQM55GYQ3MZuveAPDFLnq9auhzboelz8w');
 define('VAPID_SUBJECT', 'mailto:mipymessalesmanager@gmail.com');
+define('TU_BOT_TOKEN','8357574899:AAHbMjfmuKuM5EC2z7XvIeTJgxPiodHfXXE');
+define('TU_CHAT_ID',1333036016);
 
 
 try {

@@ -1638,6 +1638,7 @@ $año_actual = date("Y");
                                     pedido_id: data.pedido_id,
                                     nombre: data.nombre,
                                     telefono: data.telefono,
+                                    direccion: data.direccion,
                                     carrito: data.carrito
                                 })
                             });

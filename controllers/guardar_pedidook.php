@@ -98,6 +98,7 @@ try {
         "pedido_id" => $pedido_id,
         "nombre" => $nombre,
         "telefono" => $telefono,
+        "direccion" => $direccion,
         "carrito" => $carrito,
 
     ];

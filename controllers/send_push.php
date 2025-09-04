@@ -17,6 +17,8 @@ if (!$input) {
 $pedido_id = $input['pedido_id'] ?? null;
 $nombre    = $input['nombre'] ?? '';
 $telefono  = $input['telefono'] ?? '';
+$direccion  = $input['direccion'] ?? '';
+
 $carritoArray   = $input['carrito'] ?? '[]'; // llega como JSON string
 
 /*Push*/
@@ -69,4 +71,39 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
             error_log("Error enviando push: " . $report->getReason());
         }
     }
+    enviarTelegram($nombre, $telefono,$direccion, $carritoResumen);
+}
+
+
+function enviarTelegram($nombre, $telefono,$direccion, $carritoResumen)
+{
+    $token = TU_BOT_TOKEN; // Token de tu bot
+    $chat_id = TU_CHAT_ID; // Tu chat_id
+    $mensaje = "📦 *Nuevo Pedido*\n";
+    $mensaje .= "👤 Nombre: $nombre\n";
+    $mensaje .= "📞 Teléfono: $telefono\n";
+    $mensaje .= "📍 Dirección: $direccion\n";
+    $mensaje .= "🛒 Productos:\n$carritoResumen";
+
+    $url = "https://api.telegram.org/bot$token/sendMessage";
+
+    $data = [
+        'chat_id' => $chat_id,
+        'text' => $mensaje,
+        'parse_mode' => 'Markdown'
+    ];
+
+    // cURL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        error_log('Error Telegram: ' . curl_error($ch));
+    }
+    curl_close($ch);
+
+    return $result;
 }
