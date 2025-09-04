@@ -2,6 +2,7 @@
 define('ROOT_DIR', dirname(__FILE__, 2) . '/');
 require_once ROOT_DIR . "controllers/Host.php";
 include_once ROOT_DIR . "pdo/conexion.php";
+include_once ROOT_DIR."controllers/error_handler.php";
 require ROOT_DIR .'vendor/autoload.php';
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
@@ -71,12 +72,8 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
             error_log("Error enviando push: " . $report->getReason());
         }
     }
-    enviarTelegram($nombre, $telefono,$direccion, $carritoResumen);
-}
 
-
-function enviarTelegram($nombre, $telefono,$direccion, $carritoResumen)
-{
+    //Send telegram
     $token = TU_BOT_TOKEN; // Token de tu bot
     $chat_id = TU_CHAT_ID; // Tu chat_id
     $mensaje = "📦 *Nuevo Pedido*\n";
@@ -104,6 +101,6 @@ function enviarTelegram($nombre, $telefono,$direccion, $carritoResumen)
         error_log('Error Telegram: ' . curl_error($ch));
     }
     curl_close($ch);
-
-    return $result;
 }
+
+

@@ -1598,7 +1598,7 @@ $año_actual = date("Y");
             } else {
                 const formData = new FormData(e.target);
                 formData.append('restaurantid', restaurantId);
-               console.log((JSON.stringify(formData)));
+              // console.log((JSON.stringify(formData)));
                 fetch('controllers/guardar_pedidook.php', {
                     method: 'POST',
                     body: formData
@@ -2377,7 +2377,7 @@ $año_actual = date("Y");
       itemsEl.textContent = totalItems;
       itemsDomicilio.textContent=domicilio;
       totalEl.textContent = currency(sum+domicilio);
-      console.log(" areNewElement= "+ areNewElement);
+      //console.log(" areNewElement= "+ areNewElement);
       // Briefly show modal on update
       if (totalItems > 0 && areNewElement) showCartModal();
     } catch(e){ console.error(e); }
