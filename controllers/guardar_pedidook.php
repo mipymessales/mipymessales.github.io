@@ -122,13 +122,25 @@ try {
 
         $webPush = new WebPush($auth);
 
+
+
+// Resumir carrito para notificación
+        $items = [];
+        foreach ($carrito as $categoria => $productos) {
+            $items[] = $categoria . " x " . $productos['cantidad']."\n";
+        }
+        $carritoResumen = implode(" ", $items);
+        // Preparar notificación
+        $title = "Nuevo pedido de " . $nombre;
+        $body = "Teléfono 📞: " . $telefono . "\n Productos 🛒 \n" . $carritoResumen;
+
         foreach ($subscriptions as $sub) {
             $subscription = Subscription::create($sub);
             $webPush->queueNotification(
                 $subscription,
                 json_encode([
-                    "title" => "Nuevo pedido recibido",
-                    "body" => "Revisa el panel de administración",
+                    "title" => $title,
+                    "body" => $body,
                     "url" => Host::getHOSTNAME()."login"
                 ])
             );

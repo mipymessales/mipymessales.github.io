@@ -1,0 +1,9 @@
+.gradle
+.idea
+build
+# Configuración de VS Code
+.vscode/
+
+# Carpetas de compilación de Java/Gradle
+bin/
+out/
