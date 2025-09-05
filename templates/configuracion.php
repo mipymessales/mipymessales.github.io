@@ -6,7 +6,7 @@ include_once ROOT_DIR."pdo/conexion.php";
 global $base_de_datos;
 
 $restaurantid=$_SESSION['idrestaurant'];
-$sentencia = $base_de_datos->prepare("SELECT * FROM admin WHERE restaurantid =:usuario");
+$sentencia = $base_de_datos->prepare("SELECT * FROM admin WHERE restaurantid =:usuario limit 1;");
 $sentencia->bindParam(':usuario', $restaurantid);
 
 try {
@@ -15,7 +15,7 @@ try {
     echo print_r($e->getTraceAsString());
 }
 $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
-
+$_SESSION['userId'] = $resultado[0]->id;
 
 if (isset($_POST['action']) && hash_equals($_POST['action'],'update') && !SqlInjectionUtils::checkSqlInjectionAttempt($_POST)){
     $incorrecta = "";

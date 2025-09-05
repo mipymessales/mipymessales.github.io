@@ -5,7 +5,7 @@ include_once ROOT_DIR."pdo/conexion.php";
 include_once ROOT_DIR."controllers/error_handler.php";
 global $base_de_datos;
 /*$sentencia = $base_de_datos->query("select * from cliente where restaurantid=: idre and estado_cuenta =:estado ;");*/
-$idrestaurant=empty($_POST['idrestaurant'])?$_SESSION['idrestaurant']:$_POST['idrestaurant'];
+$idrestaurant=!isset($_POST['idrestaurant'])?$_SESSION['idrestaurant']:$_POST['idrestaurant'];
 /*$sentencia->bindParam(':idre', $idrestaurant);
 $estado=1;
 $sentencia->bindParam(':estado', $estado);
