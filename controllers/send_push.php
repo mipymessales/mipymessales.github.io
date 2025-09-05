@@ -47,13 +47,39 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
 
 // Resumir carrito para notificación
     $items = [];
-    foreach ($carritoArray as $categoria => $productos) {
-        $items[] = $categoria . " x " . $productos['cantidad']."\n";
+    $montoTotal=0;
+    // Agrupar productos por categoria
+    $categorias = [];
+    foreach ($carritoArray as $nombreC => $producto) {
+        $categoria = $producto['categoria'];
+        if (!isset($categorias[$categoria])) {
+            $categorias[$categoria] = [];
+        }
+        $categorias[$categoria][$nombreC] = $producto;
     }
-    $carritoResumen = implode(" ", $items);
-    // Preparar notificación
+
+// Construir el resumen
+    foreach ($categorias as $categoria => $productos) {
+        $carritoResumen .= "📂 " . ucfirst($categoria) . ":\n";
+        foreach ($productos as $nombreC => $producto) {
+            $subtotal = $producto['precio'] * $producto['cantidad'];
+            $montoTotal += $subtotal;
+            $carritoResumen .= "- {$nombreC} {$producto['precio']} x {$producto['cantidad']} = $subtotal\n";
+        }
+        $carritoResumen .= "\n";
+    }
+
+// Preparar notificación
     $title = "Nuevo pedido de " . $nombre;
-    $body = " 📞Teléfono \n" . $telefono . "\n 🛒Productos \n" . $carritoResumen;
+    $body = "📞 Teléfono: " . $telefono . "\n🛒 Productos:\n" . $carritoResumen . "💰 Monto total: $" . $montoTotal;
+
+    /*    foreach ($carritoArray as $categoria => $productos) {
+            $items[] = $categoria . " x " . $productos['cantidad']."\n";
+        }
+        $carritoResumen = implode(" ", $items);
+        // Preparar notificación
+        $title = "Nuevo pedido de " . $nombre;
+        $body = " 📞Teléfono \n" . $telefono . "\n 🛒Productos \n" . $carritoResumen."\n Monto total: $".$montoTotal;*/
 
     foreach ($subscriptions as $sub) {
         $subscription = Subscription::create($sub);
@@ -72,12 +98,13 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
             echo "Error enviando push: " . $report->getReason();
         }
     }
+
     try {
         $postData = [
             'nombre' => $nombre,
             'telefono' => $telefono,
             'direccion' => $direccion,
-            'carrito' => $carritoResumen
+            'carrito' => $carritoResumen. "💰 Monto total: $" . $montoTotal
         ];
 
         $ch = curl_init("https://telegram-server-henna.vercel.app/api/send-telegram");
@@ -95,39 +122,40 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
     } catch (Exception $e) {
         echo "Ocurrió un error: " . $e->getMessage();
     }
-  /*  try {
-    //Send telegram
-    $token = TU_BOT_TOKEN; // Token de tu bot
-    $chat_id = TU_CHAT_ID; // Tu chat_id
-    $mensaje = "📦 *Nuevo Pedido*\n";
-    $mensaje .= "👤 Nombre: $nombre\n";
-    $mensaje .= "📞 Teléfono: $telefono\n";
-    $mensaje .= "📍 Dirección: $direccion\n";
-    $mensaje .= "🛒 Productos:\n$carritoResumen";
 
-    $url = "https://api.telegram.org/bot$token/sendMessage";
 
-    $data = [
-        'chat_id' => $chat_id,
-        'text' => $mensaje,
-        'parse_mode' => 'Markdown'
-    ];
+    /*    try {
+        //Send telegram
+        $token = TU_BOT_TOKEN; // Token de tu bot
+        $chat_id = TU_CHAT_ID; // Tu chat_id
+        $mensaje = "📦 *Nuevo Pedido*\n";
+        $mensaje .= "👤 Nombre: $nombre\n";
+        $mensaje .= "📞 Teléfono: $telefono\n";
+        $mensaje .= "📍 Dirección: $direccion\n";
+        $mensaje .= "🛒 Productos:\n$carritoResumen";
 
-    // cURL
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $result = curl_exec($ch);
-    if (curl_errno($ch)) {
-        error_log('Error Telegram: ' . curl_error($ch));
-    }
-    curl_close($ch);
-    } catch (Exception $e) {
+        $url = "https://api.telegram.org/bot$token/sendMessage";
 
-        echo "Ocurrió un error con la base de datos: " . $e->getMessage();
-    }*/
+        $data = [
+            'chat_id' => $chat_id,
+            'text' => $mensaje,
+            'parse_mode' => 'Markdown'
+        ];
+
+        // cURL
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            error_log('Error Telegram: ' . curl_error($ch));
+        }
+        curl_close($ch);
+        } catch (Exception $e) {
+            echo "Ocurrió un error con la base de datos: " . $e->getMessage();
+        }*/
 }
 
 

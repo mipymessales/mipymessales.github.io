@@ -373,7 +373,7 @@ $ano=split('-',$date,1);*/
 
                         <?php if (in_array('pedidoscliente', $roles)){ ?>
                         <li>
-                            <a href="?section=pedidoscliente" class="nav-menu <?= ($active==0) ? 'active' : '' ?>" onclick="cargarPedidosPendientes()">
+                            <a href="?section=pedidoscliente" class="nav-menu <?= ($active==0) ? 'active' : '' ?>">
                                 $
                                 <span>Pedidos</span>
                             </a>
@@ -548,6 +548,7 @@ $ano=split('-',$date,1);*/
     <script src="assets/js/tabulator.min.js"></script>
     <script type="text/javascript">
         const navLinks = document.querySelectorAll('.nav-menu');
+        cargarPedidosPendientes();
         // Función para establecer el enlace activo
         if (!esNuloOVacio(navLinks)){
             // Al hacer clic en un enlace, se guarda como activo
