@@ -69,10 +69,10 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
 
     foreach ($webPush->flush() as $report) {
         if (!$report->isSuccess()) {
-            error_log("Error enviando push: " . $report->getReason());
+            echo "Error enviando push: " . $report->getReason();
         }
     }
-
+    try {
     //Send telegram
     $token = TU_BOT_TOKEN; // Token de tu bot
     $chat_id = TU_CHAT_ID; // Tu chat_id
@@ -101,6 +101,10 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
         error_log('Error Telegram: ' . curl_error($ch));
     }
     curl_close($ch);
+    } catch (Exception $e) {
+
+        echo "Ocurrió un error con la base de datos: " . $e->getMessage();
+    }
 }
 
 
