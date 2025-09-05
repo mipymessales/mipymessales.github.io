@@ -73,6 +73,29 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
         }
     }
     try {
+        $postData = [
+            'nombre' => $nombre,
+            'telefono' => $telefono,
+            'direccion' => $direccion,
+            'carrito' => $carritoResumen
+        ];
+
+        $ch = curl_init("https://telegram-server-henna.vercel.app/api/send-telegram");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json'
+        ]);
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error al contactar Vercel: ' . curl_error($ch);
+        }
+        curl_close($ch);
+    } catch (Exception $e) {
+        echo "Ocurrió un error: " . $e->getMessage();
+    }
+  /*  try {
     //Send telegram
     $token = TU_BOT_TOKEN; // Token de tu bot
     $chat_id = TU_CHAT_ID; // Tu chat_id
@@ -104,7 +127,7 @@ if (!empty($subscriptions) && sizeof($subscriptions)>0){
     } catch (Exception $e) {
 
         echo "Ocurrió un error con la base de datos: " . $e->getMessage();
-    }
+    }*/
 }
 
 
