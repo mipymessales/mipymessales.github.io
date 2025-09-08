@@ -24,7 +24,7 @@
                     <div class="form-validation">
                         <form enctype="multipart/form-data" class="form-valide" action="controllers/comboController.php" method="POST">
                             <input type="hidden" name="id" value="<?php echo $id_bebida;?>">
-                            <input type="hidden" name="imagecombo" value="<?php echo $foto;?>">
+                            <input type="hidden" name="foto" value="<?php echo $foto;?>">
                     <div class="modal-body">
 
                             <div class="card">

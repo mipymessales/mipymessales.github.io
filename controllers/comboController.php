@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !SqlInjectionUtils::checkSqlInjecti
 
 
     $id_bebida=$_POST["id_combo"];
-    $imagess=$_POST["imagecombo"];
+    $imagess=$_POST["foto"];
     $categoria="combos";
     $idrestaurant=$_POST["idrestaurant"];
 
