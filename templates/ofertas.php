@@ -475,13 +475,13 @@ global $availableIds;
 
 
                                                                     <div class="acciones">
-                                                                        <input type="checkbox" class="check-producto" id="prod<?= $id ?>" />
-                                                                        <label for="prod<?= $id ?>" class="nombre"><?= $nombre ?></label>
+                                                                        <input type="checkbox" class="check-producto" id="prod<?= $arraypedidos.$id ?>"  data-categoria="<?= $arraypedidos ?>"/>
+                                                                        <label for="prod<?= $arraypedidos.$id ?>" class="nombre"><?= $nombre ?></label>
                                                                         <span class="precio-unit">Precio: $<?= number_format($precio,2) ?></span>
-                                                                        <button type="button" class="btn-cantidad btn-menos" data-id="<?= $id ?>">−</button>
-                                                                        <input type="text" id="cantidad<?= $id ?>" value="0" readonly />
-                                                                        <button type="button" class="btn btn-danger btn-decrement btn-mas" data-id="<?= $id ?>">+</button>
-                                                                        <span class="precio" id="precio<?= $id ?>">$0.00</span>
+                                                                        <button type="button" class="btn-cantidad btn-menos" data-id="<?= $arraypedidos.$id ?>" data-categoria="<?= $arraypedidos ?>">−</button>
+                                                                        <input type="text" id="cantidad<?= $arraypedidos.$id ?>" value="0" readonly />
+                                                                        <button type="button" class="btn btn-danger btn-decrement btn-mas" data-id="<?= $arraypedidos.$id ?>" data-categoria="<?= $arraypedidos ?>">+</button>
+                                                                        <span class="precio" id="precio<?= $arraypedidos.$id ?>">$0.00</span>
                                                                     </div>
                                                                 </div>
 
@@ -601,9 +601,9 @@ global $availableIds;
             let nombre = prod.dataset.nombre;
             let precio = parseFloat(prod.dataset.precio);
             let categoria = prod.dataset.categoria;
-            let cantidad = parseInt(document.getElementById("cantidad"+id).value);
+            let cantidad = parseInt(document.getElementById("cantidad"+categoria+id).value);
 
-            let checked = document.getElementById("prod"+id).checked;
+            let checked = document.getElementById("prod"+categoria+id).checked;
 
             if (checked && cantidad > 0) {
                 if (!carrito[categoria]) carrito[categoria] = [];
@@ -625,8 +625,9 @@ global $availableIds;
 
         document.querySelectorAll(".producto-item").forEach(prod => {
             let id = prod.dataset.id;
-            let cantidad = parseInt(document.getElementById("cantidad"+id).value);
-            if (cantidad > 0 && document.getElementById("prod"+id).checked) {
+            let categoria = prod.dataset.categoria;
+            let cantidad = parseInt(document.getElementById("cantidad"+categoria+id).value);
+            if (cantidad > 0 && document.getElementById("prod"+categoria+id).checked) {
                 let precioVenta = parseFloat(prod.dataset.precio);
                 let precioCompra = parseFloat(prod.dataset.compra);
 
@@ -658,14 +659,16 @@ global $availableIds;
         document.querySelectorAll(".btn-mas").forEach(btn => {
             btn.addEventListener("click", () => {
                 let id = btn.dataset.id;
+                let categoria = btn.dataset.categoria;
                 let input = document.getElementById("cantidad"+id);
                 let chk = document.getElementById("prod"+id);
                 let cantidad = parseInt(input.value) + 1;
                 input.value = cantidad;
 
                 if (!chk.checked) chk.checked = true;
-
-                let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${id}']`).dataset.precio);
+                let iditem = id.replace(categoria,"");
+                console.log(iditem);
+                let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${iditem}']`).dataset.precio);
                 document.getElementById("precio"+id).innerText = "$" + (cantidad * precioUnit).toFixed(2);
 
                 actualizarTotales();
@@ -677,12 +680,14 @@ global $availableIds;
         document.querySelectorAll(".btn-menos").forEach(btn => {
             btn.addEventListener("click", () => {
                 let id = btn.dataset.id;
+                let categoria = btn.dataset.categoria;
                 let input = document.getElementById("cantidad"+id);
                 let chk = document.getElementById("prod"+id);
                 let cantidad = Math.max(0, parseInt(input.value) - 1);
                 input.value = cantidad;
-
-                let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${id}']`).dataset.precio);
+                let iditem = id.replace(categoria,"");
+                console.log(iditem);
+                let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${iditem}']`).dataset.precio);
                 document.getElementById("precio"+id).innerText = "$" + (cantidad * precioUnit).toFixed(2);
 
                 if (cantidad === 0) chk.checked = false;
@@ -695,18 +700,19 @@ global $availableIds;
         // Checkbox manual
         document.querySelectorAll(".check-producto").forEach(chk => {
             chk.addEventListener("change", () => {
-                let id = chk.id.replace("prod","");
-                let input = document.getElementById("cantidad"+id);
+                let categoria = chk.dataset.categoria;
+                let id = chk.id.replace("prod"+categoria,"");
+                let input = document.getElementById("cantidad"+categoria+id);
                 let precioUnit = parseFloat(document.querySelector(`.producto-item[data-id='${id}']`).dataset.precio);
 
                 if (chk.checked) {
                     if (parseInt(input.value) === 0) {
                         input.value = 1;
-                        document.getElementById("precio"+id).innerText = "$" + precioUnit.toFixed(2);
+                        document.getElementById("precio"+categoria+id).innerText = "$" + precioUnit.toFixed(2);
                     }
                 } else {
                     input.value = 0;
-                    document.getElementById("precio"+id).innerText = "$0.00";
+                    document.getElementById("precio"+categoria+id).innerText = "$0.00";
                 }
 
                 actualizarTotales();
