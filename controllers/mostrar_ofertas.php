@@ -57,7 +57,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                     $precio=$listaItem->monto_descuento;
                                     $descuento=floor($listaItem->descuento);
                                     $valoracion=$listaItem->valoracion;
-
+                                    $listadoProductos = json_decode($listaItem->productos, true);
                                     if($j<4){
                                         $html.="   <div class='col-lg-3 col-sm-6'>
                                                                 <div class='card border-0'>
@@ -114,8 +114,28 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                             $html.="   <span class='icon'>★★★★★</span>";
                                         }
 
-                                        $html .= " <p class='section-title mb-2' style='color: #ff5722bf;font-size: 12px;
+                                        $html .= " <p class='section-title mb-2' style='font-size: 12px;color: black;
   letter-spacing: normal;'>" . $descripcion . "  </p>";
+
+
+
+                                        if (is_array($listadoProductos)) {
+                                            $html .= " <div style='text-align: left'> ";
+                                            foreach ($listadoProductos as $itemArray) {
+                                                foreach ($itemArray as $item) {
+                                                    $name=$item["nombre"];
+                                                    $cantidad=$item["cantidad"];
+                                                    $preciop=$item["precio"];
+                                                    $html .= "
+                            <p class='mb-2' style='color: black'><strong> $name x " . $cantidad ." </strong><span>... $$preciop</span></p>";
+                                                }
+                                            }
+                                            $html .= " </div>";
+                                        }
+
+
+
+
 
                                         if ($descuento>0){
                                             $html .= " 
@@ -126,7 +146,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                         }
 
 
-                                        $html.=" <h4 class='text-primary' style='margin-top: 5px'>$ {$precio} cup </h4>
+                                        $html.=" <h4 class='text-black' style='margin-top: 5px'>$ {$precio} cup </h4>
                                                                             <button class='agregar btn btn-success'>+</button>
                                                                             <span class='cantidad'>0</span>
                                                                             <button class='quitar btn btn-danger'>−</button>
@@ -166,9 +186,21 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                             $html.="  <span class='icon'>★★★★★</span>";
                                         }
 
-                                        $html .= " <p class='section-title mb-2' style='color: #ff5722bf;font-size: 12px;
+                                        $html .= " <p class='section-title mb-2' style='font-size: 12px;color: black;
   letter-spacing: normal;'>" . $descripcion . "  </p>";
-
+                                        if (is_array($listadoProductos)) {
+                                            $html .= " <div class='mb-2'> ";
+                                            foreach ($listadoProductos as $itemArray) {
+                                                foreach ($itemArray as $item) {
+                                                    $name=$item["nombre"];
+                                                    $cantidad=$item["cantidad"];
+                                                    $preciop=$item["precio"];
+                                                    $html .= "
+                            <p class='mb-2' style='color: black'><strong> $name x " . $cantidad ." </strong><span>... $$preciop</span></p>";
+                                                }
+                                            }
+                                            $html .= " </div>";
+                                        }
 
                                         if ($descuento>0){
                                             $html .= " 
@@ -182,7 +214,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
 
 
 
-                                        $html.="<h4 class='text-primary' style='margin-top: 5px'>$ {$precio} cup </h4>
+                                        $html.="<h4 class='text-black' style='margin-top: 5px'>$ {$precio} cup </h4>
                                                                             <button class='agregar btn btn-success'>+</button>
                                                                             <span class='cantidad'>0</span>
                                                                             <button class='quitar btn btn-danger'>−</button>
@@ -302,7 +334,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                               if(($valoracion)==5 || empty($valoracion)){
                                                                                   $html.="   <span class='icon'>★★★★★</span>";
                                                                              }
-                                                                            $html.=" <h4 class='text-primary' style='margin-top: 5px'>$ {$precio} cup </h4>
+                                                                            $html.=" <h4 class='text-black' style='margin-top: 5px'>$ {$precio} cup </h4>
                                                                             <button class='agregar btn btn-success'>+</button>
                                                                             <span class='cantidad'>0</span>
                                                                             <button class='quitar btn btn-danger'>−</button>
@@ -336,7 +368,7 @@ if (!SqlInjectionUtils::checkSqlInjectionAttempt($_POST)) {
                                                                               if(($valoracion)==5 || empty($valoracion)){
                                                                                   $html.="  <span class='icon'>★★★★★</span>";
                                                                              }
-                                                                            $html.="<h4 class='text-primary' style='margin-top: 5px'>$ {$precio} cup </h4>
+                                                                            $html.="<h4 class='text-black' style='margin-top: 5px'>$ {$precio} cup </h4>
                                                                             <button class='agregar btn btn-success'>+</button>
                                                                             <span class='cantidad'>0</span>
                                                                             <button class='quitar btn btn-danger'>−</button>
